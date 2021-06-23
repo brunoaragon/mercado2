@@ -1,0 +1,527 @@
+<script src="https://use.fontawesome.com/7102890617.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<input type="hidden" value="0" id="product-count">
+
+<div id="separacao">
+
+</div>
+
+<div id="new_order">
+    <span>Novo Pedido Realizado!</span>
+</div>
+
+<div id="messages">
+    <div class="messages">
+        <div class="message message-success success">
+            <div data-ui-id="messages-message-success">Situação do pedido atualizada com sucesso!</div>
+        </div>
+    </div>
+</div>
+
+<span style="margin: -10px 10px 15px 10px; display: block; font-size: 12px; color: #555;">Atualização em <span class="updated_at">30</span>s</span>
+
+<div>
+    <select onchange="orderStore()" id="select_store" style="border: 1px solid #ccc; background: #fff; border-radius: 4px; padding: 4px 8px; width: 200px; margin-bottom: 15px;">
+        <?php
+        $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();        
+        $storeManager  = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+
+        $storeManagerDataList = $storeManager->getStores();        
+        if(count($storeManagerDataList) > 1){
+        ?>
+        <option value="0">Selecione a loja...</option>
+        <?php        
+        }
+        foreach($storeManagerDataList as $_store){
+        ?>
+        <option value="<?= $_store->getStoreId() ?>"><?= $_store->getName() ?></option>
+        <?php
+        }
+        ?>        
+    </select>
+</div>
+
+<div class="container" style="display: inline-block; width: 100%;">
+    <div id="order_list">
+
+    </div>
+    <div id="order_list_complete">
+        <div>
+            <span style="color: #41362f; font-size: 20px; word-break: break-all; display: inline-block; margin: 10px 0;">Pedidos Finalizados Hoje</span>
+        </div>
+        <div class="order_completed">
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function orderStore(){
+        jQuery('.order_item').hide();
+
+        jQuery(".order_store_id").each(function(index) {                     
+            if(jQuery(this).val() == jQuery('#select_store').val()){
+                jQuery(this).parent().parent().parent().show();
+            }      
+        });
+    }
+
+    function checkProducts(){
+        setTimeout(function() {
+            jQuery('#s_btn_check button').removeAttr('disabled');
+
+            jQuery(".s_item_checked input").each(function(index) {                     
+                if(!jQuery(this).is(':checked')){
+                    jQuery('#s_btn_check button').attr('disabled','disabled');
+                }         
+            });
+        }, 100);
+    }
+
+    function saveCheckProducts(order_id){
+        jQuery.post("<?= $block->getUrl("masterprice/index/ordercheck") ?>", {
+                order_id: order_id
+            },
+            function(data) {
+                jQuery('.s_close').click();
+                jQuery('#products_checked-'+order_id).val('1');
+                jQuery('<i style="color: #78c524;" class="fa fa-check"></i>').appendTo('.order_status-'+order_id);
+            }
+        )
+    }
+
+    function loadCheckProducts(order_id){
+        jQuery.post("<?= $block->getUrl("masterprice/index/orderseparate") ?>", {
+                order_id: order_id
+            },
+            function(data) {
+                jQuery('#separacao').show();
+                jQuery('#separacao').html(data);
+            }
+        )
+    }
+
+    setInterval(function() {
+        current = jQuery('.updated_at').html();
+        time = parseInt(current) - 1;
+
+        if (time <= 0) {
+            time = 0;
+        }
+
+        jQuery('.updated_at').html(time);
+
+        checkProducts();
+
+        orderStore()
+
+        jQuery('#s_barcode_input').on('keyup',function(e) {
+            if(e.which == 13) {
+                jQuery(".s_item_sku span").each(function(index) {                     
+                    if(jQuery(this).html() == jQuery('#s_barcode_input').val()){
+                        jQuery(this).parent().parent().find('.s_item_checked input').attr('checked','checked');
+                        jQuery('#s_barcode_input').val('');
+                    }      
+                });
+            }
+        });
+    }, 1000);
+
+    setInterval(function() {
+        loadOrders();
+        orderStore()
+    }, 32000);
+
+    setTimeout(function() {
+        loadOrders();
+        checkProducts();  
+
+        jQuery('#new_order').mousemove(function( event ) {
+            jQuery(this).hide()
+        });      
+    }, 2000);
+
+    function checkNewOrder(){
+        if(parseInt(jQuery('#product-count').val()) < 1){
+            jQuery('#product-count').val(jQuery('.order_item').length);
+        } else {
+            if(jQuery('.order_item').length > parseInt(jQuery('#product-count').val())){
+                jQuery('#new_order').show();
+                jQuery('#product-count').val(jQuery('.order_item').length);
+            }
+        }        
+    }
+
+    function loadOrders() {
+        jQuery('.m2n-loading').show();
+        jQuery.post("<?= $block->getUrl("masterprice/index/orderload") ?>", {
+                id: 0
+            },
+            function(data) {
+                jQuery('#order_list').html(data);
+                orderStore()
+                jQuery('.updated_at').html('30')
+                loadOrdersCompleted();
+                checkNewOrder();  
+            }
+        )
+    }
+
+    function loadOrdersCompleted() {
+        jQuery.post("<?= $block->getUrl("masterprice/index/ordercomplete") ?>", {
+                id: 0
+            },
+            function(data) {
+                jQuery('#order_list_complete .order_completed').html(data);
+                orderStore()
+            }
+        )
+    }
+
+    function cancelOrder(order_id) {
+        var r = confirm("Tem certeza que deseja alterar o status do pedido?");
+        if (r == true) {
+            jQuery('.loading-' + order_id).show();
+
+            jQuery.post("<?= $block->getUrl("masterprice/index/ordercancel") ?>", {
+                    order_id: order_id
+                },
+                function(data) {
+                    loadOrders()
+                    jQuery('.loading-' + order_id).hide();
+
+                    jQuery('#messages').show();
+                    setTimeout(function() {
+                        jQuery('#messages').hide();
+                    }, 7500);
+                }
+            )
+        } else {
+            
+        } 
+    }
+
+    function nextStep(order_id, order_status, order_shipping) {
+
+        if(order_status == 'separacao' && jQuery('#products_checked-'+order_id).val() != 1){
+            loadCheckProducts(order_id);
+        } else {
+            var r = confirm("Tem certeza que deseja alterar o status do pedido?");
+            if (r == true) {
+                jQuery('.loading-' + order_id).show();
+
+                jQuery.post("<?= $block->getUrl("masterprice/index/orderstep") ?>", {
+                        order_id: order_id,
+                        order_status: order_status,
+                        order_shipping: order_shipping
+                    },
+                    function(data) {
+                        loadOrders()
+                        jQuery('.loading-' + order_id).hide();
+
+                        jQuery('#messages').show();
+                        setTimeout(function() {
+                            jQuery('#messages').hide();
+                        }, 7500);
+                    }
+                )
+            }  
+        }    
+    }
+
+    function productSelectAll(){
+        jQuery(".s_order_item input").each(function(index) {           
+            if(!jQuery(this).is(':checked')){
+                jQuery(this).click(); 
+            }    
+        });
+
+        checkProducts();
+    }
+</script>
+
+<style>
+    ::-webkit-scrollbar {
+        width: 9px;
+        height: 9px;
+    }
+    ::-webkit-scrollbar-button {
+        width: 0px;
+        height: 0px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #aaaaaa;
+        border: 0px none #ffffff;
+        border-radius: 50px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #ffffff;
+    }
+    ::-webkit-scrollbar-thumb:active {
+        background: #444444;
+    }
+    ::-webkit-scrollbar-track {
+        background: #ececec;
+        border: 0px none #ffffff;
+        border-radius: 0;
+    }
+    ::-webkit-scrollbar-track:hover {
+        background: #ececec;
+    }
+    ::-webkit-scrollbar-track:active {
+        background: #333333;
+    }
+    ::-webkit-scrollbar-corner {
+        background: transparent;
+    }
+    .s_order_item img{
+        display: none;
+    }
+
+    .s_order_id{
+        position: absolute;
+        padding: 10px 15px;
+        font-size: 20px;
+    }
+
+    #separacao{
+        background: #ffffff;
+        width: calc(100% - 88px);
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 88px;
+        z-index: 999;
+        color: #555;
+        display: none;
+    }
+
+    #new_order{
+        background: rgba(121, 185, 38,0.85);
+        width: calc(100% - 88px);
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 88px;
+        z-index: 999;
+        color: #fff;
+        text-align: center;
+        padding-top: 150px;
+        display: none;
+    }
+    #new_order span{
+        font-size: 50px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #ffffff;
+    }  
+
+
+    #separacao .s_header{
+        height: 50px;
+        background: rgba(213,213,213,0.4);
+    }
+
+    #s_barcode_input{
+        float: right;
+        margin-right: 10px;
+        border: 1px solid #d7d7d7;
+        background: rgba(191,191,191,0.1);
+        padding: 5px 15px;
+        padding-left: 30px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    #separacao .s_header .s_close{
+        height: 50px;
+        width: 50px;
+        cursor: pointer;
+        float: right;
+        margin-right: 50px;
+        color: #a2a2a2;
+        font-size: 27px;
+        text-align: center;
+        line-height: 48px;
+    }
+    #separacao .s_header .s_close:hover{
+        color: #bfbfbf;
+    }
+    #s_order_items{
+        overflow-y: scroll;
+        height: 499px;
+        width: 1100px;
+        display: block;
+        margin: auto;
+        margin-top: 50px;
+    }
+    #s_btn_check{
+        height: 50px;
+        width: 1100px;
+        display: block;
+        margin: auto;
+        margin-top: 15px;
+    }
+    #s_btn_check button{
+        float: right;
+        background: #2d9fd5;
+        border: none;
+        color: #fff;
+    }
+
+    .s_order_item_head div{
+        font-weight: 700 !important;
+        text-transform: uppercase;
+        font-size: 15px !important;
+    }
+    
+    .s_order_item_head,
+    .s_order_item {
+        width: auto;
+        display: inline-flex;
+        padding: 15px 25px;
+        border-bottom: 1px solid #ececec;
+        margin-left: calc(50% - 490px);
+    }
+    .s_order_item:last-child {
+        border-bottom: none;
+    }
+    .s_order_item:hover {
+        background: rgba(228,228,228,0.33);
+        cursor: pointer;
+    }
+    .s_order_item_head .s_item_name,
+    .s_order_item .s_item_name{
+        width: 500px;
+        font-weight: 700;
+    }
+    .s_order_item_head .s_item_sku,
+    .s_order_item .s_item_sku{
+        width: 180px;
+        font-weight: 400;
+    }
+    .s_order_item_head .s_item_qtd,
+    .s_order_item .s_item_qtd{
+        width: 120px;
+        font-weight: 700;
+    }
+    .s_order_item .s_item_checked{
+        width: 180px;
+    }
+    .s_order_item .s_item_checked div{
+        float: right;
+    }
+
+    #messages{
+        display: none;
+    }
+    .m2n-loading {
+        display: none;
+        background: rgba(255, 255, 255, 0.7);
+        width: calc(100% - 148px);
+        height: 88px;
+        margin-left: -15px;
+        position: absolute;
+        margin-top: -10px;
+        text-align: center;
+    }
+
+    #order_list_complete {
+        display: inline-block;
+        width: 100%;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    #order_list {
+        display: inline-block;
+        width: 100%;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .order_item {
+        width: 100%;
+        background: #f4f4f4;
+        padding: 10px 15px;
+        margin-bottom: 5px;
+        display: inline-flex;
+        margin-right: 5px;
+    }
+
+    .order_item .order_info {
+        width: 300px;
+    }
+
+    .order_item .order_id {
+        width: 150px;
+    }
+    .order_item .order_id a{
+        font-weight: 600;
+        color: #444;
+    }
+
+    .order_item .order_info .order_status {
+        width: 100%;
+        font-weight: 600;
+        color: #444;
+    }
+
+    .order_item .customer_info {
+        width: calc(100% - 800px);
+    }
+
+    .order_item .order_info .order_shipping {
+        width: 100%;
+        font-weight: 600;
+        color: #444;
+    }
+
+    .order_item .order_info .order_billing {
+        width: 100%;
+        font-weight: 600;
+        color: #444;
+    }
+
+    .order_item .customer_info .order_name {
+        width: 100%;
+        font-weight: 600;
+        color: #444;
+    }
+
+    .order_item .order_progress {
+        width: 300px;
+    }
+
+    .order_item .order_progress .btn-order-cancel {
+        width: 200px;
+        float: right;
+        border: none;
+        color: #6c6c6c;
+        background: rgba(200,200,200,0.35);
+        height: 28px;
+        line-height: 16px;
+        margin-top: -2px;
+        border-radius: 4px;
+    }
+
+    .order_item .order_progress .btn-order-next {
+        width: 300px;
+        float: right;
+        border: none;
+        color: #fff;
+        background: #2d9fd5;
+        height: 32px;
+        line-height: 16px;
+        margin-top: 0px;
+        border-radius: 4px;
+    }
+    @media only screen and (max-width: 468px) {   
+        #s_order_items {
+            height: 400px !important;
+            width: calc(100% - 30px) !important;
+            margin-left: 15px !important;
+        }
+    }
+</style>
+
+<span style="margin-top: 50px; display: inline-block; font-size: 11px; color: #bbb;">v1.0</span>

@@ -1,0 +1,189 @@
+<div class="container">
+    <div><input name="form_key" type="hidden" value="<?= $this->getFormKey() ?>"></div>
+
+    <?php
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $extensionUser = $objectManager->get('Magento\Backend\Model\Auth\Session')->getUser()->getUsername();
+
+    if ($extensionUser == 'm2n') {
+    ?>
+
+        <div class="list-item" id="sortable">
+            <?php
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $_store_list = $objectManager->create('Rdtech\Masterprice\Model\Stores')->getCollection()
+                ->addFieldToSelect('*');
+
+            if (count($_store_list)) {
+                foreach ($_store_list as $_store) {
+            ?>
+                    <div class="item ui-state-default">
+                        <input type="hidden" value="<?= $_store->getId() ?>" class="store-id">
+
+                        <div class="query name">
+                            <span class="subtitle">Descrição</span><br>
+                            <input class="store-description" value="<?= $_store->getName() ?>">
+                        </div>
+
+                        <div class="query name">
+                            <span class="subtitle">URL <span style="font-size: 12px; color: #999;">https://.../</span></span><br>
+                            <input class="store-url" value="<?= $_store->getUrl() ?>">
+                        </div>
+
+                        <div class="query name">
+                            <span class="subtitle">Token</span><br>
+                            <input class="store-token" value="<?= $_store->getToken() ?>">
+                        </div>
+
+                        <div class="option">
+                            <button onclick="insertStore(this)" class="scalable delete btn-save  action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">Salvar</button>
+                        </div>
+                        <div class="option">
+                            <button onclick="deleteStore(this)" class="scalable delete btn-remove  action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">Remover</button>
+                        </div>
+                    </div>
+                <?php
+                }
+            } else {
+                ?>
+                <div class="item ui-state-default">
+                    <div class="query name">
+                        <span class="subtitle">Descrição</span><br>
+                        <input class="store-description" value="">
+                    </div>
+
+                    <div class="query name">
+                        <span class="subtitle">URL <span style="font-size: 12px; color: #999;"> https://.../</span></span><br>
+                        <input class="store-url">
+                    </div>
+
+                    <div class="query name">
+                        <span class="subtitle">Token</span><br>
+                        <input class="store-token">
+                    </div>
+
+                    <div class="option">
+                        <button onclick="insertStore(this)" class="scalable delete btn-save action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">Salvar</button>
+                    </div>
+                    <div class="option">
+                        <button onclick="deleteStore(this)" class="scalable delete btn-remove action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">Remover</button>
+                    </div>
+                </div>
+            <?php
+            }
+            ?>
+        </div>
+
+        <div>
+            <button onclick="addRule();jQuery('.item').last().find('input').val('')" class="btn-add action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">
+                <span><span><span>Novo Acesso</span></span></span>
+            </button>
+        </div>
+
+    <?php
+    } else {
+    ?>
+        <div>
+            <span>Seu usuário não tem permissão.</span>
+        </div>
+    <?php
+    }
+    ?>
+
+    <style>
+        .changed {
+            pointer-events: none;
+            opacity: 0.3;
+            filter: grayscale(1);
+        }
+
+        .query input {
+            border: 1px solid #aaa;
+            width: 100%;
+            padding: 4px 25px;
+            border-radius: 3px;
+        }
+
+        .query select {
+            border: 1px solid #aaa;
+            width: 100%;
+            padding: 3px 25px;
+            border-radius: 3px;
+            background: #fff;
+        }
+
+        .query textarea {
+            max-width: 340px;
+            max-height: 140px;
+            border: 1px solid #aaa !important;
+            padding: 3px 25px;
+            border-radius: 3px !important;
+            background: #fff;
+            margin-top: 0 !important;
+        }
+
+        .item .option button {
+            margin-top: 18px;
+            display: inline-block;
+        }
+
+        .sku-error {
+            display: none;
+            font-size: 13px;
+            font-weight: 600;
+            color: #e03b3b;
+        }
+
+        .item {
+            background: #ffffff;
+            border: 1px solid #ccc;
+        }
+
+        .item .subtitle {
+            margin-bottom: 4px;
+            display: inline-block;
+        }
+
+        .query input {
+            margin-bottom: -5px;
+        }
+    </style>
+
+    <script>
+        function insertStore(store) {
+            id          = jQuery(store).parent().parent().find('.store-id').val();
+            description = jQuery(store).parent().parent().find('.store-description').val();
+            url         = jQuery(store).parent().parent().find('.store-url').val();
+            token       = jQuery(store).parent().parent().find('.store-token').val();
+
+            if(jQuery.isNumeric(id)){
+                Store(id, description, url, token, '1');
+            } else {
+                Store(null, description, url, token, '2');
+            }            
+        }
+
+        function deleteStore(store) {
+            id = jQuery(store).parent().parent().find('.store-id').val();
+
+            if(jQuery.isNumeric(id)){
+                Store(id, null, null, null, '3');
+            }            
+
+            jQuery(store).parent().parent().remove(); 
+        } 
+
+        function Store(id, description, url, token, action){
+            jQuery.post("<?= $block->getUrl("masterprice/index/store"); ?>", {
+                    id: id,
+                    description: description,
+                    url: url,
+                    token: token,
+                    action: action
+                },
+                function(data) {
+                    alert("Registrado/alterado com sucesso!");
+                }
+            )
+        }
+    </script>

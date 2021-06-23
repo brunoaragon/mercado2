@@ -1,0 +1,237 @@
+<div class="container">
+    <div><input name="form_key" type="hidden" value="<?= $this->getFormKey() ?>"></div>
+
+    Quantidade máxima de produtos: 50
+
+    <button onclick="saveRule()" title="Salvar" type="button" class="btn-save action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="">
+        <span><span><span>Salvar</span></span></span>
+    </button>
+
+    <?php
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $extensionUser = $objectManager->get('Magento\Backend\Model\Auth\Session')->getUser()->getUsername();
+
+    if($extensionUser == 'm2n'){
+    ?>
+
+    <div class="list-item" id="sortable">
+        <?php
+        $_product_list = $block->getProducts();
+
+        if (count($_product_list)) {
+            foreach ($_product_list as $_product) {
+        ?>
+                <div class="item ui-state-default pending-<?= $_product['id'] ?>">                   
+
+                    <div class="query name">
+                        <span class="subtitle">Nome </span><br>
+                        <input type="text" class="product-name" value="<?= $_product['name'] ?>"><br>
+
+                        <span style="margin-top: 12px; display: inline-block;" class="subtitle">SKU </span><br>
+                        <input type="text" class="product-sku" value="<?= $_product['name'] ?>"><br>
+                        <span class="sku-error">SKU já existente.</span>
+                    </div>
+
+                    <div class="query name">
+                        <span class="subtitle">Descrição Curta </span><br>
+                        <textarea class="product-shortdescription"><?= $_product['short_description'] ?></textarea>
+                    </div>
+
+                    <div class="query name">
+                        <span class="subtitle">Descrição </span><br>
+                        <textarea class="product-description"><?= $_product['description'] ?></textarea>
+                    </div>
+
+                    <div class="query name">
+                        <span class="subtitle">Preço Sugerido </span><br>
+                        <input type="text" class="product-price" value="<?= $_product['price'] ?>"><br>
+
+                        <span style="margin-top: 12px; display: inline-block;" class="subtitle">Origem </span><br>
+                        <input readonly type="text" class="product-name" value="<?= $_product['store'] ?>">
+                    </div>
+
+                    <div class="query name">
+                        <span class="subtitle">Categoria(s) </span><br>
+
+                        <?php
+                        $_categories = $_product['categories'];
+                        $_categories = explode(',', $_categories);
+
+                        foreach ($_categories as $_category) {
+                        ?>
+                            <select style="width: calc(100% - 42px);padding: 3px 5px;" name="variable[<?= substr(md5(microtime() . rand()), 0, 14) ?>][<?= substr(md5(microtime() . rand()), 0, 14) ?>]" class="product-categories" title="">
+                                <?php
+                                $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
+                                $categoryCollection = $objectManager->get('\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory');
+                                $categories = $categoryCollection->create();
+                                $categories->addAttributeToSelect('*');
+                                $categories->addAttributeToFilter('entity_id', array('gt' => 2));
+                                $categories->addAttributeToFilter('level', 2);
+                                $categories->addAttributeToFilter('is_active', 1);
+
+                                foreach ($categories as $category) {
+                                ?>
+                                    <optgroup label="<?= $category->getName() ?>">
+                                        <option <?= $_category == $category->getId() ? 'selected="selected"' : '' ?> value="<?= $category->getId() ?>">Categoria Principal</option>
+                                        <?php
+                                        $subcategories = $category->getChildrenCategories();
+                                        foreach ($subcategories as $subcategory) {
+                                        ?>
+                                            <option <?= $_category == $subcategory->getId() ? 'selected="selected"' : '' ?> value="<?= $subcategory->getId() ?>"><?= $subcategory->getName() ?></option>
+                                        <?php
+                                        }
+                                        ?>
+                                    </optgroup>
+                                <?php
+                                }
+                                ?>
+                            </select>
+                            <button style="font-weight: 700; width: 38px; padding: 4px 4px 3px 4px; border-radius: 3px;" onclick="removeOption(this)" class="scalable delete btn-remove  action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button"><span><span><span>X</span></span></span></button>
+                        <?php
+                        }
+                        ?>
+                    </div>
+
+                    <div class="option">
+                        <button onclick="importProduct(<?= $_product['id'] ?>)" class="scalable delete btn-save  action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">Importar</button>
+                    </div>
+                    <div class="option">
+                        <button onclick="deleteProduct(<?= $_product['id'] ?>)" class="scalable delete btn-remove  action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">Remover</button>
+                    </div>
+
+                    
+
+                </div>
+        <?php
+            }
+        }
+        ?>
+    </div>
+    <?php            
+    } else {
+    ?>
+    <div>
+        <span>Seu usuário não tem permissão.</span>
+    </div>
+    <?php
+    }
+    ?>
+
+    <style>
+        .changed {
+            pointer-events: none;
+            opacity: 0.3;
+            filter: grayscale(1);
+        }
+
+        .query input {
+            border: 1px solid #aaa;
+            width: 100%;
+            padding: 4px 25px;
+            border-radius: 3px;
+        }
+
+        .query select {
+            border: 1px solid #aaa;
+            width: 100%;
+            padding: 3px 25px;
+            border-radius: 3px;
+            background: #fff;
+        }
+
+        .query textarea {
+            max-width: 340px;
+            max-height: 140px;
+            border: 1px solid #aaa !important;
+            padding: 3px 25px;
+            border-radius: 3px !important;
+            background: #fff;
+            margin-top: 0 !important;
+        }
+
+        .item .option button {
+            margin-top: 18px;
+            display: inline-block;
+        }
+
+        .sku-error {
+            display: none;
+            font-size: 13px;
+            font-weight: 600;
+            color: #e03b3b;
+        }
+        .item {        
+            background: #ffffff;
+            border: 1px solid #ccc;            
+        }
+        .item .subtitle {
+            margin-bottom: 4px;
+            display: inline-block;
+        }
+        .query input {
+            margin-bottom: -5px;
+        }
+    </style>
+
+    <script>
+        function importProduct(id) {
+            jQuery('.pending-' + id).find('.sku-error').hide();
+
+            var r_categories = [];
+            jQuery('.pending-' + id).find('.product-categories').each(function(index) {
+                r_categories.push(jQuery(this).val());
+            });
+
+            jQuery('.pending-' + id).addClass('changed');
+
+            setTimeout(function() {
+                showError(id);
+            }, 5000);
+
+            sku = jQuery('.pending-' + id).find('.product-sku').val();
+            shortdescription = jQuery('.pending-' + id).find('.product-shortdescription').val();
+            description = jQuery('.pending-' + id).find('.product-description').val();
+            name = jQuery('.pending-' + id).find('.product-name').val();
+            price = jQuery('.pending-' + id).find('.product-price').val();
+            jQuery.post("<?= $block->getUrl("masterprice/index/productsave"); ?>", {
+                    id: id,
+                    sku: sku,
+                    categories: r_categories,
+                    shortdescription: shortdescription,
+                    description: description,
+                    name: name,
+                    price: price
+                },
+                function(data) {
+                    if (data != '0') {
+                        jQuery('.pending-' + id).addClass('saved');
+                        alert('Produto importado com sucesso!');
+
+                        window.open(data, '_blank');
+                    }
+
+                    showError(id);
+                }
+            )
+        }
+
+        function deleteProduct(id) {
+            jQuery.post("<?= $block->getUrl("masterprice/index/productdelete"); ?>", {
+                    id: id
+                },
+                function(data) {
+                    jQuery('.pending-' + id).remove();
+                    alert('Produto deletado com sucesso!');
+                }
+            )
+        }
+
+        function showError(id) {
+            if (!jQuery('.pending-' + id).hasClass('saved')) {
+                jQuery('.pending-' + id).find('.sku-error').show();
+                jQuery('.pending-' + id).removeClass('changed');
+            }
+        }
+
+        jQuery("#sortable").sortable();
+    </script>

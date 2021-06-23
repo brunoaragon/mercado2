@@ -1,0 +1,160 @@
+<?php
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\Checkout\Block\Cart\Sidebar */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
+<style>
+    .page-wrapper .page-header .header.content .minicart-wrapper .action.showcart:before {
+        background: none;
+    }
+
+    .minicart-wrapper .fa-shopping-cart {
+        font-size: 26px;
+        color: #fff;
+        position: absolute;
+        left: 0;
+        top: 7px;
+    }
+
+    .mnn-minicart {
+        display: none;
+    }
+
+    @media only screen and (min-width : 1280px) {
+        .minicart-wrapper {
+            display: none;
+        }
+
+        .mnn-minicart {
+            display: inline-block !important;
+            border: 1px solid #444;
+            width: 170px;
+            border-radius: 100px;
+            margin-top: -2px;
+        }
+
+        .mnn-minicart .showcart {
+            float: right;
+            right: 10px;
+        }
+
+        .mnn-minicart label {
+            position: absolute;
+            left: 20px;
+            top: 12px;            
+        }
+
+        .mnn-minicart label a{
+            color: #eee;
+            font-weight: 500;
+        }
+
+        .page-wrapper .page-header .header.content .minicart-wrapper .action.showcart .counter.qty {
+            background: #333;
+        }
+
+        .page-wrapper .page-header .header.content .minicart-wrapper .action.showcart .counter.qty {
+            top: 12px;
+        }
+
+        .minicart-wrapper .fa-shopping-cart {
+            font-size: 26px;
+            color: #eee;
+            position: absolute;
+            right: 25px;
+            top: 8px;
+        }
+    }
+</style>
+
+<div data-block="minicart" class="minicart-wrapper mnn-minicart">
+    <label><a href="/checkout/cart/">Carrinho</a></label>
+    <a class="action showcart" href="<?= $block->escapeUrl($block->getShoppingCartUrl()) ?>" data-bind="scope: 'minicart_content'">
+        <span class="text"><?= $block->escapeHtml(__('My Cart')) ?></span>
+        <span class="counter qty empty" data-bind="css: { empty: !!getCartParam('summary_count') == false && !isLoading() },
+               blockLoader: isLoading">
+            <span class="counter-number">
+                <!-- ko text: getCartParam('summary_count') -->
+                <!-- /ko -->
+            </span>
+            <span class="counter-label">
+                <!-- ko if: getCartParam('summary_count') -->
+                <!-- ko text: getCartParam('summary_count') -->
+                <!-- /ko -->
+                <!-- ko i18n: 'items' -->
+                <!-- /ko -->
+                <!-- /ko -->
+            </span>
+        </span>
+        <i class="fa fa-shopping-cart"></i>
+    </a>
+</div>
+
+<div data-block="minicart" class="minicart-wrapper">
+    <a class="action showcart" href="<?= $block->escapeUrl($block->getShoppingCartUrl()) ?>" data-bind="scope: 'minicart_content'">
+        <span class="text"><?= $block->escapeHtml(__('My Cart')) ?></span>
+        <span class="counter qty empty" data-bind="css: { empty: !!getCartParam('summary_count') == false && !isLoading() },
+               blockLoader: isLoading">
+            <span class="counter-number">
+                <!-- ko text: getCartParam('summary_count') -->
+                <!-- /ko -->
+            </span>
+            <span class="counter-label">
+                <!-- ko if: getCartParam('summary_count') -->
+                <!-- ko text: getCartParam('summary_count') -->
+                <!-- /ko -->
+                <!-- ko i18n: 'items' -->
+                <!-- /ko -->
+                <!-- /ko -->
+            </span>
+        </span>
+        <i class="fa fa-shopping-cart"></i>
+    </a>
+    <?php if ($block->getIsNeedToDisplaySideBar()) : ?>
+        <div class="block block-minicart" data-role="dropdownDialog" data-mage-init='{"dropdownDialog":{
+                "appendTo":"[data-block=minicart]",
+                "triggerTarget":".showcart",
+                "timeout": "2000",
+                "closeOnMouseLeave": false,
+                "closeOnEscape": true,
+                "triggerClass":"active",
+                "parentClass":"active",
+                "buttons":[]}}'>
+            <div id="minicart-content-wrapper" data-bind="scope: 'minicart_content'">
+                <!-- ko template: getTemplate() -->
+                <!-- /ko -->
+            </div>
+            <?= $block->getChildHtml('minicart.addons') ?>
+        </div>
+    <?php else : ?>
+        <?php $scriptString = <<<script
+            require(['jquery'], function ($) {
+                $('a.action.showcart').click(function() {
+                    $(document.body).trigger('processStart');
+                });
+            });
+script;
+        ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
+    <?php endif ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], 'window.checkout = ' .
+        /* @noEscape */ $block->getSerializedConfig(), false); ?>
+    <script type="text/x-magento-init">
+        {
+        "[data-block='minicart']": {
+            "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+        },
+        "*": {
+            "Magento_Ui/js/block-loader": "<?= $block->escapeJs(
+                                                $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))
+                                            ) ?>"
+        }
+    }
+    </script>
+</div>

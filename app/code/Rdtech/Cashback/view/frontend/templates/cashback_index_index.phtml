@@ -1,0 +1,145 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$customerSession = $objectManager->get('Magento\Customer\Model\Session');
+if($customerSession->isLoggedIn()) {
+?>
+
+<div class="container">
+    <div class="col-md-12">
+
+        <style>
+            .cashback_item .in {
+                color: #3ebf94 !important;
+                font-weight: 500;
+            }
+
+            .cashback_item .out {
+                color: #dc2323 !important;
+                font-weight: 500;
+            }
+
+            .cashback_item .total {
+                color: #666666 !important;
+                font-weight: 500;
+            }
+
+            .cashback_item {
+                padding: 10px;
+                border-bottom: 1px solid #eee;
+            }
+
+            .cashback_item:last-child {
+                border-bottom: none;
+            }
+
+            .cashback_title {
+                margin-bottom: 5px;
+                display: inline-block;
+                font-weight: 15px;
+            }
+
+            .cashback_title span {
+                font-weight: 600;
+            }
+
+            .cashback_item .col-md-2 {
+                padding: 0 5px;
+            }
+
+            .resume{
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+                border-bottom: 1px solid #eee;                
+            }
+
+            .resume .title span{
+                font-size: 18px;
+            }
+            .resume .info span{
+                font-size: 28px;
+                font-weight: 600;
+                color: #3ebf94;
+                margin-top: -3px;
+                display: inline-block;
+            }
+        </style>
+
+        <div class="col-md-12 resume">
+            <div class="col-md-12 title">
+                <span>Seu Saldo</span>
+            </div>
+            <div class="col-md-12 info">
+                <?php
+                $helper = $this->helper('Rdtech\Cashback\Helper\Data');
+                $cashback_total = $helper->getCashbackCredit();
+                ?>
+                <span>R$<?= number_format($cashback_total, 2, ',', '.') ?></span>
+            </div>
+        </div>
+
+        <div class="col-md-12 cashback_title">
+            <div class="col-md-2">
+                <span>Pedido</span>
+            </div>
+            <div class="col-md-2">
+                <span>Data do Pedido</span>
+            </div>
+            <div class="col-md-2">
+                <span>Valido até</span>
+            </div>
+            <div class="col-md-2">
+                <span>Cashback</span>
+            </div>
+            <div class="col-md-2">
+                <span>Crédito usado</span>
+            </div>
+            <div class="col-md-2">
+                <span>Saldo</span>
+            </div>
+        </div>
+
+        <?php
+        $helper = $this->helper('Rdtech\Cashback\Helper\Data');
+        $_current = 0;
+        foreach ($helper->getCashback() as $_item) {
+            $_current = $_current + number_format($_item['cashback'], 2);
+            $_current = $_current - number_format($_item['cashback_used'], 2);
+
+            $date = new DateTime($_item['date']);
+            $date = $date->format('d/m/Y H:i:s');
+
+            $validity = new DateTime($_item['validity']);
+            $validity = $validity->format('d/m/Y');
+        ?>
+            <div class="col-md-12 cashback_item">
+                <div class="col-md-2">
+                    <a style="font-weight: 500;color: #555" href="/sales/order/view/order_id/<?= $_item['entity_id'] ?>/"><span>#<?= $_item['id'] ?></span></a>
+                </div>
+                <div class="col-md-2">
+                    <span><?= $date ?></span>
+                </div>
+                <div class="col-md-2">
+                    <span><?= $validity ?></span>
+                </div>
+                <div class="col-md-2 in">
+                    <span>+R$<?= number_format($_item['cashback'], 2, ',', '.') ?></span>
+                </div>
+                <div class="col-md-2 out">
+                    <span>-R$<?= number_format($_item['cashback_used'], 2, ',', '.') ?></span>
+                </div>
+                <div class="col-md-2 total">
+                    <span>R$<?= number_format($_current, 2, ',', '.') ?></span>
+                </div>
+            </div>
+        <?php
+        }
+        ?>
+    </div>
+</div>
+<?php
+} else {
+?>
+<a href="/customer/account/">Faça login para continuar</a>
+<?php
+}
+?>

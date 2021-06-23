@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/mercadonanuvem/price/tableprice" method="POST">
+        <service class="Rdtech\Masterprice\Api\ApitablepriceInterface" method="insertTablePrice"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="description" force="true">%description%</parameter>
+            <parameter name="code" force="true">%code%</parameter>
+            <parameter name="validity_init" force="true">%validity_init%</parameter>
+            <parameter name="validity_end" force="true">%validity_end%</parameter>
+            <parameter name="is_active" force="true">%is_active%</parameter>
+        </data>
+    </route>  
+
+    <route url="/V1/mercadonanuvem/price/tablepricelink" method="POST">
+        <service class="Rdtech\Masterprice\Api\ApitablepricelinkInterface" method="insertTablePriceLink"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="store_id" force="true">%store_id%</parameter>
+            <parameter name="price_table_id" force="true">%price_table_id%</parameter>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+            <parameter name="customer_group_id" force="true">%customer_group_id%</parameter>
+            <parameter name="is_active" force="true">%is_active%</parameter>
+        </data>
+    </route>  
+
+    <route url="/V1/mercadonanuvem/price/tablepriceproduct" method="POST">
+        <service class="Rdtech\Masterprice\Api\ApitablepriceproductInterface" method="insertTablePriceProduct"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="product_id" force="true">%store_id%</parameter>
+            <parameter name="price_table_id" force="true">%price_table_id%</parameter>
+            <parameter name="price" force="true">%customer_id%</parameter>
+        </data>
+    </route>    
+
+    <route url="/V1/mercadonanuvem/price/discount" method="POST">
+        <service class="Rdtech\Masterprice\Api\ApidiscountInterface" method="insertDiscount"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="product_id" force="true">%product_id%</parameter>
+            <parameter name="code" force="true">%code%</parameter>
+            <parameter name="store_id" force="true">%store_id%</parameter>
+            <parameter name="percentage" force="true">%percentage%</parameter>
+            <parameter name="category_id" force="true">%category_id%</parameter>
+            <parameter name="price_table_id" force="true">%price_table_id%</parameter>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+            <parameter name="date_from" force="true">%date_from%</parameter>
+            <parameter name="date_to" force="true">%date_to%</parameter>
+            <parameter name="is_active" force="true">%is_active%</parameter>
+        </data>
+    </route>   
+</routes>

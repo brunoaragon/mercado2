@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+	<head>
+        <title>Gerenciar Lojas</title>
+		<script src="Rdtech_Masterprice::js/js.js"/>
+		<css src="Rdtech_Masterprice::css/css.css"/>
+		<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" ></script>       
+    </head>
+	<body>
+        <referenceContainer name="content">
+            <block class="Rdtech\Loja\Block\Adminhtml\Index\Index" name="loja_block_adminhtml_index_index"  template="Rdtech_Loja::loja_index_index.phtml" />
+        </referenceContainer>
+    </body>
+</page>

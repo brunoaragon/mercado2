@@ -1,0 +1,217 @@
+<script src="https://use.fontawesome.com/7102890617.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<input id="stop" type="hidden" value="0">
+
+<div class="loading-more">
+    <span>Carregando mais produtos...</span>
+</div>
+
+<div class="container" style="display: flex;">
+    <div class="list_loaded" style="width: calc(50% - 10px);border: 1px solid #ddd;border-radius: 4px;margin-right: 20px;height: 620px;overflow-y: scroll;">
+        <div style="width:100%">
+            <button class="btn_load_product" style="display: block; margin: 10px auto 10px auto;" type="button" onclick="automatic()">Importar Imagens</button>
+            <button class="btn_stop_product" style="display: none; margin: 10px auto 10px auto;" type="button" onclick="stop()">Cancelar</button>
+            
+            <span style="display: block;text-align: center;">Produtos Sem Imagem:</span>
+            <input class="count-loaded" value="0" style="background: transparent; border: none; display: block; margin: 0 auto 10px auto; text-align: center;">
+        </div>
+
+        <div class="listagem">
+
+        </div>
+    </div>
+
+    <div class="list_success" style="width: calc(50% - 10px);border: 1px solid #ddd;border-radius: 4px;height: 620px;overflow-y: scroll;">
+        <div style="width:100%">
+            <button class="btn_import_all" disabled style="display: block;float: right;margin-top: -5px;margin-right: 10px;" type="button" onclick="importAll()">Importar Todas as Imagens</button>
+            <span style="display: block;margin: 10px auto 10px auto;text-align: center;font-size: 16px;font-weight: 600;color: #444;">Importação <span style="font-weight:400;font-size:12px">(<span id="count-ready">0</span> importadas)</span></span>
+        </div>       
+        
+        <div class="listagem">
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .loading-more{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255,255,0.75);
+        z-index: 9;
+        display: none;
+        text-align: center;
+    }
+    .loading-more span{
+        display: block;
+        margin: auto;
+        margin-top: 25%;
+    }
+
+    .product-loaded{
+        display: none;
+    }
+    .remove-pdt{
+        display: none;
+    }
+    .list_success .remove-pdt{
+        display: block !important;
+    }
+    .sku-load{
+        display:none;
+    }
+</style>
+
+<script>
+    function automatic(){
+        setInterval(function(){ 
+            jQuery('.list_loaded .product-loaded').first().appendTo('.list_success .listagem');
+        }, 1);
+
+        setInterval(function(){ 
+            jQuery('.list_success .img-loaded .importImg').each(function( index ) {
+                //jQuery('.btn_import_all').html('<i class="fa fa-spinner fa-spin"></i>');
+                //jQuery(this).click();     
+                jQuery(this).parent().parent().removeClass('img-loaded');               
+            });            
+        }, 100);
+
+        setInterval(function(){ 
+            if(jQuery('.fa-spinner').length < 1){
+                automatic();
+            }          
+        }, 17500);
+
+        jQuery.post("<?= $block->getUrl("masterprice/index/imagesave"); ?>", {
+                id: 0
+            },
+            function(data) {
+                jQuery('.list_loaded .listagem').html(data);
+
+                if(jQuery('.count-loaded').val() < 1000){   
+                    automatic();
+                } else {
+                    var str = jQuery('.count-loaded').val();
+                    str = str.toString();
+                    var res = str.substr(str.length - 3);
+
+                    if(res == '000'){    
+                        jQuery('.btn_load_product').html('Buscando mais produtos...');
+                        jQuery('.btn_load_product').attr('disabled','disabled');
+
+                        jQuery('.loading-more').show();               
+                        setTimeout(function(){ 
+                            jQuery('.loading-more').hide();  
+
+                            jQuery('.btn_load_product').html('Importar Imagens');
+                            jQuery('.btn_load_product').removeAttr('disabled');
+
+                            automatic();
+                        }, 40000);                        
+                    } else {
+                        automatic();
+                    }
+                }
+            }
+        )       
+    }
+
+    function importAll(){
+        jQuery('.btn_import_all').html('<i class="fa fa-spinner fa-spin"></i>');
+        jQuery('.btn_import_all').attr('disabled','disabled');  
+        jQuery('.btn_import_all').css('background','transparent');  
+        jQuery('.btn_import_all').css('border','none');  
+
+        jQuery('.list_success .img-loaded .importImg').each(function( index ) {
+            jQuery(this).click();            
+        });
+    }
+
+    function importImage(sku){
+        if(jQuery('.sku-'+sku).hasClass('img-loaded')){
+            jQuery('.sku-'+sku+' button').html('<i class="fa fa-spinner fa-spin"></i>');
+            img = jQuery('.sku-'+sku+' img').attr('src');
+
+            jQuery.post("<?= $block->getUrl("masterprice/index/imagesaveproduct"); ?>", {
+                    sku: sku,
+                    img: img
+                },
+                function(data) {
+                    jQuery('.sku-'+sku+' button').html('Importada');        
+                    jQuery('.sku-'+sku+' button').attr('disabled','disabled'); 
+
+                    //setTimeout(function(){ 
+                        jQuery('.sku-'+sku).remove();
+                        jQuery('#count-ready').html(parseInt(jQuery('#count-ready').html()) + 1);
+                    //}, 50);
+                }
+            )   
+        }
+    }
+
+    function imgError(image) {
+        jQuery(image).parent().parent().hide();
+
+        jQuery(image).parent().parent().find('.importImg').attr('disabled','disabled');
+        jQuery(image).parent().html('<span style="margin-top: -1px;display: inline-block;line-height: 13px;font-size: 12px;text-align: center;">Imagem não encontrada</span>');
+    }
+
+    function imgLoad(image) {
+        jQuery(image).parent().parent().find('.importImg').removeAttr('disabled');
+        jQuery(image).parent().parent().find('.sku-load').show();
+        jQuery(image).parent().parent().find('.ico-load').hide();
+        jQuery(image).parent().parent().show();
+        jQuery(image).parent().parent().addClass('img-loaded');
+        jQuery(image).parent().parent().find('.remove-pdt span').html('Importando');
+        
+
+        jQuery(image).parent().parent().find('.importImg').click();
+    }
+
+    jQuery("#sortable").sortable();
+
+    function getProducts() {
+        jQuery('.btn_load_product').hide();
+        jQuery('.btn_stop_product').css('display','block');
+        jQuery('.btn_load_product').attr('disabled','disabled');
+        jQuery('.btn_import_all').attr('disabled','disabled');
+
+        setInterval(function(){ 
+            jQuery('.list_loaded .product-loaded').first().appendTo('.list_success .listagem');
+
+            if(jQuery('.list_loaded .product-loaded').length <= 0){
+                jQuery('.btn_import_all').removeAttr('disabled');
+
+                if(jQuery('#stop').val() == '1'){
+                    jQuery('.btn_stop_product').html('Consulta cancelada');
+                }                
+            }
+        }, 1);
+
+        jQuery.post("<?= $block->getUrl("masterprice/index/imagesave"); ?>", {
+                id: 0
+            },
+            function(data) {
+                jQuery('.list_loaded .listagem').html(data);
+
+                var str = jQuery('.count-loaded').val();
+                str = str.toString();
+                var res = str.substr(str.length - 3);
+
+                if(res == '000'){    
+                    jQuery('.admin__data-grid-loading-mask').show();               
+                    setTimeout(function(){ 
+                        jQuery('.admin__data-grid-loading-mask').hide();  
+                        automatic();
+                    }, 20000);
+                } else {
+                    automatic();
+                }
+            }
+        )       
+    }
+</script>

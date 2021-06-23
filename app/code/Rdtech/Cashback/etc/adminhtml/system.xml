@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="cashback" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Cashback</label>
+            <tab>rdtech</tab>
+            <resource>Mageplaza_Core::configuration</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Geral</label>
+
+                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Habilitar</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="percentage" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Porcentagem (%)</label>
+                    <comment>Porcentagem de cashback por pedido.</comment>
+                </field>
+
+                <field id="min_value" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Valor Mínimo (R$)</label>
+                    <comment>Valor mínimo para gerar cashback.</comment>
+                </field>
+
+                <field id="max_value" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Valor Máximo (R$)</label>
+                    <comment>Valor máximo para calcular o cashback (0 para ilimitado).</comment>
+                </field>
+
+                <field id="validity" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Validade (dias)</label>
+                    <comment>Quantidade em dias para expirar o cashback (por pedido realizado).</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

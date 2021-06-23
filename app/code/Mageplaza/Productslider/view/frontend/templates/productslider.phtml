@@ -1,0 +1,717 @@
+<?php
+
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Productslider
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+use Mageplaza\Productslider\Block\AbstractSlider;
+use Magento\Framework\App\Action\Action;
+
+/** @var AbstractSlider $block */
+$mode = 'grid';
+$type = 'widget-product-grid';
+$title = $block->getTitle();
+$banner = $block->getDescription();
+$blockId = $block->getSliderId() . uniqid('-', false);
+$layout = $block->getLayout();
+$items = $block->getProductCollection();
+if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
+    if ($layout == 0) {
+?>
+
+        <div class="mnn-slide-title">
+            <span><?= $title ?></span>
+        </div>
+
+        <div style="display: inline-flex; width: 100%">
+            <?php
+            if (boolval($banner)) {
+                echo "<style>.banner-productslider{width:20%;padding:35px 8px 10px 0}#mp-list-items-" . $blockId . "{width:80%}</style>";
+            ?>
+                <div class="banner-productslider">
+                    <img src="<?= $banner ?>">
+                </div>
+            <?php
+            }
+            ?>
+
+            <div class="mnn-product-list owl-carousel owl-theme" id="mp-list-items-<?= $blockId ?>">
+                <?php
+                foreach ($items as $_item) {
+                    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                    $_product = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface')->getById($_item->getId());
+
+                    $__cart = $objectManager->get('\Magento\Checkout\Model\Session')->getQuote();
+                    $__result = $__cart->getAllVisibleItems();
+                    $__itemsIds = array();
+                    foreach ($__result as $__cartItem) {
+                        array_push($__itemsIds, $__cartItem->getProduct()->getId());
+                    }
+
+                    $image = 'new_products_content_widget_grid';
+                    $productImage = $block->getImage($_product, $image);
+                ?>
+                    <div class="make-3D-space">
+                        <div class="product-card product-<?= $_product->getId() ?>">
+                            <div class="product-front">
+                                <div class="shadow"></div>
+
+                                <?php echo $productImage->toHtml(); ?>
+
+                                <div class="image_overlay"></div>
+                                <a href="<?= $_product->getProductUrl() ?>" class="view_details">Ver Produto</a>
+                                <div class="stats">
+                                    <div class="stats-container">
+                                        <span class="product_price">
+                                            <?php
+                                            $weight = "";
+                                            if ($_product->getProdutoPorPeso()) {
+                                                if ($_product->getSpecialPrice()) {
+                                                    $_oldprice = ($_product->getPrice() * 1000) / $_product->getProdutoPesoUnidade();
+                                                    $_price = ($_product->getSpecialPrice() * 1000) / $_product->getProdutoPesoUnidade();
+                                            ?>
+                                                    <div class="old-price">
+                                                        <?= 'R$' . number_format($_oldprice, 2, ',', '.') . $weight ?>
+                                                    </div>
+                                                    <div>
+                                                        <?= 'R$' . number_format($_price, 2, ',', '.') . '/kg' ?>
+                                                    </div>
+                                                <?php
+                                                } else {
+                                                    $_price = ($_product->getPrice() * 1000) / $_product->getProdutoPesoUnidade();
+                                                ?>
+                                                    <div>
+                                                        <?= 'R$' . number_format($_price, 2, ',', '.') . '/kg' ?>
+                                                    </div>
+                                                <?php
+                                                }
+                                            } else {
+                                                if (($_product->getSpecialPrice() < $_product->getPrice()) && $_product->getSpecialPrice()) {
+                                                ?>
+                                                    <div class="old-price">
+                                                        <?= 'R$' . number_format($_product->getPrice(), 2, ',', '.') . $weight ?>
+                                                    </div>
+                                                    <div>
+                                                        <?= 'R$' . number_format($_product->getSpecialPrice(), 2, ',', '.') . $weight ?>
+                                                    </div>
+                                            <?php
+                                                } else {
+                                                    echo 'R$' . number_format($_product->getPrice(), 2, ',', '.') . $weight;
+                                                }
+                                            }
+                                            ?>
+                                        </span>
+                                        <span class="product_name"><?= $_product->getName() ?></span>
+                                        <p>
+                                            <?php
+                                            $categories = $_product->getCategoryIds();
+                                            foreach ($categories as $category) {
+                                                $cat = $objectManager->create('Magento\Catalog\Model\Category')->load($category);
+                                                $_category_name = $cat->getName();
+                                            }
+                                            echo $_category_name;
+                                            ?>
+                                        </p>
+
+                                        <div class="product-more-info">
+                                            <div class="product-info-price">
+                                                <?php
+                                                $weight = "/unidade";
+
+                                                if ($_product->getProdutoPorPeso()) {
+                                                    $weight = '/<span style="font-size: 12px;">' . $_product->getProdutoPesoUnidade() . $_product->getProdutoUnidadeMedida() . '</span>';
+                                                }
+
+                                                if ($_product->getSpecialPrice()) {
+                                                    echo 'R$' . number_format($_product->getSpecialPrice(), 2, ',', '.') . $weight;
+                                                } else {
+                                                    echo 'R$' . number_format($_product->getPrice(), 2, ',', '.') . $weight;
+                                                }
+                                                ?>
+                                            </div>
+
+                                            <?php
+                                            $_product_qty = 0;
+
+                                            if (in_array($_product->getId(), $__itemsIds)) {
+                                                $cart = $this->helper('\Magento\Checkout\Helper\Cart');
+                                                $itens = $cart->getQuote()->getItems();
+
+                                                foreach ($itens as $item) {
+                                                    if ($_product->getId() == $item->getProduct_id()) {
+                                                        $_product_qty = $item->getQty();
+                                                    }
+                                                }
+                                            }
+                                            if (!$_product->getProdutoPorPeso()) {
+                                            ?>
+                                                <div class="img-hover-cart cart-check-<?= $_product->getId() ?>">
+                                                    <span class="cart-check-qtd"><?= $_product_qty ?></span> <span>no Carrinho</span>
+                                                </div>
+                                            <?php
+                                            } else {
+                                                if ($_product_qty == 0) {
+                                                    $qty_weight = 1;
+                                                } else {
+                                                    $qty_weight = $_product_qty;
+                                                }
+                                            ?>
+                                                <div class="weight-qtd">
+                                                    <span class="qtd-selected"><?= ($_product->getProdutoPesoUnidade() * $qty_weight) ?></span>g
+                                                    <input value="<?= $_product->getProdutoPesoUnidade() ?>" type="hidden">
+                                                    <span style="display: none" class="cart-check-qtd"><?= $_product_qty ?></span>
+                                                </div>
+                                            <?php
+                                            }
+                                            ?>
+                                        </div>
+
+                                        <div class="product-options">
+                                            <div class="product-options-item">
+                                                <button type="button" onclick="mnnRemoveQty(<?= $_product->getId() ?>);">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                                        <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="M5 12h14" />
+                                                        </g>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="product-options-item">
+                                                <input class="qtd-addtocart" type="number" min="1" value="<?= $_product_qty > 1 ? $_product_qty : '1' ?>" readonly="readonly" type="number" min="0" max="999">
+                                            </div>
+                                            <div class="product-options-item">
+                                                <button type="button" onclick="mnnAddQty(<?= $_product->getId() ?>);">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                                        <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path d="M12 5v14" />
+                                                            <path d="M5 12h14" />
+                                                        </g>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="product-options-item">
+                                                <button type="button" onclick="mnnAddToCart(<?= $_product->getId() ?>)">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                                        <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <circle cx="9" cy="21" r="1" />
+                                                            <circle cx="20" cy="21" r="1" />
+                                                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                                                        </g>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-back">
+                                <div class="shadow"></div>
+                                <div class="carousel">
+                                    <ul>
+                                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt-large.png" alt="" /></li>
+                                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt-large2.png" alt="" /></li>
+                                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt-large3.png" alt="" /></li>
+                                    </ul>
+                                    <div class="arrows-perspective">
+                                        <div class="carouselPrev">
+                                            <div class="y"></div>
+                                            <div class="x"></div>
+                                        </div>
+                                        <div class="carouselNext">
+                                            <div class="y"></div>
+                                            <div class="x"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flip-back">
+                                    <div class="cy"></div>
+                                    <div class="cx"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+
+        <script>
+            require([
+                'jquery',
+                'mage/translate',
+                'mageplaza/core/owl.carousel'
+            ], function($, $t) {
+                jQuery(window).ready(function() {
+                    jQuery('#mp-list-items-<?= $blockId ?>').owlCarousel({
+                        loop: true,
+                        responsiveClass: true,
+                        autoplay: true,
+                        autoplayTimeout: 8000,
+                        responsive: {
+                            0: {
+                                items: 2,
+                                nav: true,
+                                autoplay: false,
+                            },
+                            600: {
+                                items: 3,
+                                nav: true
+                            },
+                            1080: {
+                                items: 4,
+                                nav: false
+                            },
+                            1280: {
+                                items: <?= boolval($banner) ? '4' : '5' ?>,
+                                nav: false
+                            },
+                            1466: {
+                                items: <?= boolval($banner) ? '4' : '5' ?>,
+                                nav: false,
+                                loop: true
+                            }
+                        }
+                    })
+                })
+            })
+        </script>
+
+    <?php } else { ?>
+        <div class="mnn-slide-title">
+            <span><?= $title ?></span>
+        </div>
+
+        <div style="display: inline-flex; width: 100%">
+            <?php
+            if (boolval($banner)) {
+                echo "<style>.banner-productslider{width:20%;padding:35px 8px 10px 0}#mp-list-items-" . $blockId . "{width:80%}</style>";
+            ?>
+                <div class="banner-productslider">
+                    <img src="<?= $banner ?>">
+                </div>
+            <?php
+            }
+            ?>
+
+            <style>
+                .productlist-card-item {
+                    width: calc(20% - 13px);
+                    padding: 10px 5px;
+                    display: inline-block;
+                    margin-bottom: 20px;
+                }
+
+                .productlist {
+                    display: inline-block;
+                    width: 100%;
+                }
+            </style>
+
+            <div class="mnn-product-list productlist" id="mp-list-items-<?= $blockId ?>">
+                <?php
+                foreach ($items as $_item) {
+                    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                    $_product = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface')->getById($_item->getId());
+
+                    $__cart = $objectManager->get('\Magento\Checkout\Model\Session')->getQuote();
+                    $__result = $__cart->getAllVisibleItems();
+                    $__itemsIds = array();
+                    foreach ($__result as $__cartItem) {
+                        array_push($__itemsIds, $__cartItem->getProduct()->getId());
+                    }
+
+                    $image = 'new_products_content_widget_grid';
+                    $productImage = $block->getImage($_product, $image);
+                ?>
+                    <div class="productlist-card-item">
+                        <div class="make-3D-space">
+                            <div class="product-card product-<?= $_product->getId() ?>">
+                                <div class="product-front">
+                                    <div class="shadow"></div>
+
+                                    <?php echo $productImage->toHtml(); ?>
+
+                                    <div class="image_overlay"></div>
+                                    <a href="<?= $_product->getProductUrl() ?>" class="view_details">Ver Produto</a>
+                                    <div class="stats">
+                                        <div class="stats-container">
+                                            <span class="product_price">
+                                                <?php
+                                                $weight = "";
+                                                if ($_product->getProdutoPorPeso()) {
+                                                    if ($_product->getSpecialPrice()) {
+                                                        $_oldprice = ($_product->getPrice() * 1000) / $_product->getProdutoPesoUnidade();
+                                                        $_price = ($_product->getSpecialPrice() * 1000) / $_product->getProdutoPesoUnidade();
+                                                ?>
+                                                        <div class="old-price">
+                                                            <?= 'R$' . number_format($_oldprice, 2, ',', '.') . $weight ?>
+                                                        </div>
+                                                        <div>
+                                                            <?= 'R$' . number_format($_price, 2, ',', '.') . '/kg' ?>
+                                                        </div>
+                                                    <?php
+                                                    } else {
+                                                        $_price = ($_product->getPrice() * 1000) / $_product->getProdutoPesoUnidade();
+                                                    ?>
+                                                        <div>
+                                                            <?= 'R$' . number_format($_price, 2, ',', '.') . '/kg' ?>
+                                                        </div>
+                                                    <?php
+                                                    }
+                                                } else {
+                                                    if (($_product->getSpecialPrice() < $_product->getPrice()) && $_product->getSpecialPrice()) {
+                                                    ?>
+                                                        <div class="old-price">
+                                                            <?= 'R$' . number_format($_product->getPrice(), 2, ',', '.') . $weight ?>
+                                                        </div>
+                                                        <div>
+                                                            <?= 'R$' . number_format($_product->getSpecialPrice(), 2, ',', '.') . $weight ?>
+                                                        </div>
+                                                <?php
+                                                    } else {
+                                                        echo 'R$' . number_format($_product->getPrice(), 2, ',', '.') . $weight;
+                                                    }
+                                                }
+                                                ?>
+                                            </span>
+                                            <span class="product_name"><?= $_product->getName() ?></span>
+                                            <p>
+                                                <?php
+                                                $categories = $_product->getCategoryIds();
+                                                foreach ($categories as $category) {
+                                                    $cat = $objectManager->create('Magento\Catalog\Model\Category')->load($category);
+                                                    $_category_name = $cat->getName();
+                                                }
+                                                echo $_category_name;
+                                                ?>
+                                            </p>
+
+                                            <div class="product-more-info">
+                                                <div class="product-info-price">
+                                                    <?php
+                                                    $weight = "/unidade";
+
+                                                    if ($_product->getProdutoPorPeso()) {
+                                                        $weight = '/<span style="font-size: 12px;">' . $_product->getProdutoPesoUnidade() . $_product->getProdutoUnidadeMedida() . '</span>';
+                                                    }
+
+                                                    if ($_product->getSpecialPrice()) {
+                                                        echo 'R$' . number_format($_product->getSpecialPrice(), 2, ',', '.') . $weight;
+                                                    } else {
+                                                        echo 'R$' . number_format($_product->getPrice(), 2, ',', '.') . $weight;
+                                                    }
+                                                    ?>
+                                                </div>
+
+                                                <?php
+                                                $_product_qty = 0;
+
+                                                if (in_array($_product->getId(), $__itemsIds)) {
+                                                    $cart = $this->helper('\Magento\Checkout\Helper\Cart');
+                                                    $itens = $cart->getQuote()->getItems();
+
+                                                    foreach ($itens as $item) {
+                                                        if ($_product->getId() == $item->getProduct_id()) {
+                                                            $_product_qty = $item->getQty();
+                                                        }
+                                                    }
+                                                }
+                                                if (!$_product->getProdutoPorPeso()) {
+                                                ?>
+                                                    <div class="img-hover-cart cart-check-<?= $_product->getId() ?>">
+                                                        <span class="cart-check-qtd"><?= $_product_qty ?></span> <span>no Carrinho</span>
+                                                    </div>
+                                                <?php
+                                                } else {
+                                                    if ($_product_qty == 0) {
+                                                        $qty_weight = 1;
+                                                    } else {
+                                                        $qty_weight = $_product_qty;
+                                                    }
+                                                ?>
+                                                    <div class="weight-qtd">
+                                                        <span class="qtd-selected"><?= ($_product->getProdutoPesoUnidade() * $qty_weight) ?></span>g
+                                                        <input value="<?= $_product->getProdutoPesoUnidade() ?>" type="hidden">
+                                                        <span style="display: none" class="cart-check-qtd"><?= $_product_qty ?></span>
+                                                    </div>
+                                                <?php
+                                                }
+                                                ?>
+                                            </div>
+
+                                            <div class="product-options">
+                                                <div class="product-options-item">
+                                                    <button type="button" onclick="mnnRemoveQty(<?= $_product->getId() ?>);">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                                            <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path d="M5 12h14" />
+                                                            </g>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                <div class="product-options-item">
+                                                    <input class="qtd-addtocart" type="number" min="1" value="<?= $_product_qty > 1 ? $_product_qty : '1' ?>" readonly="readonly" type="number" min="0" max="999">
+                                                </div>
+                                                <div class="product-options-item">
+                                                    <button type="button" onclick="mnnAddQty(<?= $_product->getId() ?>);">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                                            <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path d="M12 5v14" />
+                                                                <path d="M5 12h14" />
+                                                            </g>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                <div class="product-options-item">
+                                                    <button type="button" onclick="mnnAddToCart(<?= $_product->getId() ?>)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                                            <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                <circle cx="9" cy="21" r="1" />
+                                                                <circle cx="20" cy="21" r="1" />
+                                                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                                                            </g>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product-back">
+                                    <div class="shadow"></div>
+                                    <div class="carousel">
+                                        <ul>
+                                            <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt-large.png" alt="" /></li>
+                                            <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt-large2.png" alt="" /></li>
+                                            <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt-large3.png" alt="" /></li>
+                                        </ul>
+                                        <div class="arrows-perspective">
+                                            <div class="carouselPrev">
+                                                <div class="y"></div>
+                                                <div class="x"></div>
+                                            </div>
+                                            <div class="carouselNext">
+                                                <div class="y"></div>
+                                                <div class="x"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flip-back">
+                                        <div class="cy"></div>
+                                        <div class="cx"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php
+                }
+                ?>
+            </div>
+        </div>
+    <?php }  ?>
+
+    <script>
+        require([
+            'jquery',
+            'mage/translate',
+            'mageplaza/core/owl.carousel'
+        ], function($, $t) {
+            jQuery(window).ready(function() {
+
+                // Lift card and show stats on Mouseover
+                jQuery('.product-card').hover(function() {
+                    jQuery(this).addClass('animate');
+                    jQuery('div.carouselNext, div.carouselPrev').addClass('visible');
+                }, function() {
+                    jQuery(this).removeClass('animate');
+                    jQuery('div.carouselNext, div.carouselPrev').removeClass('visible');
+                });
+
+                // Flip card back to the front side
+                jQuery('.flip-back').click(function() {
+
+                    jQuery('.product-card').removeClass('flip180').addClass('flip190');
+                    setTimeout(function() {
+                        jQuery('.product-card').removeClass('flip190').addClass('flip90');
+
+                        jQuery('.product-back div.shadow').css('opacity', 0).fadeTo(100, 1, function() {
+                            jQuery('.product-back, .product-back div.shadow').hide();
+                            jQuery('.product-front, .product-front div.shadow').show();
+                        });
+                    }, 50);
+
+                    setTimeout(function() {
+                        jQuery('.product-card').removeClass('flip90').addClass('flip-10');
+                        jQuery('.product-front div.shadow').show().fadeTo(100, 0);
+                        setTimeout(function() {
+                            jQuery('.product-front div.shadow').hide();
+                            jQuery('.product-card').removeClass('flip-10').css('transition', '100ms ease-out');
+                            jQuery('.cx, .cy').removeClass('s1 s2 s3');
+                        }, 100);
+                    }, 150);
+
+                });
+
+
+                /* ----  Image Gallery Carousel   ---- */
+
+                var carousel = jQuery('.carousel ul');
+                var carouselSlideWidth = 335;
+                var carouselWidth = 0;
+                var isAnimating = false;
+
+                // building the width of the casousel
+                jQuery('.carousel li').each(function() {
+                    carouselWidth += carouselSlideWidth;
+                });
+                jQuery(carousel).css('width', carouselWidth);
+
+                // Load Next Image
+                jQuery('div.carouselNext').on('click', function() {
+                    var currentLeft = Math.abs(parseInt(jQuery(carousel).css("left")));
+                    var newLeft = currentLeft + carouselSlideWidth;
+                    if (newLeft == carouselWidth || isAnimating === true) {
+                        return;
+                    }
+                    jQuery('.carousel ul').css({
+                        'left': "-" + newLeft + "px",
+                        "transition": "300ms ease-out"
+                    });
+                    isAnimating = true;
+                    setTimeout(function() {
+                        isAnimating = false;
+                    }, 300);
+                });
+
+                // Load Previous Image
+                jQuery('div.carouselPrev').on('click', function() {
+                    var currentLeft = Math.abs(parseInt(jQuery(carousel).css("left")));
+                    var newLeft = currentLeft - carouselSlideWidth;
+                    if (newLeft < 0 || isAnimating === true) {
+                        return;
+                    }
+                    jQuery('.carousel ul').css({
+                        'left': "-" + newLeft + "px",
+                        "transition": "300ms ease-out"
+                    });
+                    isAnimating = true;
+                    setTimeout(function() {
+                        isAnimating = false;
+                    }, 300);
+                });
+            })
+        });
+
+        function mnnAddQty(product_id) {
+            qtd = parseInt(jQuery('.product-' + product_id).find('.qtd-addtocart').val());
+            if (qtd < 999) {
+                qtd_atual = qtd + 1;
+                jQuery('.product-' + product_id).find('.qtd-addtocart').val(qtd_atual);
+                jQuery('.m2n-num2add-' + product_id).html(qtd_atual + ' ');
+
+                peso_unidade = jQuery('.product-' + product_id).find('.weight-qtd input').val();
+                jQuery('.product-' + product_id).find('.weight-qtd .qtd-selected').html(qtd_atual * peso_unidade);
+            }
+        }
+
+        function mnnRemoveQty(product_id) {
+            qtd = parseInt(jQuery('.product-' + product_id).find('.qtd-addtocart').val());
+            if (qtd > 1) {
+                qtd_atual = qtd - 1;
+                jQuery('.product-' + product_id).find('.qtd-addtocart').val(qtd_atual);
+                jQuery('.m2n-num2add-' + product_id).html(qtd_atual + ' ');
+
+                peso_unidade = jQuery('.product-' + product_id).find('.weight-qtd input').val();
+                jQuery('.product-' + product_id).find('.weight-qtd .qtd-selected').html(qtd_atual * peso_unidade);
+            }
+        }
+
+        function mnnAddToWishlist(product_id) {
+            jQuery('.product-' + product_id).find('.loading').css('display', 'flex');
+            jQuery('.product-' + product_id).find('.add-success').hide();
+            jQuery('.product-' + product_id).find('.add-fail').hide();
+
+            jQuery.post("<?= $block->getUrl("adicionarcarrinho/index/savewishlist"); ?>", {
+                    product_id: product_id
+                },
+                function(data) {
+                    jQuery('.product-' + product_id).find('.loading').hide();
+                    if (data == '1') {
+                        jQuery('.product-' + product_id).find('.add-success').css('display', 'flex');
+                    } else {
+                        jQuery('.product-' + product_id).find('.add-fail').css('display', 'flex');
+                        jQuery('.product-' + product_id).find('.add-fail span').hide();
+                        jQuery('.product-' + product_id).find('.add-fail .wishlist-error-msg').show();
+                    }
+
+                    setTimeout(function() {
+                        jQuery('.product-' + product_id).find('.add-success').hide();
+                        jQuery('.product-' + product_id).find('.add-fail').hide();
+                        jQuery('.product-' + product_id).find('.add-fail span').show();
+                        jQuery('.product-' + product_id).find('.add-fail .wishlist-error-msg').hide();
+                    }, 1500);
+                }
+            )
+        }
+
+        function mnnAddToCart(product_id) {
+            qtd = parseInt(jQuery('.product-' + product_id).find('.qtd-addtocart').val());
+            qtdInCart = parseInt(jQuery('.product-' + product_id).find('.cart-check-qtd').html());
+
+            jQuery('.product-' + product_id).find('.loading').css('display', 'flex');
+            jQuery('.product-' + product_id).find('.add-success').hide();
+            jQuery('.product-' + product_id).find('.add-fail').hide();
+
+            if (qtdInCart > 0) {
+                jQuery.post("<?= $block->getUrl("adicionarcarrinho/index/update"); ?>", {
+                        product_id: product_id,
+                        qtd: qtd
+                    },
+                    function(data) {
+                        jQuery('.product-' + product_id).find('.loading').hide();
+                        if (data == '1') {
+                            jQuery('.product-' + product_id).find('.cart-check-qtd').html(parseInt(qtd));
+                            mnnAlert("Adicionado ao Carrinho", "Quantidade do produto atualizada", "success");
+                        } else {
+                            mnnAlert("Não foi possível atualizar", "Produto/quantidade do produto indisponível", "error");
+                        }
+                    }
+                )
+            } else {
+                jQuery.post("<?= $block->getUrl("adicionarcarrinho/index/save"); ?>", {
+                        product_id: product_id,
+                        qtd: qtd
+                    },
+                    function(data) {
+                        jQuery('.product-' + product_id).find('.loading').hide();
+                        if (data == '1') {
+                            jQuery('.product-' + product_id).find('.cart-check-qtd').html(parseInt(qtd));
+                            mnnAlert("Adicionado ao Carrinho", "Produto adicionado com sucesso", "success");
+                        } else {
+                            mnnAlert("Não foi possível adicionar", "Produto/quantidade do produto indisponível", "error");
+                        }
+                    }
+                )
+            }
+        }
+    </script>
+
+<?php endif; ?>

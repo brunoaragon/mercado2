@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
+    <menu>
+        <add id="Rdtech_Master::parent" title="Mercado na Nuvem" module="Rdtech_Master" sortOrder="10" resource="Rdtech_Master::parent"/>    
+            <add id="Rdtech_Master::masterprice" title="Gerenciar Preço" translate="title" module="Rdtech_Masterprice" sortOrder="20" parent="Rdtech_Master::parent" resource="Rdtech_Master::masterprice"/>
+                <add id="Rdtech_Masterprice::price" title="Tabela de Preços" translate="title" module="Rdtech_Masterprice" sortOrder="10" parent="Rdtech_Master::masterprice" action="masterprice/index/price" resource="Rdtech_Masterprice::price"/>
+                <add id="Rdtech_Masterprice::discount" title="Tabela de Descontos" translate="title" module="Rdtech_Masterprice" sortOrder="10" parent="Rdtech_Master::masterprice" action="masterprice/index/discount" resource="Rdtech_Masterprice::discount"/>
+                <add id="Rdtech_Masterprice::tax" title="Tabela de Impostos" translate="title" module="Rdtech_Masterprice" sortOrder="10" parent="Rdtech_Master::masterprice" action="masterprice/index/tax" resource="Rdtech_Masterprice::price"/>
+                <add id="Rdtech_Masterprice::taxrule" title="Regras da Tabela de Impostos" translate="title" module="Rdtech_Masterprice" sortOrder="10" parent="Rdtech_Master::masterprice" action="masterprice/index/taxrule" resource="Rdtech_Masterprice::price"/>
+            
+            <add id="Rdtech_Master::store" title="Gerenciar Loja" translate="title" module="Rdtech_Store" sortOrder="10" parent="Rdtech_Master::parent" resource="Rdtech_Master::store"/>
+                <add id="Rdtech_Loja::index" title="Lojas" translate="title" module="Rdtech_Loja" sortOrder="10" parent="Rdtech_Master::store" action="loja/index" resource="Rdtech_Loja::index"/>
+                <add id="Rdtech_Store::index" title="Faixa(s) de CEP" translate="title" module="Rdtech_Store" sortOrder="20" parent="Rdtech_Master::store" action="store/index" resource="Rdtech_Store::index"/>      
+                <add id="Rdtech_Masterprice::image" title="Importar Imagens" translate="title" module="Rdtech_Masterprice" sortOrder="30" parent="Rdtech_Master::store" action="masterprice/index/image" resource="Rdtech_Masterprice::image"/>
+                <add id="Rdtech_Masterprice::order" title="Pedidos em Andamento" translate="title" module="Rdtech_Masterprice" sortOrder="10" parent="Magento_Sales::sales" action="masterprice/index/order" resource="Rdtech_Masterprice::order"/>
+                <add id="Rdtech_Masterprice::user" title="Gerenciar Usuários" translate="title" module="Rdtech_Masterprice" sortOrder="40" parent="Rdtech_Master::store" action="masterprice/index/user" resource="Rdtech_Masterprice::user"/>
+                <add id="Rdtech_Mastertheme::index" title="Gerenciar Tema/Cores" translate="title" module="Rdtech_Mastertheme" sortOrder="50" parent="Rdtech_Master::store" action="mastertheme/index" resource="Rdtech_Mastertheme::index"/>
+                <add id="Rdtech_Masterprice::layout" title="Gerenciar Layout" translate="title" module="Rdtech_Masterprice" sortOrder="60" parent="Rdtech_Master::store" action="masterprice/index/layout" resource="Rdtech_Masterprice::layout"/>
+
+
+            <add id="Rdtech_Master::m2n" title="Mercado na Nuvem" translate="title" module="Rdtech_Store" sortOrder="30" parent="Rdtech_Master::parent" resource="Rdtech_Master::store"/>
+                <add id="Rdtech_Masterprice::product" title="Importação de Produtos" translate="title" module="Rdtech_Masterprice" sortOrder="20" parent="Rdtech_Master::m2n" action="masterprice/index/product" resource="Rdtech_Masterprice::product"/>
+                <add id="Rdtech_Masterprice::productexport" title="Exportação de Produtos" translate="title" module="Rdtech_Masterprice" sortOrder="30" parent="Rdtech_Master::m2n" action="masterprice/index/productexport" resource="Rdtech_Masterprice::productexport"/>
+                <add id="Rdtech_Masterprice::categoryexport" title="Exportação de Categorias" translate="title" module="Rdtech_Masterprice" sortOrder="30" parent="Rdtech_Master::m2n" action="masterprice/index/categoryexport" resource="Rdtech_Masterprice::categoryexport"/>
+                <add id="Rdtech_Masterprice::access" title="Gerenciar Acessos" translate="title" module="Rdtech_Masterprice" sortOrder="40" parent="Rdtech_Master::m2n" action="masterprice/index/access" resource="Rdtech_Masterprice::access"/>
+
+    </menu>
+</config>

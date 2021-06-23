@@ -1,0 +1,177 @@
+<div class="container">
+    <div><input name="form_key" type="hidden" value="<?= $this->getFormKey() ?>"></div>
+
+    <button onclick="saveRule()" title="Salvar" type="button" class="btn-save action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="">
+        <span><span><span>Salvar</span></span></span>
+    </button>
+
+    <div class="list-item" id="sortable">
+
+        <?php
+        $pricerule = $block->getUsers()->getCollection();
+
+        if (count($pricerule)) {
+            foreach ($pricerule as $rule) {
+                ?>
+                <div class="item ui-state-default">
+                    <div class="query">
+                        <span class="subtitle">Usuário </span><br>                
+                        <input disabled="disabled" type="text" class="us-username" value="<?= $rule->getUsername() ?>">
+                    </div>
+
+                    <div class="query">
+                        <span class="subtitle">Senha </span><br>                
+                        <input type="password" class="us-pass" value="......">
+                    </div>
+
+                    <div class="query">
+                        <span class="subtitle">Confirmar Senha </span><br>                
+                        <input type="password" class="us-pass-confirm" value="......">
+                    </div>
+
+                    <div class="query">
+                        <span class="subtitle">Situação </span><br>                
+                        <select class="us-status">
+                            <option <?= $rule->getIsActive() == '1' ? 'selected' : '' ?> value="1">Ativado</option>
+                            <option <?= $rule->getIsActive() == '0' ? 'selected' : '' ?> value="0">Desativado</option>
+                        </select>
+                    </div>
+
+                    <div class="option">
+                        <button onclick="removeRule(this)" class="scalable delete btn-remove  action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">Remover</button>
+                    </div>
+                </div>
+            <?php
+                }
+            } else {
+            ?>
+
+            <div class="item ui-state-default">
+                <div class="query">
+                    <span class="subtitle">Usuário </span><br>                
+                    <input type="text" class="us-username">
+                </div>
+
+                <div class="query">
+                    <span class="subtitle">Senha </span><br>                
+                    <input type="password" class="us-pass">
+                </div>
+
+                <div class="query">
+                    <span class="subtitle">Confirmar Senha </span><br>                
+                    <input type="password" class="us-pass-confirm">
+                </div>
+
+                <div class="query">
+                    <span class="subtitle">Situação </span><br>                
+                    <select class="us-status">
+                        <option value="1">Ativado</option>
+                        <option value="0">Desativado</option>
+                    </select>
+                </div>
+
+                <div class="option">
+                    <button onclick="removeRule(this)" class="scalable delete btn-remove  action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">Remover</button>
+                </div>
+            </div>
+
+        <?php
+        }
+        ?>
+
+    </div>
+    <div>
+        <button onclick="addUser();checkDefault();" class="btn-add action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">
+            <span><span><span>Novo Usuário</span></span></span>
+        </button>
+    </div>
+
+    <style>
+        .query input{
+            border: 1px solid #aaa;
+            width: 100%;
+            padding: 4px 25px;
+            border-radius: 3px;
+        }
+        .query select{
+            border: 1px solid #aaa;
+            width: 100%;
+            padding: 3px 25px;
+            border-radius: 3px;
+            background: #fff;
+        }
+    </style>
+
+    <script>
+        function addUser() {
+            jQuery('.item').first().clone().appendTo('.list-item');
+            jQuery('.item').last().find('input').val('').removeAttr('disabled');
+
+            setKey();
+
+            jQuery('.item').last().find('.new').each(function (index) {
+                jQuery(this).remove();
+            });
+
+            i = 0
+            jQuery('.item').last().find('.select-rules').each(function (index) {
+                if (i > 0) {
+                    jQuery(this).remove();
+                }
+                i++;
+            });
+        }
+
+        jQuery("#sortable").sortable();
+
+        function saveRule() {
+            var level = [];
+
+            var r_rules = [];
+            var r_username = [];
+            var r_password = [];
+            var r_status = [];
+
+            jQuery('.item').each(function(index) {
+                if(jQuery(this).find('.us-pass').val() != '......' && (jQuery(this).find('.us-pass').val() != jQuery(this).find('.us-pass-confirm').val())){
+                    jQuery(this).css('border','1px solid red');
+                    jQuery(this).find('.us-pass-confirm').css('border','1px solid red');
+                } else {                   
+                    r_rules = [];
+                    r_username = [];
+                    r_password = [];
+                    r_status = [];
+
+                    jQuery(this).css('border','none');
+                    jQuery(this).find('.us-pass-confirm').css('border','1px solid #aaa');
+
+                    username = jQuery(this).find('.us-username').val();
+                    r_username.push(username);
+
+                    password = jQuery(this).find('.us-pass').val();
+                    r_password.push(password);
+
+                    status = jQuery(this).find('.us-status').val();
+                    r_status.push(status);
+
+                    r_rules.push(username);
+                    r_rules.push(password);
+                    r_rules.push(status);
+
+                    level.push(r_rules);
+                }                
+            });
+
+            result = jQuery.unique(level);
+            result = JSON.stringify(result);
+
+            jQuery.post("<?= $block->getUrl("masterprice/index/usersave"); ?>", {
+                    result: result
+                },
+                function(data) {
+                    alert('Registrado com sucesso!');
+                }
+            )
+
+        }
+    </script>

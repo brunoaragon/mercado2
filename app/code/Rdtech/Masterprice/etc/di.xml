@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Rdtech\Masterprice\Api\ApitablepriceInterface" type="Rdtech\Masterprice\Model\Apitableprice" />
+    <preference for="Rdtech\Masterprice\Api\ApitablepricelinkInterface" type="Rdtech\Masterprice\Model\Apitablepricelink" />
+    <preference for="Rdtech\Masterprice\Api\ApitablepriceproductInterface" type="Rdtech\Masterprice\Model\Apitablepriceproduct" />
+    <preference for="Rdtech\Masterprice\Api\ApidiscountInterface" type="Rdtech\Masterprice\Model\Apidiscount" />
+</config>

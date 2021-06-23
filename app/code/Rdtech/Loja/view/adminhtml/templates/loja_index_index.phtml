@@ -1,0 +1,154 @@
+<style>
+.address{
+    width: 100%;
+    padding: 5px;
+    background: #f9f9f9;
+    border: 1px solid #e4e4e4;
+    color: #514943;
+    margin-top: 5px;
+}
+</style>
+
+<div class="container">
+    <div><input name="form_key" type="hidden" value="<?= $this->getFormKey() ?>"></div>
+
+    <span class="msg">*clique e arraste para ordernar as lojas.</span>
+
+    <button onclick="saveRule()" title="Salvar" type="button" class="btn-save action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="">
+        <span><span><span>Salvar</span></span></span>
+    </button>
+
+    <div class="list-item" id="sortable">
+
+        <?php
+        $pricerule = $block->getStores()->getCollection();
+
+        if (count($pricerule)) {
+            foreach ($pricerule as $rule) {
+                ?>
+                <div class="item ui-state-default">
+                    <div class="rules" style="width:calc(40% - 200px) !important">
+                        <div class="list-rules">
+                            <div class="select-rules store-info">
+                                <span class="subtitle">Loja</span>
+                                <input class="address store-name" title="" value="<?= $rule->getDescription() ?>">
+                            </div>
+                        </div>                   
+                    </div>
+
+                    <div class="rules" style="width:200px !important">
+                        <div class="list-rules">                       
+                            <div class="select-rules store-info">
+                                <span class="subtitle">Código</span>
+                                <input class="address store-code" title="" value="<?= $rule->getCode() ?>">
+                            </div>
+                        </div>                   
+                    </div>
+
+                    <div class="query" style="width:calc(60% - 200px) !important">
+                        <span class="subtitle">Endereço:</span><br>                
+                        <textarea class="query-text store-address"><?= $rule->getAddress() ?></textarea>
+                    </div>
+                
+                    <div class="option" style="width:15% !important">
+                        <button onclick="removeRule(this)" class="scalable delete btn-remove  action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">Remover Loja</button>
+                    </div>
+                </div>
+            <?php
+                }
+            } else {
+            ?>
+
+            <div class="item ui-state-default">
+                <div class="rules" style="width:calc(40% - 200px) !important">
+                    <div class="list-rules">
+                        <div class="select-rules store-info">
+                            <span class="subtitle">Loja</span>
+                            <input class="address store-name" title="" value="">
+                        </div>
+                    </div>                   
+                </div>
+
+                <div class="rules" style="width:200px !important">
+                    <div class="list-rules">                       
+                        <div class="select-rules store-info">
+                            <span class="subtitle">Código</span>
+                            <input class="address store-code" title="" value="">
+                        </div>
+                    </div>                   
+                </div>
+
+                <div class="query" style="width:calc(60% - 200px) !important">
+                    <span class="subtitle">Endereço:</span><br>                
+                    <textarea class="query-text store-address"></textarea>
+                </div>
+               
+                <div class="option" style="width:15% !important">
+                    <button onclick="removeRule(this)" class="scalable delete btn-remove  action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">Remover Loja</button>
+                </div>
+            </div>
+
+        <?php
+        }
+        ?>
+
+    </div>
+    <div>
+        <button onclick="addStore();" class="btn-add action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">
+            <span><span><span>Nova Loja</span></span></span>
+        </button>
+    </div>
+
+
+    <script>
+        function addStore() {
+            jQuery('.item').first().clone().appendTo('.list-item');
+            jQuery('.item').last().find('.query-text').val('');
+
+            setKey();         
+            
+            jQuery("#sortable").sortable();
+        }
+
+        jQuery("#sortable").sortable();
+
+        function saveRule() {
+            var level = [];
+
+            var r_rules = [];
+            var r_query = [];
+            var r_isdefault = [];
+            var r_variables = [];
+
+            jQuery('.item').each(function(index) {
+                r_rules = [];
+                r_query = [];
+                r_variables = [];
+
+                query = jQuery(this).find('.query-text').val();
+                r_query.push(query);
+
+                jQuery(this).find('.select-rules').each(function(index) {
+                    variable = jQuery(this).find('.variable').val();
+                    r_variables.push(variable);
+                });
+
+                r_rules.push(query);
+                r_rules.push(r_variables);
+
+                level.push(r_rules);
+            });
+
+            result = jQuery.unique(level);
+            result = JSON.stringify(result);
+
+            jQuery.post("<?= $block->getUrl("loja/index/savestore"); ?>", {
+                    result: result
+                },
+                function(data) {
+                    alert('Registrado com sucesso!');
+                }
+            )
+
+        }
+    </script>

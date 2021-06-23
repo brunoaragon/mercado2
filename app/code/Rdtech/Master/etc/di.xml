@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Rdtech\Master\Api\ProductInterface" type="Rdtech\Master\Model\Product" />
+    <preference for="Rdtech\Master\Api\ProductpendingInterface" type="Rdtech\Master\Model\Productpending" />
+    <preference for="Rdtech\Master\Api\ProductexportInterface" type="Rdtech\Master\Model\Productexport" />
+    <preference for="Rdtech\Master\Api\ImageInterface" type="Rdtech\Master\Model\Image" />
+    <preference for="Rdtech\Master\Api\CategoryInterface" type="Rdtech\Master\Model\Category" />
+    <preference for="Rdtech\Master\Api\CategoryupdateInterface" type="Rdtech\Master\Model\Categoryupdate" />
+    <preference for="Rdtech\Master\Api\NotificationInterface" type="Rdtech\Master\Model\Notification" />
+    <preference for="Rdtech\Master\Api\CartitemaddInterface" type="Rdtech\Master\Model\Cartitemadd" />
+    <preference for="Rdtech\Master\Api\CartitemqtyInterface" type="Rdtech\Master\Model\Cartitemqty" />
+    <preference for="Rdtech\Master\Api\ProductslideInterface" type="Rdtech\Master\Model\Productslide" />
+    <preference for="Rdtech\Master\Api\BannerInterface" type="Rdtech\Master\Model\Banner" />
+    <preference for="Rdtech\Master\Api\DeliveryInterface" type="Rdtech\Master\Model\Delivery" />
+    <preference for="Rdtech\Master\Api\DeliveryorderInterface" type="Rdtech\Master\Model\Deliveryorder" />
+    <preference for="Rdtech\Master\Api\FaixacepInterface" type="Rdtech\Master\Model\Faixacep" />
+    <preference for="Rdtech\Master\Api\TaxaservicoInterface" type="Rdtech\Master\Model\Taxaservico" />
+    <preference for="Rdtech\Master\Api\TaxaentregaInterface" type="Rdtech\Master\Model\Taxaentrega" />
+    <preference for="Magento\Directory\Model\Config\Source\WeightUnit" type="Rdtech\Master\Model\Config\Source\WeightUnit" />
+
+    <type name="Magento\Wishlist\Model\Item">
+        <plugin name="keep_in_wishlist" type="Rdtech\Master\Plugin\KeepItemsInWishlistOnPurchase" />
+    </type>
+
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="stock_qtd_api_general" type="Rdtech\Master\Plugin\ProductPlugin" sortOrder="1" />
+    </type>
+</config>

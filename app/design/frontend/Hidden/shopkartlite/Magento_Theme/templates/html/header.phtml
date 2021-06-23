@@ -1,0 +1,414 @@
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+<script src="https://use.fontawesome.com/2e7330d8f0.js"></script>
+
+<script>
+    function mnnAlert(title, message, type) {
+        require([
+            'jquery',
+            'Rdtech_Mastertheme/js/sweetalert2'
+        ], function($, $t) {
+            swal(title, message, type);
+
+            if (type == "success") {
+                setTimeout(function() {
+                    jQuery('.swal-icon--success').parent().parent().remove()
+                }, 1750);
+            } else {
+                setTimeout(function() {
+                    jQuery('.swal-overlay').remove()
+                }, 10000);
+            }
+        })
+    }
+</script>
+
+<!--------------------Cores Header--------------------->
+<style>
+    .page-wrapper .page-header .panel.wrapper {
+        background: #1e1e1e;
+    }
+
+    .page-wrapper .page-header {
+        background-color: #222;
+    }
+
+    .nav-sections .navigation>ul,
+    .nav-sections,
+    .navigation .level0>.level-top:hover,
+    .navigation .level0>.level-top.ui-state-focus {
+        background-color: #48cfad;
+    }
+
+    .nav-sections-item-content .ui-menu li a i,
+    .nav-sections-item-content .ui-menu li a span {
+        color: #fff;
+    }
+</style>
+<!------------------------------------------------------>
+
+<!----------------------Cores Menu---------------------->
+<style>
+    .menu_logo {
+        background-color: #222;
+    }
+
+    #subcategory {
+        background-color: #48cfad;
+        border-color: #48cfad;
+    }
+
+    .subcategory_item a {
+        color: #fff !important;
+        font-size: 15px;
+    }
+</style>
+<!------------------------------------------------------>
+
+
+
+
+
+
+
+
+
+<style>
+    html,
+    body {
+        font-family: 'Roboto', sans-serif !important;
+    }
+
+    .page-wrapper .page-header .panel.wrapper .panel.header .header.links>li>a,
+    .page-wrapper .page-header .panel.wrapper .panel.header .header.links>li>span {
+        line-height: 17px;
+        font-weight: 400;
+    }
+
+    .mp-slider-mnn {
+        display: none;
+    }
+
+    @media only screen and (min-width : 1280px) and (max-width : 1366px) {
+
+        .navigation,
+        .breadcrumbs,
+        .page-header .header.panel,
+        .header.content,
+        .footer.content,
+        .page-wrapper>.widget,
+        .page-wrapper>.page-bottom,
+        .block.category.event,
+        .top-container,
+        .page-main {
+            max-width: 96%;
+        }
+    }
+
+
+    @media only screen and (min-width : 1367px) {
+
+        .navigation,
+        .breadcrumbs,
+        .page-header .header.panel,
+        .header.content,
+        .footer.content,
+        .page-wrapper>.widget,
+        .page-wrapper>.page-bottom,
+        .block.category.event,
+        .top-container,
+        .page-main {
+            max-width: 84%;
+        }
+    }
+
+    @media only screen and (max-width : 767px) {
+        .block-search .control {
+            border-top: none;
+        }
+    }
+
+    @media only screen and (max-width : 480px) {
+
+        .page-wrapper .page-header .panel.wrapper .panel.header .header.links>li>a,
+        .page-wrapper .page-header .panel.wrapper .panel.header .header.links>li>span {
+            display: none;
+        }
+
+        .page-wrapper .page-header .header.content {
+            padding: 10px !important;
+        }
+
+        .header .header-logo {
+            margin-left: 25px;
+        }
+
+        .nav-toggle {
+            top: 19px;
+        }
+
+        .block-search {
+            margin-top: 3px !important;
+        }
+
+        .minicart-wrapper {
+            margin-top: 7px !important;
+        }
+    }
+
+    @media only screen and (min-width : 1280px) {
+        .page-wrapper .page-header .header.content .block-search {
+            padding-left: 15px;
+            max-width: calc(100% - 470px);
+            width: 600px;
+        }
+
+        .page-wrapper .page-header .header.content .block-search .field.search .control .input-text {
+            padding: 15px 25px;
+        }
+    }
+
+    .page-wrapper .page-header .header.content {
+        padding: 36px 15px;
+    }
+
+    .page-wrapper .page-footer {
+        display: none !important;
+    }
+
+    .panel.header .links,
+    .panel.header .switcher {
+        display: block;
+    }
+</style>
+
+<?php
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * @var \Magento\Theme\Block\Html\Header $block
+ */
+$welcomeMessage = $block->getWelcome();
+?>
+<?php switch ($block->getShowPart()):
+    case 'welcome': ?>
+        <li class="greet welcome" data-bind="scope: 'customer'">
+            <!-- ko if: customer().fullname  -->
+            <span class="logged-in" data-bind="text: new String('<?= $block->escapeHtml(__('Welcome, %1!', '%1')) ?>').replace('%1', customer().fullname)">
+            </span>
+            <!-- /ko -->
+            <!-- ko ifnot: customer().fullname  -->
+            <span class="not-logged-in" data-bind='html:"<?= $block->escapeHtml($welcomeMessage) ?>"'></span>
+            <?= $block->getBlockHtml('header.additional') ?>
+            <!-- /ko -->
+        </li>
+        <script type="text/x-magento-init">
+            {
+            "*": {
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "customer": {
+                            "component": "Magento_Customer/js/view/customer"
+                        }
+                    }
+                }
+            }
+        }
+        </script>
+        <?php break; ?>
+
+    <?php
+    case 'other': ?>
+        <?= $block->getChildHtml() ?>
+        <?php break; ?>
+
+<?php endswitch; ?>
+
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+<script>
+    require([
+        'jquery',
+        'mage/translate',
+        'mage/calendar'
+    ], function($, $t) {
+        jQuery(window).ready(function() {
+            sortSlide();
+
+            jQuery(".header-logo .nav-toggle").click(function() {
+                showCategoryMenu()
+            });
+        });
+    });
+
+    function sortSlide() {
+        priority = 0;
+        jQuery(".mp-slider-mnn").each(function(index) {
+            if (parseInt(jQuery(this).attr('sort')) >= parseInt(priority)) {
+                priority = parseInt(jQuery(this).attr('sort'));
+            }
+        });
+
+        for (i = 0; i <= parseInt(priority); i++) {
+            jQuery(".mp-slider-mnn").each(function(index) {
+                jQuery('.mnn-content-sort-' + i).appendTo(jQuery(this).parent());
+            });
+        }
+
+        jQuery('.mp-slider-mnn').show();
+    }
+
+    function showCategoryMenu() {
+        jQuery('#mnn_menu').show();
+
+        jQuery(document).mouseup(function(e) {
+            var container1 = jQuery("#menu");
+            var container2 = jQuery("#subcategory");
+
+            if ((!container1.is(e.target) && container1.has(e.target).length === 0) && (!container2.is(e.target) && container2.has(e.target).length === 0)) {
+                jQuery('#mnn_menu').hide();
+                jQuery("#subcategory").hide();
+            }
+        });
+    }
+
+    function showCategory(id) {
+        jQuery('#subcategory').show();
+        jQuery('.category_children').hide();
+        jQuery('.category-' + id).show();
+    }
+</script>
+
+
+<div id="mnn_menu">
+    <div id="menu">
+        <div class="menu_logo">
+            <?php
+            $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
+            $logo = $objectManager->get('\Magento\Theme\Block\Html\Header\Logo');
+            $logo_url = $logo->getLogoSrc();
+            ?>
+            <img src="<?= $logo_url ?>">
+        </div>
+
+        <div class="menu_list">
+            <a href="/customer/account/" class="menu_item">
+                <div class="menu_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                        <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="menu_title">
+                    Minha Conta
+                </div>
+            </a>
+            <a href="/checkout/cart/" class="menu_item">
+                <div class="menu_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                        <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1" />
+                            <circle cx="20" cy="21" r="1" />
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="menu_title">
+                    Carrinho
+                </div>
+            </a>
+            <a href="/sales/order/history" class="menu_item">
+                <div class="menu_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                        <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                            <path d="M3 6h18" />
+                            <path d="M16 10a4 4 0 0 1-8 0" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="menu_title">
+                    Pedidos
+                </div>
+            </a>
+        </div>
+
+        <div class="category_list">
+            <div class="category_title">
+                <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                        <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 12h18" />
+                            <path d="M3 6h18" />
+                            <path d="M3 18h18" />
+                        </g>
+                    </svg>
+                </div>
+                <div class="title">
+                    <a>Compre por Departamento</a>
+                </div>
+            </div>
+            <?php
+            $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
+            $categoryCollection = $objectManager->get('\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory');
+            $categories = $categoryCollection->create();
+            $categories->addAttributeToSelect('*');
+            $categories->addAttributeToFilter('entity_id', array('gt' => 2));
+            $categories->addAttributeToFilter('level', 2);
+            $categories->addAttributeToFilter('is_active', 1);
+            $categories->setOrder('name', 'ASC');
+
+            foreach ($categories as $category) {
+            ?>
+                <div class="category_item">
+                    <span><a href="<?= $category->getUrl() ?>"><?= $category->getName() ?></a></span>
+                    <?php
+                    if (count($category->getChildrenCategories()) > 0) {
+                    ?>
+                        <div onclick="showCategory(<?= $category->getId() ?>)">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 18l6-6l-6-6" />
+                                </g>
+                            </svg>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                </div>
+            <?php
+            }
+            ?>
+        </div>
+    </div>
+
+    <div id="subcategory">
+        <?php
+        foreach ($categories as $category) {
+        ?>
+            <div class="category_children category-<?= $category->getId() ?>">
+                <?php
+                $subcategories = $category->getChildrenCategories();
+
+                foreach ($subcategories as $subcategory) {
+                ?>
+                    <div class="subcategory_item">
+                        <a href="<?= $subcategory->getUrl() ?>"><?= $subcategory->getName() ?></a>
+                    </div>
+                <?php
+                }
+                ?>
+            </div>
+        <?php
+        }
+        ?>
+    </div>
+</div>

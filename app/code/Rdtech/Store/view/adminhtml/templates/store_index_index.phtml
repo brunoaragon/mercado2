@@ -1,0 +1,561 @@
+<style>
+.add,
+.delete {
+    width: 100px
+}
+
+button {
+    margin: 5px 0
+}
+
+.item {
+    padding: 5px 5px 0 5px;
+    display: inline-flex;
+    width: 100%;
+    background: #ececec;
+    margin-bottom: 15px;
+    cursor: move
+}
+
+.item .option {
+    padding: 10px;
+    width: 160px
+}
+
+.item .option button {
+    width: 100%
+}
+
+.item .option .reset {
+    background-color: #ff8d00
+}
+
+.item .query {
+    padding: 10px;
+    width: calc(50% - 170px)
+}
+
+.item .query .save {
+    margin-top: -13px;
+    width: 80px
+}
+
+.item .query .btn-test {
+    margin-top: 5px;
+    background-color: #666;
+    display: none
+}
+
+.item .query textarea {
+    width: 100%;
+    height: 90px;
+    overflow-y: scroll;
+    border: 1px solid #e4e4e4;
+    margin-top: 6px;
+    background: #f9f9f9;
+    color: #514943
+}
+
+.item .rules {
+    padding: 10px;
+    width: calc(50% - 10px);
+    margin-bottom: 5px
+}
+
+.item .rules .select-rules {
+    width: 100%
+}
+
+.item .rules .store-info {
+    width: 100% !important;
+}
+
+.item .subtitle {
+    font-size: 15px;
+    font-weight: 500
+}
+
+.store-code{
+    width: 100%;
+    padding: 5px;
+    background: #f9f9f9;
+    border-color: #e4e4e4;
+    color: #514943;
+    margin-top: 5px;
+}
+
+.store_address input,
+.store_cep_from input,
+.store_cep_to input{
+    width: 100%;
+    padding: 6px 5px;
+    background: #f9f9f9;
+    border: 1px solid #e4e4e4 !important;
+    color: #514943;
+    margin-top: 5px;
+}
+
+.item .rules .select-rules select {
+    width: calc(100% - 120px);
+    padding: 5px;
+    background: #f9f9f9;
+    border-color: #e4e4e4;
+    color: #514943
+}
+
+.container .btn-add {
+    background: #4e9ad0!important;
+    border-color: #4e9ad0!important
+}
+
+.container .btn-add:hover {
+    background: #3f80af!important;
+    border-color: #3f80af!important
+}
+
+.container .btn-remove {
+    background: #e60808!important;
+    border-color: #e60808!important
+}
+
+.container .btn-remove:hover {
+    background: #ca0909!important;
+    border-color: #ca0909!important
+}
+
+.container .btn-reset {
+    background: #9c9c9c!important;
+    border-color: #9c9c9c!important
+}
+
+.container .btn-reset:hover {
+    background: #8c8c8c!important;
+    border-color: #8c8c8c!important
+}
+
+.container .msg {
+    font-weight: 300;
+    font-style: italic
+}
+
+.item .rules .select-rules .subtitle {
+    display: none
+}
+
+.item .rules .select-rules:first-child .subtitle {
+    display: block
+}
+
+.btn-save {
+    float: right;
+    width: 100px
+}
+
+.version {
+    background: #ececec;
+    padding: 15px;
+    text-align: center;
+    margin-bottom: 10px
+}
+
+.version .desc {
+    display: grid;
+    font-size: 13px;
+    line-height: 15px;
+    color: #a7a7a7
+}
+
+.version .desc .legend {
+    margin-top: 6px;
+    margin-bottom: -2px;
+    font-weight: 400;
+    font-size: 12px;
+    color: #5f5f5f
+}
+
+.version .desc img {
+    margin-bottom: 5px
+}
+
+.version .menu {
+    font-size: 13px;
+    line-height: 15px;
+    color: #6b6b6b;
+    margin-top: 6px
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 130px;
+    height: 34px
+}
+
+.switch input {
+    display: none
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #a0a0a0;
+    -webkit-transition: .4s;
+    transition: .4s
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: #fff;
+    -webkit-transition: .4s;
+    transition: .4s
+}
+
+input:checked+.slider {
+    background-color: #2a84b9
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #2196f3
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(55px);
+    -ms-transform: translateX(55px);
+    transform: translateX(95px)
+}
+
+.on {
+    display: none
+}
+
+.off,
+.on {
+    color: #fff;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    font-size: 11px;
+    font-family: Verdana, sans-serif
+}
+
+input:checked+.slider .on {
+    display: block
+}
+
+input:checked+.slider .off {
+    display: none
+}
+
+.slider.round {
+    border-radius: 34px
+}
+
+.slider.round:before {
+    border-radius: 50%
+}
+.store_code{
+    width: 25%;
+    margin-right: 10px;
+    margin-left: 8px;
+}
+.store_address{
+    width: 35%;
+    margin-right: 10px;
+}
+.store_cep_from{
+    width: calc(20% - 100px);
+    margin-right: 10px;
+}
+.store_cep_to{
+    width: calc(20% - 100px);
+    margin-right: 10px;
+}
+.searchcep{
+    float: right; 
+    font-style: italic; 
+    margin-right: 25px; 
+    margin-top: 3px; 
+    font-size: 13px; 
+    cursor: pointer; 
+    color: #3696cd;
+    display: none;
+}
+iframe{
+    width: 900px;
+    height: 550px;
+    border: none;
+    z-index: 0;
+}
+iframe section{
+    display: none;
+}
+</style>
+
+<script>
+function addOption(option) {
+    jQuery(option).parent().parent().find('.select-rules').first().clone().addClass('new').appendTo(jQuery(option).parent().parent().find('.list-rules'));
+
+    setKey();
+}
+
+function removeOption(option) {
+    if (jQuery(option).parent().parent().find('.select-rules').length > 1) {
+        jQuery(option).parent().remove();
+    }
+}
+
+function setKey() {
+    i = 0;
+    jQuery('.item').each(function (index) {
+        y = 0;
+        jQuery(this).find('.select-rules').each(function (index) {
+            jQuery(this).find('select').attr('name', 'variable[' + i + '][' + y + ']');
+            y++;
+        });
+        i++;
+    });
+}
+
+function addRule() {
+    jQuery('.item').first().clone().appendTo('.list-item');
+    jQuery('.item').last().find('.query-text').val('');
+
+    setKey();
+
+    jQuery('.item').last().find('.new').each(function (index) {
+        jQuery(this).remove();
+    });
+
+    i = 0
+    jQuery('.item').last().find('.select-rules').each(function (index) {
+        if (i > 0) {
+            jQuery(this).remove();
+        }
+        i++;
+    });
+}
+
+function removeRule(option) {
+    if (jQuery('.item').length > 1) {
+        jQuery(option).parent().parent().remove();
+
+        setKey()
+    }
+}
+
+function resetRule(rule) {
+    jQuery(rule).parent().parent().find('.query-text').val('');
+
+    i = 0;
+    jQuery(rule).parent().parent().find('.select-rules').each(function (index) {
+        if (i > 0) {
+            jQuery(this).remove();
+        }
+        i++;
+    });
+
+    setKey()
+}
+
+function faixaCep(loja){
+    unidade = jQuery(loja).parent().parent().find('.store-code option:selected').text()
+
+    res = unidade.split("-");
+
+    localidade = jQuery.trim(res[0]);
+    uf = jQuery.trim(res[1]).substr(0, 2);
+    
+    url = "https://buscacep.correios.com.br/app/faixa_cep_uf_localidade/index.php?uf="+uf+"&localidade="+localidade;
+
+    window.open(url, '_blank');
+}
+</script>
+
+<div class="container">
+    <div><input name="form_key" type="hidden" value="<?= $this->getFormKey() ?>"></div>
+
+    <span class="msg">*clique e arraste para ordernar as regras.</span>
+
+
+    
+
+    <button onclick="saveRule()" title="Salvar" type="button" class="btn-save action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="">
+        <span><span><span>Salvar</span></span></span>
+    </button>
+
+    <div class="list-item" id="sortable">
+
+        <?php
+        $storecollection = $block->getStores()->getCollection();
+
+        $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();        
+        $storeManager  = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+        $storeManagerDataList = $storeManager->getStores();                       
+
+        if (count($storecollection)) {
+            foreach ($storecollection as $store) {
+                ?>
+                <div class="item ui-state-default">
+                    <div class="store_code">
+                        <span class="subtitle">Loja: <span class="searchcep" onclick="faixaCep(this)">Pesquisar Faixa de CEP</span></span><br>                
+                        <select class="store-code">
+                            <?php
+                            foreach ($storeManagerDataList as $key => $value){
+                            ?>
+
+                            <option <?= $store->getCode() == $value['code'] ? 'selected' : '' ?> value="<?= $value['code'] ?>"><?= $value['name'] ?> (código: <?= $value['code'] ?>)</option>
+                            <?php
+                            }
+                            ?>
+                        </select>             
+                    </div>
+
+                    <div class="store_address">
+                        <span class="subtitle">Endereço: </span><br>  
+                        <input type="text" class="store-address" value="<?= $store->getAddress() ?>">
+                    </div>
+
+                    <div class="store_cep_from">
+                        <span class="subtitle">CEP Inicial: </span><br>  
+                        <input type="text" class="store-cep_from" value="<?= $store->getCepFrom() ?>">
+                    </div>
+
+                    <div class="store_cep_to">
+                        <span class="subtitle">CEP Final: </span><br>  
+                        <input type="text" class="store-cep_to" value="<?= $store->getCepTo() ?>">
+                    </div>
+
+
+                    <div class="option">
+                        <button style="margin-top: 15px;display: inline-block;padding: 5px 5px 6px 5px;" onclick="removeRule(this)" class="scalable delete btn-remove  action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">Remover Regra</button>
+                    </div>
+                </div>
+            <?php
+                }
+            } else {
+            ?>
+
+            <div class="item ui-state-default">
+                <div class="store_code">
+                    <span class="subtitle">Loja: <span class="searchcep" onclick="faixaCep(this)">Pesquisar Faixa de CEP</span></span><br>                
+                    <select class="store-code">
+                        <?php
+                        foreach ($storeManagerDataList as $key => $value){
+                        ?>
+
+                        <option value="<?= $value['code'] ?>"><?= $value['name'] ?> (código: <?= $value['code'] ?>)</option>
+                        <?php
+                        }
+                        ?>
+                    </select>             
+                </div>
+
+                <div class="store_address">
+                    <span class="subtitle">Endereço: </span><br>  
+                    <input type="text" class="store-address">
+                </div>
+
+                <div class="store_cep_from">
+                    <span class="subtitle">CEP Inicial: </span><br>  
+                    <input type="text" class="store-cep_from">
+                </div>
+
+                <div class="store_cep_to">
+                    <span class="subtitle">CEP Final: </span><br>  
+                    <input type="text" class="store-cep_to">
+                </div>
+
+                <div class="option">
+                    <button style="margin-top: 15px;display: inline-block;padding: 5px 5px 6px 5px;" onclick="removeRule(this)" class="scalable delete btn-remove  action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">Remover Regra</button>
+                </div>
+            </div>
+
+        <?php
+        }
+        ?>
+
+    </div>
+    <div>
+        <button onclick="addRule();checkDefault();" class="btn-add action-default scalable save primary ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button">
+            <span><span><span>Nova Regra</span></span></span>
+        </button>
+    </div>
+
+
+    <script>
+        setTimeout(function(){
+            jQuery("#sortable").sortable();
+        }, 1000);        
+
+        function saveRule() {
+            var level = [];
+            var r_rules = [];
+
+            var r_store = [];
+            var r_address = [];
+            var r_cep_from = [];
+            var r_cep_to = [];
+
+            jQuery('.item').each(function(index) {
+                r_rules = [];
+
+                r_store = [];
+                r_address = [];
+                r_cep_from = [];
+                r_cep_to = [];
+
+                store = jQuery(this).find('.store-code').val();
+                r_store.push(store);
+
+                address = jQuery(this).find('.store-address').val();
+                r_address.push(address);
+
+                cep_from = jQuery(this).find('.store-cep_from').val();
+                r_cep_from.push(cep_from);
+
+                cep_to = jQuery(this).find('.store-cep_to').val();
+                r_cep_to.push(cep_to); 
+                               
+                r_rules.push(store);
+                r_rules.push(address);
+                r_rules.push(cep_from);
+                r_rules.push(cep_to);
+
+                level.push(r_rules);
+            });
+
+            result = jQuery.unique(level);
+            result = JSON.stringify(result);
+
+            jQuery.post("<?= $block->getUrl("store/index/storesave"); ?>", {
+                    result: result
+                },
+                function(data) {
+                    alert('Registrado com sucesso!');
+                }
+            )
+
+        }
+    </script>
+
+<div>
+    <div style="height: 120px; background: #fff; position: absolute; width: 900px;">
+        <span style="font-size: 20px; color: #444; font-weight: 600; margin-left: 8px; margin-top: 90px; display: inline-block;">Pesquisar faixa de CEP</span>
+    </div>
+    <iframe scrolling="no" id="iframe" src="https://buscacep.correios.com.br/app/faixa_cep_uf_localidade/index.php">
+</div>
+
+<script>
+
+
+</script>

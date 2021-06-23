@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/mercadonanuvem/product/slide" method="GET">
+        <service class="Rdtech\Master\Api\ProductslideInterface" method="getProducts"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+    </route>
+    <route url="/V1/mercadonanuvem/banner" method="GET">
+        <service class="Rdtech\Master\Api\BannerInterface" method="getBanner"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+    </route>
+    <route url="/V1/mercadonanuvem/delivery" method="GET">
+        <service class="Rdtech\Master\Api\DeliveryInterface" method="getDeliveryDate"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+    </route>
+    <route url="/V1/mercadonanuvem/faixacep" method="GET">
+        <service class="Rdtech\Master\Api\FaixacepInterface" method="getFaixaCep"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+    </route>
+    <route url="/V1/mercadonanuvem/taxaservico" method="GET">
+        <service class="Rdtech\Master\Api\TaxaservicoInterface" method="getTaxaServico"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+    </route>
+    <route url="/V1/mercadonanuvem/taxaentrega" method="GET">
+        <service class="Rdtech\Master\Api\TaxaentregaInterface" method="getTaxaEntrega"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+    </route>
+    <route url="/V1/mercadonanuvem/product/insert" method="POST">
+        <service class="Rdtech\Master\Api\ProductInterface" method="insertProduct"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="name" force="true">%name%</parameter>
+            <parameter name="sku" force="true">%sku%</parameter>
+            <parameter name="price" force="true">%price%</parameter>
+            <parameter name="description" force="true">%description%</parameter>
+            <parameter name="shortdescription" force="true">%shortdescription%</parameter>
+            <parameter name="categories" force="true">%categories%</parameter>
+            <parameter name="quantity" force="true">%quantity%</parameter>
+            <parameter name="visibility" force="true">%visibility%</parameter>
+            <parameter name="image" force="true">%image%</parameter>
+            <parameter name="sku_mnn" force="true">%sku_mnn%</parameter>
+            <parameter name="produto_por_peso" force="true">%produto_por_peso%</parameter>
+            <parameter name="produto_unidade_medida" force="true">%produto_unidade_medida%</parameter>
+            <parameter name="produto_peso_unidade" force="true">%produto_peso_unidade%</parameter>
+        </data>
+    </route>
+    <route url="/V1/mercadonanuvem/product/pending" method="POST">
+        <service class="Rdtech\Master\Api\ProductpendingInterface" method="insertProduct"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="name" force="true">%name%</parameter>
+            <parameter name="sku" force="true">%sku%</parameter>
+            <parameter name="price" force="true">%price%</parameter>
+            <parameter name="description" force="true">%description%</parameter>
+            <parameter name="shortdescription" force="true">%shortdescription%</parameter>
+            <parameter name="categories" force="true">%categories%</parameter>
+        </data>
+    </route>
+    <route url="/V1/mercadonanuvem/product/export" method="POST">
+        <service class="Rdtech\Master\Api\ProductexportInterface" method="insertProduct"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="name" force="true">%name%</parameter>
+            <parameter name="sku" force="true">%sku%</parameter>
+            <parameter name="price" force="true">%price%</parameter>
+            <parameter name="description" force="true">%description%</parameter>
+            <parameter name="shortdescription" force="true">%shortdescription%</parameter>
+            <parameter name="categories" force="true">%categories%</parameter>
+            <parameter name="quantity" force="true">%quantity%</parameter>
+            <parameter name="visibility" force="true">%visibility%</parameter>
+            <parameter name="image" force="true">%image%</parameter>
+            <parameter name="produto_por_peso" force="true">%produto_por_peso%</parameter>
+            <parameter name="produto_unidade_medida" force="true">%produto_unidade_medida%</parameter>
+            <parameter name="produto_peso_unidade" force="true">%produto_peso_unidade%</parameter>
+        </data>
+    </route>
+    <route url="/V1/mercadonanuvem/image/insert" method="POST">
+        <service class="Rdtech\Master\Api\ImageInterface" method="insertImage"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="sku" force="true">%sku%</parameter>
+            <parameter name="image" force="true">%image%</parameter>
+        </data>
+    </route>
+    <route url="/V1/mercadonanuvem/category/get" method="POST">
+        <service class="Rdtech\Master\Api\CategoryInterface" method="getCategory"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="id" force="true">%id%</parameter>
+            <parameter name="nivel" force="true">%nivel%</parameter>
+        </data>
+    </route>
+    <route url="/V1/mercadonanuvem/category/update" method="POST">
+        <service class="Rdtech\Master\Api\CategoryupdateInterface" method="updateCategory"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="id" force="true">%id%</parameter>
+            <parameter name="name" force="true">%name%</parameter>
+            <parameter name="parent" force="true">%parent%</parameter>
+        </data>
+    </route>
+    <route url="/V1/mercadonanuvem/notification" method="POST">
+        <service class="Rdtech\Master\Api\NotificationInterface" method="updateNotification"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="token" force="true">%token%</parameter>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/mercadonanuvem/cart/add" method="POST">
+        <service class="Rdtech\Master\Api\CartitemaddInterface" method="AddQuoteItem"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="sku" force="true">%sku%</parameter>
+            <parameter name="qty" force="true">%qty%</parameter>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/mercadonanuvem/cart/qty" method="POST">
+        <service class="Rdtech\Master\Api\CartitemqtyInterface" method="setQuoteQty"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="sku" force="true">%sku%</parameter>
+            <parameter name="qty" force="true">%qty%</parameter>
+            <parameter name="quote_id" force="true">%quote_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/mercadonanuvem/delivery" method="POST">
+        <service class="Rdtech\Master\Api\DeliveryorderInterface" method="insertDelivery"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="order_id" force="true">%order_id%</parameter>
+            <parameter name="delivery" force="true">%delivery%</parameter>
+        </data>
+    </route>
+</routes>

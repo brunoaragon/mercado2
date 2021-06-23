@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Core
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="rdtech" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Gerenciamento de Preço</label>
+            <tab>rdtech</tab>
+            <resource>Mageplaza_Core::configuration</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Configurações Gerais</label>
+                <field id="enable_price" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Habilitar tabela de preços</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Ativar preços de produtos por tabela de preços</comment>
+                </field>
+                <field id="enable_discount" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Habilitar tabela de descontos</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Habilitar desconto de produto por tabela de descontos</comment>
+                </field>
+                <field id="enable_tax" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Habilitar tabela de impostos</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Habilitar imposto de produto por tabela de impostos</comment>
+                </field>
+            </group>
+            <group id="pricetable" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Tabela de Preço</label>
+                <field id="defaulttable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Tabela de preço padrão</label>
+                    <source_model>Rdtech\Masterprice\Model\Config\Custom\Tables</source_model>
+                    <comment>Definir um preço de tabela de produto padrão</comment>
+                </field>               
+            </group>
+            <group id="discounttable" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Tabela de Desconto</label>
+                <field id="discounttag" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Habilitar TAG de desconto</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Ative para mostrar etiqueta de desconto no produto</comment>
+                </field>               
+            </group>
+            <group id="taxtable" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Tabela de Imposto</label>
+                <field id="taxdetailproduct" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Detalhe de imposto no produto</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Mostrar detalhes fiscais na página do produto</comment>
+                </field>    
+                <field id="taxdetailcart" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Detalhe de imposto no carrinho</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Mostrar detalhes fiscais na página do carrinho</comment>
+                </field>             
+            </group>
+        </section>
+
+        <section id="catalog">
+            <group id="search" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Catalog Search</label>
+                <field id="barcode" type="select" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Busca por código de barras</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
