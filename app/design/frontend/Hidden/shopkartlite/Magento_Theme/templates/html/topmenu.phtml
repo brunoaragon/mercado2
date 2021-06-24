@@ -292,3 +292,124 @@ $showHome = $helper->getConfigValue('shopkartlitesettings/navigation_settings/en
         </li>
     </ul>
 </nav>
+
+<div class="mnn-categories-slider owl-carousel owl-theme">
+    <?php
+    $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
+    $categoryCollection = $objectManager->get('\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory');
+    $categories = $categoryCollection->create();
+    $categories->addAttributeToSelect('*');
+    $categories->addAttributeToFilter('entity_id', array('gt' => 2));
+    $categories->addAttributeToFilter('level', 2);
+    $categories->addAttributeToFilter('is_active', 1);
+    $categories->setOrder('name', 'ASC');
+
+    foreach ($categories as $_category) {
+        $collectionFactory = $objectManager->get('\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory')->create();
+        $products = $collectionFactory->addAttributeToSelect('external_image')
+            ->addCategoriesFilter(['in' => $_category->getId()])
+            ->setPageSize(4);
+
+        $products->getSelect()->orderRand();
+
+        $products = $products->getItems();
+
+    ?>
+        <div>
+            <a href="<?= $_category->getUrl() ?>">
+                <div class="slider-category_item">
+                    <?php
+                    foreach ($products as $_item) {
+                    ?>
+                        <div class="slider-category_item-product">
+                            <img src="<?= $_item->getExternalImage() ?>">
+                        </div>
+                    <?php
+                    }
+                    ?>
+
+                </div>
+                <div class="slider-category_name">
+                    <span><?= $_category->getName() ?></span>
+                </div>
+            </a>
+        </div>
+
+    <?php
+    }
+    ?>
+</div>
+
+<style>
+    .slider-category_name {
+        padding: 0 5px;
+        font-size: 13px;
+        color: #555;
+        -webkit-line-clamp: 1;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-top: -3px;
+    }
+
+    .slider-category_item {
+        width: calc(100% - 20px);
+        display: inline-block;
+        background: #fff;
+        margin: 5px;
+        padding: 5px;
+        filter: brightness(0.93);
+    }
+
+    .slider-category_item-product {
+        width: calc(50% - 5px);
+        height: calc(50% - 5px);
+        display: inline-block;
+    }
+
+    .slider-category_item-product img {
+        filter: brightness(1.06);
+        height: auto;
+        max-height: 50px;
+        width: auto !important;
+        max-width: 50px;
+        margin: auto;
+        white-space: nowrap;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .mnn-categories-slider .owl-dots {
+        display: none;
+    }
+
+    .mnn-categories-slider {
+        padding: 15px 0;
+    }
+</style>
+
+<script>
+    require([
+        'jquery',
+        'mage/translate',
+        'mageplaza/core/owl.carousel'
+    ], function($, $t) {
+        jQuery(window).ready(function() {
+            jQuery('.mnn-categories-slider').owlCarousel({
+                loop: true,
+                responsiveClass: true,
+                autoplay: false,
+                autoplayTimeout: 8000,
+                responsive: {
+                    0: {
+                        items: 3,
+                        nav: true,
+                        autoplay: false,
+                    }
+                }
+            })
+        })
+    })
+</script>

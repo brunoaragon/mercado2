@@ -142,7 +142,6 @@
     }
 
     @media only screen and (max-width : 480px) {
-
         .page-wrapper .page-header .panel.wrapper .panel.header .header.links>li>a,
         .page-wrapper .page-header .panel.wrapper .panel.header .header.links>li>span {
             display: none;
@@ -268,19 +267,16 @@ $welcomeMessage = $block->getWelcome();
             }
         });
 
-        for (i = 0; i <= parseInt(priority); i++) {
-            jQuery(".mp-slider-mnn").each(function(index) {
-                //jQuery('.mnn-content-sort-' + i).appendTo(jQuery(this).parent());
-                //jQuery('.mnn-content-sort-' + i).insertAfter( ".nav-sections" );
-            });
-        }
-
         for (i = priority; i >= 0; i--) {
             jQuery(".mp-slider-mnn").each(function(index) {
                 //jQuery('.mnn-content-sort-' + i).appendTo(jQuery(this).parent());
                 jQuery('.mnn-content-sort-' + i).insertAfter( ".nav-sections" );
             });
         }
+
+        jQuery('.mnn-categories-slider').insertAfter(".nav-sections");
+
+        jQuery('.mnn-categories-slider').insertAfter(jQuery('.mp-slider-mnn').first());
 
         jQuery('.mp-slider-mnn').show();
     }
