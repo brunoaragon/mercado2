@@ -91,7 +91,6 @@
     }
 
     @media only screen and (min-width : 1280px) and (max-width : 1366px) {
-
         .navigation,
         .breadcrumbs,
         .page-header .header.panel,
@@ -104,11 +103,14 @@
         .page-main {
             max-width: 96%;
         }
+        .mnn-content-productslide{
+            max-width: 96%;
+            margin-left: 2%;
+        }
     }
 
 
     @media only screen and (min-width : 1367px) {
-
         .navigation,
         .breadcrumbs,
         .page-header .header.panel,
@@ -120,6 +122,10 @@
         .top-container,
         .page-main {
             max-width: 84%;
+        }
+        .mnn-content-productslide{
+            max-width: 84%;
+            margin-left: 8%;
         }
     }
 
@@ -258,7 +264,15 @@ $welcomeMessage = $block->getWelcome();
 
         for (i = 0; i <= parseInt(priority); i++) {
             jQuery(".mp-slider-mnn").each(function(index) {
-                jQuery('.mnn-content-sort-' + i).appendTo(jQuery(this).parent());
+                //jQuery('.mnn-content-sort-' + i).appendTo(jQuery(this).parent());
+                //jQuery('.mnn-content-sort-' + i).insertAfter( ".nav-sections" );
+            });
+        }
+
+        for (i = priority; i >= 0; i--) {
+            jQuery(".mp-slider-mnn").each(function(index) {
+                //jQuery('.mnn-content-sort-' + i).appendTo(jQuery(this).parent());
+                jQuery('.mnn-content-sort-' + i).insertAfter( ".nav-sections" );
             });
         }
 

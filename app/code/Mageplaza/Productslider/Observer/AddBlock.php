@@ -95,9 +95,9 @@ class AddBlock implements ObserverInterface
 
                     if (strpos($location, $type) !== false) {
                         if (strpos($location, 'top') !== false) {
-                            $output = "<div sort='".$slider->getTimeCache()."' class='mnn-content-sort-".$slider->getTimeCache()." mp-slider-mnn' id=\"mageplaza-productslider-block-before-{$type}-{$slider->getId()}\">$content</div>" . $output;
+                            $output = "<div sort='".$slider->getTimeCache()."' class='mnn-content-productslide mnn-content-sort-".$slider->getTimeCache()." mp-slider-mnn' id=\"mageplaza-productslider-block-before-{$type}-{$slider->getId()}\">$content</div>" . $output;
                         } else {
-                            $output .= "<div sort='".$slider->getTimeCache()."' class='mnn-content-sort-".$slider->getTimeCache()." mp-slider-mnn' id=\"mageplaza-productslider-block-after-{$type}-{$slider->getId()}\">$content</div>";
+                            $output .= "<div sort='".$slider->getTimeCache()."' class='mnn-content-productslide mnn-content-sort-".$slider->getTimeCache()." mp-slider-mnn' id=\"mageplaza-productslider-block-after-{$type}-{$slider->getId()}\">$content</div>";
                         }
                     }
                 }
