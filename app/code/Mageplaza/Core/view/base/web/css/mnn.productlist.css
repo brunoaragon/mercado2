@@ -627,6 +627,9 @@ div.shadow {
 }
 
 @media only screen and (max-width: 480px) {
+	.view_details{
+		border: none;
+	}
 	.product-options-item input, 
 	.product-options-item button {
 		border: 1px solid #eee;
@@ -680,7 +683,7 @@ div.shadow {
 		height: 300px;
 	}
 	.owl-dots {
-		margin-top: 15px !important;
+		margin-top: 5px !important;
 	}
 	.product-card.animate .view_details {
 		top: 55px;
@@ -694,6 +697,9 @@ div.shadow {
 	.productlist-card-item {
 		margin-bottom: 10px !important;
 		padding-top: 0 !important;
+	}
+	.make-3D-space .old-price {
+		font-size: 14px !important;
 	}
 }
 
