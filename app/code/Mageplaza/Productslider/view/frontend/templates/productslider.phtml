@@ -262,7 +262,7 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
                     jQuery('#mp-list-items-<?= $blockId ?>').owlCarousel({
                         loop: true,
                         responsiveClass: true,
-                        autoplay: true,
+                        autoplay: false,
                         autoplayTimeout: 8000,
                         responsive: {
                             0: {
@@ -270,11 +270,11 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
                                 nav: true,
                                 autoplay: false,
                             },
-                            600: {
+                            768: {
                                 items: 3,
                                 nav: true
                             },
-                            1080: {
+                            991: {
                                 items: 4,
                                 nav: false
                             },
@@ -544,32 +544,7 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
                     jQuery(this).removeClass('animate');
                     jQuery('div.carouselNext, div.carouselPrev').removeClass('visible');
                 });
-
-                // Flip card back to the front side
-                jQuery('.flip-back').click(function() {
-
-                    jQuery('.product-card').removeClass('flip180').addClass('flip190');
-                    setTimeout(function() {
-                        jQuery('.product-card').removeClass('flip190').addClass('flip90');
-
-                        jQuery('.product-back div.shadow').css('opacity', 0).fadeTo(100, 1, function() {
-                            jQuery('.product-back, .product-back div.shadow').hide();
-                            jQuery('.product-front, .product-front div.shadow').show();
-                        });
-                    }, 50);
-
-                    setTimeout(function() {
-                        jQuery('.product-card').removeClass('flip90').addClass('flip-10');
-                        jQuery('.product-front div.shadow').show().fadeTo(100, 0);
-                        setTimeout(function() {
-                            jQuery('.product-front div.shadow').hide();
-                            jQuery('.product-card').removeClass('flip-10').css('transition', '100ms ease-out');
-                            jQuery('.cx, .cy').removeClass('s1 s2 s3');
-                        }, 100);
-                    }, 150);
-
-                });
-
+            
 
                 /* ----  Image Gallery Carousel   ---- */
 

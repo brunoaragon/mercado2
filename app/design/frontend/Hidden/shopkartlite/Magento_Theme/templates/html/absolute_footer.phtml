@@ -1,0 +1,303 @@
+<style>
+    #mnn-footer {
+        display: inline-block;
+        background: #333333;
+        min-height: 300px;
+        padding: 60px 15px;
+        color: #fff;
+    }
+
+    @media only screen and (min-width: 1366px) {
+        #mnn-footer .footer-content {
+            width: 80%;
+            display: inline-flex;
+            margin-left: 10%;
+        }
+
+    }
+
+    .column-left,
+    .column-center,
+    .column-right {
+        width: 33.33%;
+        padding: 5px 15px;
+    }
+
+    #mnn-footer .session {
+        width: 100%;
+        display: inline-block;
+    }
+
+    #mnn-footer .session .title {
+        width: 100%;
+        display: inline-block;
+        padding: 5px 0;
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    #mnn-footer .session-links .content {
+        width: 100%;
+        display: inline-block;
+        padding: 5px 0;
+    }
+
+    #mnn-footer .session-links .content a {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 300;
+        width: 100%;
+        display: block;
+        padding: 3px 0;
+    }
+
+    #mnn-footer .session-payment .content {
+        display: inline-flex;
+        width: 100%;
+    }
+
+    #mnn-footer .session-payment .content .icon {
+        width: 50px;
+    }
+
+    #mnn-footer .session-social .content {
+        display: inline-flex;
+        width: 100%;
+        padding-top: 5px;
+    }
+
+    #mnn-footer .session-social .content a {
+        width: 16.6%;
+        max-width: 50px;
+        color: #fff;
+        font-size: 22px;
+    }
+
+    #mnn-footer .session-contact .subtitle {
+        width: 100%;
+        display: inline-block;
+        font-size: 15px;
+        font-weight: 400;
+    }
+
+    #mnn-footer .session-contact .content {
+        width: 100%;
+        display: inline-block;
+        font-size: 15px;
+        font-weight: 300;
+    }
+
+    #mnn-footer .session-contact .content .item {
+        margin: 5px 0;
+    }
+
+    #mnn-footer .session-app {
+        display: inline-block;
+        width: 100%;
+        text-align: right;
+    }
+
+    #mnn-footer .session-app .content {
+        display: inline-flex;
+        width: auto;
+        float: right;
+    }
+
+    #mnn-footer .session-app .content .item {
+        width: 120px;
+        max-width: 50%;
+        font-size: 60px;
+    }
+
+    #mnn-footer .session-logo {
+        margin-bottom: 15px;
+    }
+
+    #mnn-footer .session-logo img {
+        width: auto;
+        max-width: 300px;
+        height: auto;
+        max-height: 150px;
+        display: block;
+        margin: auto;
+        margin-top: 15px;
+        float: right;
+    }
+
+
+    @media only screen and (max-width: 768px) {
+
+        .column-left,
+        .column-center,
+        .column-right {
+            width: 100%;
+            padding: 5px 15px;
+        }
+
+        .session-logo {
+            display: none !important;
+        }
+
+        #mnn-footer .session-app {
+            text-align: left;
+        }
+
+        #mnn-footer .session-app .content {
+            float: left;
+        }
+    }
+</style>
+
+<?php
+$objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
+$_config_contact_address = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('mnnmain/contact/address');
+$_config_contact_mail = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('mnnmain/contact/mail');
+$_config_contact_phone = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('mnnmain/contact/phone');
+?>
+
+<div id="mnn-footer">
+    <div class="footer-content">
+        <div class="column-left">
+            <div class="session session-links">
+                <div class="title">
+                    Links
+                </div>
+                <div class="content">
+                    <a href="/privacy-policy-cookie-restriction-mode/">Política de Privacidade e Cookies</a>
+                    <a href="/search/term/popular/">Termos de Pesquisa</a>
+                    <a href="/contact">Fale Conosco</a>
+                    <a href="/sales/guest/form/">Pedidos e Devoluções</a>
+                    <a href="/catalogsearch/advanced/">Pesquisa Avançada</a>
+                </div>
+            </div>
+            <div class="session session-payment">
+                <div class="title">
+                    Formas de Pagamento
+                </div>
+                <div class="content">
+                    <div class="icon">
+                        <img src="/payment/visa.webp">
+                    </div>
+                    <div class="icon">
+                        <img src="/payment/visa.webp">
+                    </div>
+                    <div class="icon">
+                        <img src="/payment/visa.webp">
+                    </div>
+                    <div class="icon">
+                        <img src="/payment/visa.webp">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column-center">
+            <div class="session session-contact">
+                <div class="title">
+                    Contato
+                </div>
+                <div class="content">
+                    <div class="item">
+                        <div class="subtitle">
+                            <span>Endereço</span>
+                        </div>
+                        <div class="value">
+                            <span><?= $_config_contact_address ?></span>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="subtitle">
+                            <span>Email</span>
+                        </div>
+                        <div class="value">
+                            <span><?= $_config_contact_mail ?></span>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="subtitle">
+                            <span>Telefone</span>
+                        </div>
+                        <div class="value">
+                            <span><?= $_config_contact_phone ?></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php
+            $_social_enable = boolval($objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rede_social/general/enable'));
+
+            $_social_facebook = boolval($objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rede_social/facebook/facebook_status'));
+            $_social_facebook_url = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rede_social/facebook/facebook_url');
+
+            $_social_instagram = boolval($objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rede_social/instagram/instagram_status'));
+            $_social_instagram_url = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rede_social/instagram/instagram_url');
+
+            $_social_twitter = boolval($objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rede_social/twitter/twitter_status'));
+            $_social_twitter_url = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rede_social/twitter/twitter_url');
+
+            $_social_whatsapp = boolval($objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rede_social/whatsapp/whatsapp_status'));
+            $_social_whatsapp_url = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rede_social/whatsapp/whatsapp_url');
+
+            $_social_youtube = boolval($objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rede_social/youtube/youtube_status'));
+            $_social_youtube_url = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rede_social/youtube/youtube_url');
+
+            $_social_linkedin = boolval($objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rede_social/linkedin/linkedin_status'));
+            $_social_linkedin_url = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('rede_social/linkedin/linkedin_url');
+
+            if ($_social_enable) {
+            ?>
+                <div class="session session-social">
+                    <div class="title">
+                        Redes Sociais
+                    </div>
+                    <div class="content">
+                        <a href="<?= $_social_facebook_url ?>" target="_blank" style="<?= $_social_facebook ? '' : 'display: none' ?>">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="<?= $_social_instagram_url ?>" target="_blank" style="<?= $_social_instagram ? '' : 'display: none' ?>">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="<?= $_social_twitter_url ?>" target="_blank" style="<?= $_social_twitter ? '' : 'display: none' ?>">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="<?= $_social_whatsapp ?>" target="_blank" style="<?= $_social_whatsapp ? '' : 'display: none' ?>">
+                            <i class="fa fa-whatsapp"></i>
+                        </a>
+                        <a href="<?= $_social_youtube_url ?>" target="_blank" style="<?= $_social_youtube ? '' : 'display: none' ?>">
+                            <i class="fa fa-youtube"></i>
+                        </a>
+                        <a href="<?= $_social_linkedin_url ?>" target="_blank" style="<?= $_social_linkedin ? '' : 'display: none' ?>">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            <?php
+            }
+            ?>
+
+        </div>
+        <div class="column-right">
+            <div class="session session-logo">
+                <?php
+                $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
+                $logo = $objectManager->get('\Magento\Theme\Block\Html\Header\Logo');
+                $logo_url = $logo->getLogoSrc();
+                ?>
+                <img src="<?= $logo_url ?>">
+            </div>
+            <div class="session session-app">
+                <div class="title">
+                    Baixe Nosso Aplicativo
+                </div>
+                <div class="content">
+                    <div class="item">
+                        <i class="fa fa-android" aria-hidden="true"></i>
+                    </div>
+                    <div class="item">
+                        <i class="fa fa-apple" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
