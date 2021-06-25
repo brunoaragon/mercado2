@@ -69,6 +69,9 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
                 ?>
                     <div class="make-3D-space">
                         <div class="product-card product-<?= $_product->getId() ?>">
+                            <div class="mnn-card-loading">
+                                <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                            </div>
                             <div class="product-front">
                                 <div class="shadow"></div>
 
@@ -262,7 +265,7 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
                     jQuery('#mp-list-items-<?= $blockId ?>').owlCarousel({
                         loop: true,
                         responsiveClass: true,
-                        autoplay: false,
+                        autoplay: true,
                         autoplayTimeout: 8000,
                         responsive: {
                             0: {
@@ -343,6 +346,9 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
                     <div class="productlist-card-item">
                         <div class="make-3D-space">
                             <div class="product-card product-<?= $_product->getId() ?>">
+                                <div class="mnn-card-loading">
+                                    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                                </div>
                                 <div class="product-front">
                                     <div class="shadow"></div>
 
@@ -544,7 +550,7 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
                     jQuery(this).removeClass('animate');
                     jQuery('div.carouselNext, div.carouselPrev').removeClass('visible');
                 });
-            
+
 
                 /* ----  Image Gallery Carousel   ---- */
 
@@ -648,12 +654,12 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
         }
 
         function mnnAddToCart(product_id) {
+
+
             qtd = parseInt(jQuery('.product-' + product_id).find('.qtd-addtocart').val());
             qtdInCart = parseInt(jQuery('.product-' + product_id).find('.cart-check-qtd').html());
 
-            jQuery('.product-' + product_id).find('.loading').css('display', 'flex');
-            jQuery('.product-' + product_id).find('.add-success').hide();
-            jQuery('.product-' + product_id).find('.add-fail').hide();
+            jQuery('.product-' + product_id).find('.mnn-card-loading').css('display', 'block');
 
             if (qtdInCart > 0) {
                 jQuery.post("<?= $block->getUrl("adicionarcarrinho/index/update"); ?>", {
@@ -661,7 +667,7 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
                         qtd: qtd
                     },
                     function(data) {
-                        jQuery('.product-' + product_id).find('.loading').hide();
+                        jQuery('.product-' + product_id).find('.mnn-card-loading').css('display', 'none');
                         if (data == '1') {
                             jQuery('.product-' + product_id).find('.cart-check-qtd').html(parseInt(qtd));
                             mnnAlert("Adicionado ao Carrinho", "Quantidade do produto atualizada", "success");
@@ -676,7 +682,7 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
                         qtd: qtd
                     },
                     function(data) {
-                        jQuery('.product-' + product_id).find('.loading').hide();
+                        jQuery('.product-' + product_id).find('.mnn-card-loading').css('display', 'none');
                         if (data == '1') {
                             jQuery('.product-' + product_id).find('.cart-check-qtd').html(parseInt(qtd));
                             mnnAlert("Adicionado ao Carrinho", "Produto adicionado com sucesso", "success");

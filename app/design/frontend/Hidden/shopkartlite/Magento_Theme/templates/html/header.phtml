@@ -91,13 +91,14 @@
     }
 
     @media only screen and (max-width : 1279px) {
-        .mnn-content-productslide{
+        .mnn-content-productslide {
             max-width: 96%;
             margin-left: 2%;
         }
     }
 
     @media only screen and (min-width : 1280px) and (max-width : 1366px) {
+
         .navigation,
         .breadcrumbs,
         .page-header .header.panel,
@@ -110,13 +111,15 @@
         .page-main {
             max-width: 96%;
         }
-        .mnn-content-productslide{
+
+        .mnn-content-productslide {
             max-width: 96%;
             margin-left: 2%;
         }
     }
 
     @media only screen and (min-width : 1367px) {
+
         .navigation,
         .breadcrumbs,
         .page-header .header.panel,
@@ -129,7 +132,8 @@
         .page-main {
             max-width: 84%;
         }
-        .mnn-content-productslide{
+
+        .mnn-content-productslide {
             max-width: 84%;
             margin-left: 8%;
         }
@@ -141,8 +145,20 @@
         }
     }
 
+    .subcategory-close {
+        display: none;
+    }
+
     @media only screen and (max-width : 480px) {
-        .mp-slider-mnn{
+        .subcategory-close {
+            display: inline-block !important;
+            font-size: 22px;
+            margin-left: 10px;
+            margin-bottom: 5px;
+            width: 50px;
+        }
+
+        .mp-slider-mnn {
             margin-top: -1px;
         }
 
@@ -169,6 +185,12 @@
 
         .minicart-wrapper {
             margin-top: 7px !important;
+        }
+
+        #subcategory {
+            position: absolute;
+            left: 0 !important;
+            width: calc(80% + 17px) !important;
         }
     }
 
@@ -274,7 +296,7 @@ $welcomeMessage = $block->getWelcome();
         for (i = priority; i >= 0; i--) {
             jQuery(".mp-slider-mnn").each(function(index) {
                 //jQuery('.mnn-content-sort-' + i).appendTo(jQuery(this).parent());
-                jQuery('.mnn-content-sort-' + i).insertAfter( ".nav-sections" );
+                jQuery('.mnn-content-sort-' + i).insertAfter(".nav-sections");
             });
         }
 
@@ -412,10 +434,17 @@ $welcomeMessage = $block->getWelcome();
     </div>
 
     <div id="subcategory">
+        <div class="subcategory-close" onclick="jQuery(this).parent().hide()">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+        </div>
+
         <?php
         foreach ($categories as $category) {
         ?>
             <div class="category_children category-<?= $category->getId() ?>">
+                <div class="subcategory_item">
+                    <span><a style="font-weight: 600; font-size: 16px;" href="<?= $category->getUrl() ?>"><?= $category->getName() ?></a></span>
+                </div>
                 <?php
                 $subcategories = $category->getChildrenCategories();
 

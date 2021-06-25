@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+ <!-- **
+ * @category   Ksolves
+ * @package    Ksolves_Deliverydate
+ * @author     Ksolves Team
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="ksolves" translate="label" sortOrder="1">
+            <label>Agendamento de Entrega</label>
+        </tab>
+        <section id="ks_deliverydate" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Agendamento de Entrega</label>
+            <tab>rdtech</tab>
+            <resource>Ksolves_Deliverydate::config_deliverydate</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Geral</label>
+
+                <field id="ksolves_deliverydate_general_deliverydate_enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Habilitar Agendamento de Entrega</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <!--<field id="ksolves_deliverydate_general_deliverydate_label" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Label do Campo de Data</label>
+                    <comment>ex: Data de Entrega</comment>
+                </field>-->
+
+                <field id="ksolves_show_today_date" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Disponível Para Entrega na Data da Compra</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                
+                <field id="ksolves_deliverydate_general_deliverytimeslot_enable" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Habilitar Intervalo de Horários</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <!--<field id="ksolves_deliverydate_general_deliverytimeslot_label" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Label do Campo de Horário</label>
+                    <comment>ex: Horário de Entrega</comment>
+                </field>-->
+
+                <field id="ksolves_deliverydate_general_deliverycomment_enable" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Habilitar Campo de Observação</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <!--<field id="ksolves_deliverydate_general_deliverycomment_label" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Label do Campo de Observação</label>
+                </field>-->
+
+                 <field id="ksolves_deliverydate_date_format" translate="label comment" sortOrder="8" type="select" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Formato da Data de Entrega</label>
+                    <source_model>Ksolves\Deliverydate\Model\Adminhtml\Source\DeliveryTime</source_model>
+                </field>                
+            </group>
+
+            <group id="time_slot" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Agendamento de Horário</label>
+               
+                <field id="ksolves_deliverydate_calendar_timeslot_add_timeslot" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Novo Intervalo</label>
+                    <frontend_model>Ksolves\Deliverydate\Block\Adminhtml\Form\Field\AddTimeSlot</frontend_model>
+                    <backend_model>Ksolves\Deliverydate\Model\Adminhtml\System\Config\Backend\AddTimeSlot</backend_model>
+                </field>
+                    
+                <!--<field id="ksolves_deliverydate_calendar_timeslot_disable_timeslot" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Desabilitar Horarios Nos Dias</label>
+                    <frontend_model>Ksolves\Deliverydate\Block\Adminhtml\Form\Field\DisableTimeSlot</frontend_model>
+                    <backend_model>Ksolves\Deliverydate\Model\Adminhtml\System\Config\Backend\DisableTimeSlot</backend_model>
+                </field>-->
+
+                <field id="ksolves_deliverydate_date_timezone" translate="label comment" sortOrder="8" type="select" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Fuso Horário</label>
+                    <source_model>Ksolves\Deliverydate\Model\Adminhtml\Source\TimeZone</source_model>
+                </field>
+                
+            </group>
+
+            <group id="holiday" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Configuração de Feriado/Folga</label>
+
+                <field id="ksolves_deliverydate_holiday_dayoff" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Dias da Semana Indisponíveis</label>
+                    <source_model>Ksolves\Deliverydate\Model\Adminhtml\Source\AllowedDays</source_model>
+                </field>
+
+                <field id="ksolves_deliverydate_holiday_excludedates" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Dias Indisponíveis</label>
+                    <frontend_model>Ksolves\Deliverydate\Block\Adminhtml\Form\Field\DatePickerList</frontend_model>
+                    <backend_model>Ksolves\Deliverydate\Model\Adminhtml\System\Config\Backend\DatePickerList</backend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

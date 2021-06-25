@@ -1,0 +1,1503 @@
+<?php
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<style>
+    #shopping-cart-table,
+    .towishlist {
+        display: none !important
+    }
+
+    .cart.table-wrapper .product-image-wrapper .product-image-photo {
+        max-height: 80px !important;
+        width: auto
+    }
+
+    .cart.table-wrapper .product-item-name {
+        margin-top: 5px
+    }
+
+    @media only screen and (max-width:768px) {
+        .product-item-details {
+            width: calc(100% - 70px);
+            margin-left: 70px;
+            left: 70px
+        }
+
+        .cart-summary .item-options {
+            background: rgba(0, 0, 0, .05);
+            padding: 5px;
+            height: 35px !important;
+            padding-top: 7px;
+            width: 180px;
+            border-radius: 5px
+        }
+
+        #co-shipping-method-form .item-title {
+            font-weight: 400
+        }
+
+        .totals .shipping .label {
+            font-size: 13px;
+            font-weight: 400;
+            padding-left: 0 !important
+        }
+
+        #store_menu {
+            margin-top: -20px !important
+        }
+
+        #block-shipping {
+            padding-top: 10px
+        }
+
+        #co-shipping-method-form {
+            margin-top: -10px;
+            display: inline-block !important;
+            padding-bottom: 15px
+        }
+
+        #cart-totals {
+            margin-top: -25px !important
+        }
+
+        #block-shipping #block-summary {
+            display: inline-block !important;
+            width: 100% !important
+        }
+
+        #shipping-zip-form {
+            width: calc(100% - 150px) !important;
+            padding-right: 15px !important
+        }
+
+        #co-shipping-method-form {
+            width: 140px !important;
+            padding-top: 0 !important
+        }
+
+        .methods .item-title {
+            margin-left: 18px
+        }
+
+        .methods .item-options .item-title {
+            margin-left: 0
+        }
+
+        .item-options:first-child {
+            border-bottom: 1px solid #e9e9e9 !important;
+            padding-bottom: 5px !important;
+            height: 20px;
+            margin-bottom: 9px !important;
+            display: inline-block
+        }
+
+        .item-options:first-child {
+            margin-bottom: -14px !important
+        }
+
+        .item-options:last-child {
+            margin-top: -6px !important
+        }
+
+        .page-wrapper .page-main .cart-summary .block {
+            margin-bottom: 15px !important
+        }
+
+        .table-wrapper .totals .totals {
+            margin-bottom: -10px !important;
+            display: inline-block;
+            width: 100%
+        }
+
+        .cart.table-wrapper .product-item-photo {
+            width: 50px
+        }
+
+        .product-item-details {
+            width: calc(100% - 50px)
+        }
+
+        .item-info .col-price,
+        .item-info .col-qty,
+        .item-info .col-subtotal {
+            width: calc((100% / 3) - 17px) !important;
+            margin-top: -50px
+        }
+
+        .item-info .col-price {
+            margin-left: 50px
+        }
+    }
+
+    @media only screen and (min-width:481px) and (max-width:768px) {
+        .checkout-cart-index .page-title-wrapper {
+            margin-top: 15px
+        }
+
+        .cart-category-group:first-child {
+            margin-top: 40px !important
+        }
+    }
+
+    .label-price {
+        margin-top: -10px;
+        display: block;
+        font-weight: 300;
+        font-size: 13px
+    }
+
+    @media only screen and (max-width:768px) {
+        .label-price {
+            display: none
+        }
+    }
+
+    .cpfnota {
+        display: none
+    }
+
+    .checkout-methods-items .cpfnota {
+        display: none
+    }
+
+
+    .cart .product-image-container {
+        width: auto !important;
+        height: auto !important;
+        background: #fff;
+        padding: 5px 0;
+        max-width: 70px !important;
+    }
+
+    .cart.table-wrapper .product-image-wrapper .product-image-photo {
+        max-height: 80px !important;
+        margin: auto;
+        display: block
+    }
+
+    .category-items {
+        display: inline-block;
+        width: 100%
+    }
+
+    .category-title {
+        margin-top: 20px !important
+    }
+
+    @media only screen and (min-width:481px) and (max-width:991px) {
+        .cart-summary {
+            float: left
+        }
+
+        #form-validate {
+            float: right
+        }
+    }
+
+    @media only screen and (min-width:481px) and (max-width:767px) {
+        .cart-discount {
+            display: flex
+        }
+    }
+
+    @media only screen and (max-width:480px) {
+
+
+        body .page-title-wrapper {
+            text-align: center !important;
+            padding: 0 5px !important;
+            margin-top: -15px !important;
+            margin-bottom: 15px !important
+        }
+    }
+
+    .table-wrapper .totals .totals,
+    .totals-tax {
+        display: inline-block !important;
+        width: 100%;
+    }
+
+    .cart-item-data_name {
+        width: calc(100% - 100px);
+        height: 22px;
+    }
+
+    .cart-item-data_name a {
+        color: #333;
+        font-weight: 500;
+    }
+
+    .cart-item-category {
+        color: #777;
+        font-weight: 300;
+        font-weight: 13px;
+        padding-left: 15px;
+        display: inline;
+    }
+
+    .cart-item-category {
+        padding-right: 15px;
+    }
+
+    .cart.table-wrapper {
+        border: none !important
+    }
+
+    .checkout-icon {
+        display: none !important
+    }
+
+    .cart-summary,
+    .opc-block-summary {
+        background: #fff !important;
+        filter: none;
+        border: 1px solid #eee;
+        border-radius: 5px
+    }
+
+    .category-title span {
+        font-weight: 300 !important;
+        text-transform: uppercase !important
+    }
+
+    .cart {
+        width: 100%;
+        display: inline-block;
+    }
+
+    .cart-product {
+        width: 100%;
+        display: inline-flex;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 7px;
+    }
+
+    .cart:last-child .cart-product{
+        border-bottom: none;
+    }
+
+    .cart-img {
+        width: 70px;
+        padding: 5px;
+    }
+
+    .cart-item {
+        width: calc(100% - 80px);
+        padding: 5px;
+        display: inline-block;
+    }
+
+    .cart-item-data {
+        width: 100%;
+        display: inline-flex;
+    }
+
+    .cart-item-data:first-child {
+        height: 22px;
+    }
+
+
+    .cart-item-data_detail {
+        width: 20%;
+        display: inline-block;
+    }
+
+    .cart-item-data_name {
+        width: calc(100% - 100px);
+    }
+
+    .cart-item-data_action {
+        width: 100px;
+    }
+</style>
+
+<script>
+    function openProductList(item) {
+        if (jQuery(item).hasClass('fa-arrow-alt-circle-down')) {
+            jQuery(item).addClass('fa-arrow-alt-circle-up');
+            jQuery(item).removeClass('fa-arrow-alt-circle-down');
+        } else {
+            jQuery(item).addClass('fa-arrow-alt-circle-down');
+            jQuery(item).removeClass('fa-arrow-alt-circle-up');
+        }
+
+        jQuery(item).parent().parent().find('.category-items').slideToggle('fast');
+    }
+
+    function groupByCategories() {
+        jQuery('.cart-item').each(function(index) {
+            category = jQuery.trim(jQuery(this).find('.cart-item-category').val());
+            jQuery(this).appendTo('.cart-category-' + category + ' .category-items');
+        });
+
+        jQuery('.category-items').each(function(index) {
+            if (jQuery(this).html() == "") {
+                jQuery(this).parent().hide();
+            }
+        });
+    }
+
+    require([
+        'jquery',
+        'mage/translate'
+    ], function($, $t) {
+        jQuery(document).ready(function() {
+            jQuery('.category-items').html('');
+
+            groupCategory = setInterval(function() {
+                if (jQuery('#loaded').val() != '1') {
+                    onLoad();
+                    clearInterval(groupCategory);
+                }
+            }, 500);
+
+            jQuery('.cart-container .cart-summary').appendTo('.cart-container');
+            jQuery('.cart-container .cart-discount').appendTo('.cart-container');
+        });
+    });
+
+    function onLoad() {
+        jQuery('#loaded').val('1');
+
+        jQuery('.cart-item').css('opacity', '1');
+
+        jQuery('.input-cart-qty')
+            .focusout(function() {
+                //jQuery('.cart .update').click();                
+                updateCartItem(jQuery(this).parent().find('.item-id').val())
+            });
+
+        groupByCategories();
+        jQuery('.cart-category-group').each(function(index) {
+            openProductList(jQuery(this).find('i'));
+        });
+    }
+</script>
+
+<input type="hidden" value="" id="loaded">
+
+<div class="cpfnota">
+    <div>CPF na Nota?</div>
+    <div>
+        <?php
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $customerSession = $objectManager->get('Magento\Customer\Model\Session');
+        if ($customerSession->isLoggedIn()) {
+            $customer_id = $customerSession->getCustomer()->getId();
+
+            $_customer = $objectManager->create('Magento\Customer\Model\Customer')->load($customer_id);
+
+            $_cpf = $_customer->getCpf();
+        } else {
+            $_cpf = '';
+        }
+        ?>
+        <input placeholder="CPF" value="<?= $_cpf ?>" style="border: 1px solid #e2e2e2 !important;border-radius: 4px;width: 170px;text-align: center;height: 31px;" type="text" class="cpf_nota">
+    </div>
+</div>
+
+<style>
+    .customdiscount {
+        display: none !important;
+        opacity: 0;
+    }
+</style>
+
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$cashback_enable = boolval($objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('cashback/general/enable'));
+
+$helper = $this->helper('Rdtech\Cashback\Helper\Data');
+$cashback_total = floatval($helper->getCashbackCredit());
+
+if ($cashback_enable && $cashback_total > 0) {
+?>
+    <style>
+        #cashback {
+            display: none;
+            width: 100%;
+            padding: 20px 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            color: #4dd6a8;
+            font-size: 15px
+        }
+
+        .checkout-methods-items #cashback {
+            display: inline-block
+        }
+
+        #cashback .icon .svg svg {
+            font-size: 45px;
+            color: #fff !important
+        }
+
+        #cashback .icon .svg {
+            width: 60px;
+            padding-top: 3px;
+            margin-bottom: -3px
+        }
+
+        #cashback .icon .title {
+            width: calc(100% - 70px);
+            line-height: 18px;
+            padding-top: 7px;
+            text-align: left;
+            margin-left: 10px
+        }
+
+        #cashback .icon .title span:first-child {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 500
+        }
+
+        #cashback .icon .title span:last-child {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 400
+        }
+
+        #cashback .icon {
+            margin-bottom: 10px;
+            background: #4dd6a8;
+            border-radius: 5px;
+            display: inline-flex;
+            width: 100%;
+            padding: 5px 0
+        }
+
+        #cashback .action button {
+            width: 140px;
+            padding: 7px;
+            background: #4dd6a8;
+            border-radius: 5px;
+            margin-top: 7px;
+            display: inline-block;
+            color: #fff;
+            font-weight: 500
+        }
+
+        #cashback .credit {
+            text-transform: uppercase;
+            color: #666
+        }
+
+        .customdiscount .amount span {
+            color: #48b792;
+            font-weight: 500
+        }
+
+        .shipping .mark .label {
+            font-size: 14px !important;
+            font-weight: 400 !important
+        }
+
+        #cashback_moreinfo {
+            color: #48b792;
+            font-weight: 500;
+            font-size: 15px
+        }
+
+        #cashback_moreinfo button {
+            color: #48b792;
+            font-weight: 500;
+            font-size: 15px;
+            padding: 5px 15px;
+            background: 0 0;
+            margin-top: 5px;
+            transition: .3s;
+            border-radius: 4px
+        }
+
+        #cashback_moreinfo button:hover {
+            background: #f7f7f7;
+            transition: .3s
+        }
+    </style>
+
+    <?php
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $customerSession = $objectManager->create('Magento\Customer\Model\Session');
+    ?>
+
+    <div id="cashback">
+        <script>
+            function useCashback() {
+                jQuery("#mnn-loading").show();
+                jQuery.post("<?= $block->getUrl("cashback/index/cashbackuse"); ?>", {
+                        id: 0
+                    },
+                    function(data) {
+                        location.reload();
+                    }
+                )
+            }
+
+            function cancelCashback() {
+                jQuery("#mnn-loading").show();
+                jQuery.post("<?= $block->getUrl("cashback/index/cashbackcancel"); ?>", {
+                        id: 0
+                    },
+                    function(data) {
+                        location.reload();
+                    }
+                )
+            }
+
+            cashbackLabel = setInterval(function() {
+                jQuery.post("<?= $block->getUrl("cashback/index/cashbackcredit"); ?>", {
+                        id: 0
+                    },
+                    function(data) {
+                        jQuery('.customdiscount .amount span').html(data);
+                    }
+                )
+            }, 1000);
+
+            setTimeout(function() {
+                clearInterval(cashbackLabel);
+            }, 5000);
+        </script>
+
+        <a target="_blank" href="/cashback">
+            <div class="icon">
+                <div class="svg">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20">
+                        <path d="M10.6 9c-.4-.1-.8-.3-1.1-.6c-.3-.1-.4-.4-.4-.6c0-.2.1-.5.3-.6c.3-.2.6-.4.9-.3c.6 0 1.1.3 1.4.7l.9-1.2c-.3-.3-.6-.5-.9-.7c-.3-.2-.7-.3-1.1-.3V4H9.4v1.4c-.5.1-1 .4-1.4.8c-.4.5-.7 1.1-.6 1.7c0 .6.2 1.2.6 1.6c.5.5 1.2.8 1.8 1.1c.3.1.7.3 1 .5c.2.2.3.5.3.8c0 .3-.1.6-.3.9c-.3.3-.7.4-1 .4c-.4 0-.9-.1-1.2-.4c-.3-.2-.6-.5-.8-.8l-1 1.1c.3.4.6.7 1 1c.5.3 1.1.6 1.7.6V16h1.1v-1.5c.6-.1 1.1-.4 1.5-.8c.5-.5.8-1.3.8-2c0-.6-.2-1.3-.7-1.7c-.5-.5-1-.8-1.6-1zM10 2c-4.4 0-8 3.6-8 8s3.6 8 8 8s8-3.6 8-8s-3.6-8-8-8zm0 14.9c-3.8 0-6.9-3.1-6.9-6.9S6.2 3.1 10 3.1s6.9 3.1 6.9 6.9s-3.1 6.9-6.9 6.9z" fill="#ffffff" />
+                    </svg>
+                </div>
+                <div class="title">
+                    <span>Seu Saldo</span><br>
+                    <span>De Cashback</span>
+                </div>
+            </div>
+        </a>
+
+        <?php
+        if (boolval($customerSession->getCashbackUse())) {
+            $cart = $objectManager->get('\Magento\Checkout\Model\Cart');
+            $_credit = $cashback_total;
+
+            $subTotal = $cart->getQuote()->getSubtotal();
+
+            if ($_credit > $subTotal) {
+                $cashback_total = $subTotal;
+            } else {
+                $cashback_total = $_credit;
+            }
+        ?>
+            <style>
+                .customdiscount {
+                    display: inline-block !important;
+                    opacity: 1 !important;
+                }
+            </style>
+            <div class="credit">
+                <span style="font-size: 16px; margin-bottom: 5px; font-weight: 600; display: inline-block;">Você está usando R$<?= number_format($cashback_total, 2, ',', '.') ?></span><br>
+                <span style="font-size: 14px; font-weight: 500">Saldo Total: R$<?= number_format($_credit, 2, ',', '.') ?></span>
+            </div>
+
+            <div class="action">
+                <button type="button" onclick="cancelCashback()">Cancelar</button>
+            </div>
+        <?php
+        } else {
+        ?>
+            <div class="credit">
+                <span style="font-weight: 500">Você tem <span style="font-weight: 600">R$<?= number_format($cashback_total, 2, ',', '.') ?></span> para usar na sua compra.</span>
+            </div>
+
+            <div class="action">
+                <button type="button" onclick="useCashback()">Usar Créditos</button>
+            </div>
+        <?php
+        }
+        ?>
+    </div>
+<?php
+
+}
+?>
+
+<script>
+    require([
+        'jquery',
+        'mage/mage',
+        'inputMask'
+    ], function($) {
+        jQuery('.checkout-methods-items').prepend(jQuery('#cashback'));
+
+        jQuery('.checkout-methods-items').prepend(jQuery('.cpfnota'));
+        jQuery('.cpf_nota').mask('000.000.000-00', {
+            clearIfNotMatch: true
+        });
+
+        jQuery('.checkout .checkout').click(function(event) {
+            if (jQuery('.cpf_nota').val().length > 5) {
+                jQuery.post("<?= $block->getUrl("adicionarcarrinho/index/cpfnota"); ?>", {
+                        cpf: jQuery('.cpf_nota').val(),
+                    },
+                    function(data) {}
+                )
+            }
+        });
+    });
+
+    function updateCartItem(item_id = 0) {
+        qty = jQuery('.item-'+item_id).find('.input-cart-qty').val();
+
+        console.log('send post; qty = '+qty+'; id = '+item_id)
+        
+        if (isNaN(qty)) {
+            qty = jQuery(qty).val();
+        }
+
+        jQuery('#mnn-loading').show();
+
+        jQuery.post("<?= $block->getUrl("adicionarcarrinho/index/updatecart"); ?>", {
+                quote_item_id: item_id,
+                qty: qty
+            },
+            function(data) {
+                jQuery('.item-' + item_id).html(data);
+
+                shipping = false;
+                jQuery('#co-shipping-method-form .radio').each(function(index) {
+                    if (jQuery(this).is(":checked")) {
+                        jQuery(this).click();
+                        shipping = true;
+                    }
+                });
+
+                if (shipping == false) {
+                    jQuery('#co-shipping-method-form input').first().click();
+                }
+
+                jQuery('#mnn-loading').hide();
+            }
+        )
+    }
+</script>
+
+<?php
+/**
+ * Shopping cart template
+ *
+ * @var $block \Magento\Checkout\Block\Cart
+ */
+
+if ($block->getItemsCount()) {
+    // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
+    echo $block->getChildHtml('with-items');
+
+    //jQuery('#co-shipping-method-form input').click()
+} else {
+    // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
+    echo $block->getChildHtml('no-items');
+}
+
+$_maioridade = false;
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$cart = $objectManager->get('\Magento\Checkout\Model\Cart');
+$itemsVisible = $cart->getQuote()->getAllVisibleItems();
+foreach ($itemsVisible as $_item) {
+    $_product = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface')->getById($_item->getProductId());
+    if ($_product->getMaioridade() == 1) {
+        $_maioridade = true;
+    }
+}
+
+$idade = 0;
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$customerSession = $objectManager->get('Magento\Customer\Model\Session');
+
+if ($customerSession->isLoggedIn() && $_maioridade == true) {
+    $customer_id = $customerSession->getCustomer()->getId();
+
+    $_customer = $objectManager->create('Magento\Customer\Model\Customer')->load($customer_id);
+    $_nascimento = $_customer->getDob();
+
+    if (strlen($_nascimento) > 6) {
+        $year = substr($_nascimento, 0, 4);
+        $month = substr($_nascimento, 5, 2);
+        $day = substr($_nascimento, 8, 2);
+
+        $data = $day . "/" . $month . "/" . $year;
+
+        $idade = 0;
+        $data_nascimento = date('Y-m-d', strtotime($data));
+        list($anoNasc, $mesNasc, $diaNasc) = explode('-', $data_nascimento);
+
+        $idade = date("Y") - $anoNasc;
+        if (date("m") < $mesNasc) {
+            $idade -= 1;
+        } elseif ((date("m") == $mesNasc) && (date("d") <= $diaNasc)) {
+            $idade -= 1;
+        }
+    }
+
+    if (strlen($_nascimento) > 2 && $idade < 18) {
+?>
+        <style>
+            .maioridade .message {
+                display: none !important;
+            }
+
+            .maioridade .alert {
+                display: block !important;
+            }
+        </style>
+    <?php
+    }
+}
+
+if ($idade < 18 && $_maioridade == true) {
+    ?>
+    <div class="maioridade">
+        <div class="message">
+            <span>Seu carrinho contém um ou mais produtos proibidos para menores de 18 anos.</span>
+        </div>
+
+        <div class="message">
+            <span>Informe sua data de nascimento</span>
+
+            <div style="display:flex; width: max-content; margin: auto;">
+                <input type="text" class="datanascimento">
+            </div>
+
+            <button type="button" onclick="verificaIdade()" style="margin-top: 10px;color: #555;">Verificar</button>
+        </div>
+
+        <div class="alert">
+            <span>Seu carrinho contém um ou mais produtos proibidos para menores de 18 anos.</span>
+        </div>
+        <div class="alert">
+            <span style="margin-bottom: 10px; display: block;">Um responsável deverá acompanhar a retirada/entrega de sua compra.</span>
+            <button type="button" onclick="jQuery(this).parent().parent().remove()" style="margin-top: 10px;color: #555;display: block;margin: auto;">OK</button>
+        </div>
+    </div>
+
+    <script>
+        require([
+            'jquery',
+            'mage/mage'
+        ], function($) {
+            jQuery('.cart-summary').prepend(jQuery('.maioridade'));
+
+            jQuery('.cart-item').css('opacity', '1');
+            groupByCategories();
+            jQuery('.cart-category-group').each(function(index) {
+                openProductList(jQuery(this).find('i'));
+            });
+        });
+
+        require([
+            'jquery',
+            'mage/translate',
+            'mage/calendar'
+        ], function($, $t) {
+            jQuery('.datanascimento').calendar({
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                currentText: $t('Go Today'),
+                closeText: $t('Close'),
+                showWeek: true,
+                dateFormat: 'dd/mm/yy',
+                monthNames: ['Janeiro', 'Fevereiro', 'Mar&ccedil;o', 'Abril', 'Maio', 'Junho',
+                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                ],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+                    'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
+                ],
+                dayNames: ['Domingo', 'Segunda-feira', 'Ter&ccedil;a-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sabado'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+                dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+                yearRange: "-150:+0"
+            });
+        })
+
+        function verificaIdade() {
+            var nascimento = jQuery('.datanascimento').val();
+
+            var d = new Date,
+                ano_atual = d.getFullYear(),
+                mes_atual = d.getMonth() + 1,
+                dia_atual = d.getDate(),
+
+                ano_aniversario = nascimento.substr(6, 4),
+                mes_aniversario = nascimento.substr(3, 2),
+                dia_aniversario = nascimento.substr(0, 2),
+
+                quantos_anos = ano_atual - ano_aniversario;
+
+            if (mes_atual < mes_aniversario || mes_atual == mes_aniversario && dia_atual < dia_aniversario) {
+                quantos_anos--;
+            }
+
+            idade = quantos_anos < 0 ? 0 : quantos_anos;
+
+            jQuery.post("<?= $block->getUrl("adicionarcarrinho/index/datanascimento"); ?>", {
+                    nascimento: nascimento,
+                },
+                function(data) {
+
+                    if (idade >= 18) {
+                        jQuery('.maioridade').remove();
+                    } else {
+                        jQuery('.maioridade .message').remove();
+                        jQuery('.maioridade .alert').show();
+                    }
+                }
+            )
+        }
+    </script>
+
+<?php
+}
+?>
+
+<style>
+    .cpfnota {
+        margin-bottom: 15px
+    }
+
+    .maioridade input {
+        width: 100%;
+        background: #fff;
+        border-radius: 3px;
+        border: 1px solid #bbb !important
+    }
+
+    .maioridade .dia,
+    .maioridade .mes {
+        width: 50px;
+        margin: auto 5px
+    }
+
+    .maioridade .ano {
+        width: 80px;
+        margin: auto 5px
+    }
+
+    .maioridade {
+        background: #fcfcfc;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: 999;
+        display: none
+    }
+
+    .maioridade .message {
+        padding: 5px;
+        margin-top: 50px;
+        text-align: center;
+        font-size: 15px
+    }
+
+    .maioridade .alert {
+        padding: 5px;
+        margin-top: 50px;
+        text-align: center;
+        font-size: 15px;
+        display: none
+    }
+
+    .cart-summary .maioridade {
+        display: block !important
+    }
+
+    @media only screen and (min-width:768px) and (max-width:1280px) {
+        .item-info .peso_classe-precokg {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -5px !important;
+            margin-left: 0 !important;
+            position: absolute
+        }
+
+        .item-info .peso_classe-preco {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -5px !important;
+            margin-left: calc(20% - 10px) !important;
+            position: absolute
+        }
+
+        .item-info .peso_classe-qtd {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -5px !important;
+            margin-left: calc(40% - 10px) !important;
+            position: absolute
+        }
+
+        .item-info .peso_classe-qtdpeso {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -5px !important;
+            margin-left: calc(60% - 10px) !important;
+            position: absolute
+        }
+
+        .item-info .peso_classe-total {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -5px !important;
+            margin-left: calc(80% - 20px) !important;
+            position: absolute
+        }
+
+        .item-info .item {
+            width: 100% !important
+        }
+
+        .item-info {
+            display: inline-block !important;
+            min-height: 130px !important
+        }
+
+        .product-item-details {
+            width: calc(100% - 50px) !important;
+            margin-left: 90px !important
+        }
+
+        .cart-item .item-info .unidade-qtd {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 30% !important;
+            margin-left: 30% !important;
+            position: absolute;
+            margin-top: -30px !important
+        }
+
+        .cart-item .item-info .unidade-preco {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 30% !important;
+            margin-left: 0 !important;
+            position: absolute
+        }
+
+        .cart-item .item-info .unidade-total {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 30% !important;
+            margin-left: 60% !important;
+            position: absolute;
+            margin-top: -30px !important
+        }
+
+        .cart-container .form-cart {
+            width: 65% !important
+        }
+
+        .cart-summary {
+            width: 35% !important
+        }
+    }
+
+    @media only screen and (min-width:768px) and (max-width:768px) {
+        #shipping-zip-form {
+            width: calc(100% - 99px) !important
+        }
+
+        .cart-totals tbody .sub .amount {
+            margin-top: -32px
+        }
+
+        #store_menu {
+            margin-top: -1px !important
+        }
+
+        .cart-item .item-info .classe_unidade {
+            margin-top: -70px !important
+        }
+
+        .cart-item .item-info .unidade-qtd {
+            margin-top: -30px !important
+        }
+
+        .cart-item .item-info .unidade-total {
+            margin-top: -30px !important
+        }
+
+        .cart-item {
+            height: 90px
+        }
+
+        .item-info .peso_classe-preco,
+        .item-info .peso_classe-qtd,
+        .item-info .peso_classe-qtdpeso,
+        .item-info .peso_classe-total {
+            margin-top: -50px !important
+        }
+    }
+
+    @media only screen and (min-width:320px) and (max-width:767px) {
+        #shipping-zip-form {
+            width: calc(100% - 99px) !important
+        }
+
+        .cart-totals tbody .sub .amount {
+            margin-top: -32px
+        }
+
+        #store_menu {
+            margin-top: -21px !important
+        }
+
+        .cart.table-wrapper .col.price:before,
+        .cart.table-wrapper .col.subtotal:before {
+            padding-bottom: 0 !important
+        }
+
+        .col.qty:before {
+            padding-bottom: 2px !important
+        }
+
+        .cart-item .item-info .unidade-qtd {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 30% !important;
+            margin-left: 30% !important;
+            position: absolute;
+            margin-top: -50px !important
+        }
+
+        .cart-item .item-info .unidade-preco {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 30% !important;
+            margin-left: 0 !important;
+            position: absolute;
+            margin-top: -30px !important
+        }
+
+        .cart-item .item-info .unidade-total {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 30% !important;
+            margin-left: 60% !important;
+            position: absolute;
+            margin-top: -50px !important
+        }
+    }
+
+    @media only screen and (max-width:1280px) {
+        .cart-discount {
+            width: 320px !important
+        }
+    }
+
+    @media only screen and (max-width:768px) {
+        .item-info .peso_classe-precokg {
+            display: none !important
+        }
+
+        .cart-category-group {
+            padding-bottom: 35px !important
+        }
+    }
+
+    @media only screen and (min-width:320px) {
+        #shipping-zip-form input {
+            border: 1px solid #eaeaea !important;
+            border-radius: 4px
+        }
+    }
+
+    @media only screen and (min-width:481px) and (max-width:767px) {
+        .item-info .peso_classe-precokg {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -55px !important;
+            margin-left: 0 !important;
+            position: absolute
+        }
+
+        .item-info .peso_classe-preco {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -55px !important;
+            margin-left: calc(20% - 10px) !important;
+            position: absolute
+        }
+
+        .item-info .peso_classe-qtd {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -55px !important;
+            margin-left: calc(40% - 10px) !important;
+            position: absolute
+        }
+
+        .item-info .peso_classe-qtdpeso {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -55px !important;
+            margin-left: calc(60% - 10px) !important;
+            position: absolute
+        }
+
+        .item-info .peso_classe-total {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -55px !important;
+            margin-left: calc(80% - 20px) !important;
+            position: absolute
+        }
+
+        .item-info .item {
+            width: 100% !important
+        }
+
+        .product-item-details {
+            width: calc(100% - 50px) !important;
+            margin-left: 90px !important
+        }
+
+        .classe_unidade {
+            margin-top: -70px !important
+        }
+
+        .item-info {
+            display: inline-block !important;
+            min-height: 100px !important
+        }
+    }
+
+    @media only screen and (max-width:480px) {
+        .item-info .peso_classe-precokg {
+            width: 20% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            display: none !important
+        }
+
+        .item-info .peso_classe-preco {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -50px !important;
+            margin-left: calc(20% - 10px) !important;
+            position: absolute
+        }
+
+        .item-info .peso_classe-qtd {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -50px !important;
+            margin-left: calc(40% - 10px) !important;
+            position: absolute
+        }
+
+        .item-info .peso_classe-qtdpeso {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -50px !important;
+            margin-left: calc(60% - 10px) !important;
+            position: absolute
+        }
+
+        .item-info .peso_classe-total {
+            width: calc(20% - 10px) !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            margin-top: -50px !important;
+            margin-left: calc(80% - 20px) !important;
+            position: absolute
+        }
+
+        #store_menu {
+            margin-top: -21px !important
+        }
+
+        .item-info {
+            display: inline-block !important;
+            min-height: 90px !important
+        }
+    }
+
+    @media only screen and (max-width:480px) {
+        .cep-invalidate {
+            padding: 15px;
+            line-height: 18px;
+            margin-bottom: -15px
+        }
+
+        .table-wrapper .totals .totals {
+            margin-bottom: -15px !important
+        }
+
+        .cart-item .item-info .unidade-preco {
+            margin-top: -50px !important
+        }
+
+        .item-info,
+        .item-info div,
+        .item-info div span {
+            font-size: 13px !important
+        }
+
+        .product-item-name a {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            width: calc(100% - 30px);
+            white-space: nowrap;
+            display: inline-block;
+            font-size: 13px
+        }
+
+        .cart.table-wrapper .col.price:before,
+        .cart.table-wrapper .col.subtotal:before {
+            padding-bottom: 0 !important
+        }
+
+        .col.qty:before {
+            padding-bottom: 2px !important
+        }
+
+        .cart-item {
+            padding-bottom: 10px !important
+        }
+
+        #block-summary,
+        #block-summary label,
+        #block-summary span,
+        #block-summary th {
+            font-size: 13px !important
+        }
+
+        .totals-tax {
+            display: block
+        }
+
+        .totals {
+            font-size: 13px !important
+        }
+
+        .totals-tax {
+            margin-bottom: -20px
+        }
+
+        .classe_unidade {
+            margin-top: -70px !important
+        }
+
+        #shipping-zip-form {
+            margin-bottom: -10px
+        }
+
+        .checkout-methods-items {
+            margin-top: 5px !important
+        }
+
+        .item-options:first-child {
+            margin-bottom: 6px !important
+        }
+    }
+
+    @media only screen and (max-width:479px) {
+        .cart-item .item-info .unidade-preco {
+            margin-top: -70px !important
+        }
+    }
+
+    @media only screen and (min-width:479px) and (max-width:767px) {
+        .cart-item .item-info .unidade-preco {
+            margin-top: -50px !important
+        }
+    }
+
+    @media only screen and (min-width:769px) and (max-width:991px) {
+        .cart-item .item-info .unidade-preco {
+            margin-top: -30px !important
+        }
+    }
+
+    @media only screen and (min-width:768px) and (max-width:768px) {
+        .cart-item .item-info .unidade-preco {
+            margin-top: -30px !important;
+            z-index: 99
+        }
+    }
+
+    @media only screen and (max-width:767px) {
+        #store_menu {
+            margin-top: -20px !important
+        }
+    }
+
+    .item-options:first-child {
+        border: none !important
+    }
+
+    .table-wrapper .totals .totals,
+    .totals-tax {
+        display: inline-block !important
+    }
+
+    .category-title {
+        margin-top: 25px
+    }
+
+    @media only screen and (min-width:769px) and (max-width:991px) {
+        .classe_unidade {
+            margin-top: -25px !important
+        }
+
+        .cart-item {
+            margin-top: 20px;
+            border-top: 1px solid #eee
+        }
+
+        .cart-item:first-child {
+            margin-top: 0;
+            border-top: 0
+        }
+    }
+
+    @media only screen and (min-width:992px) and (max-width:1280px) {
+        .cart-item {
+            margin-bottom: 25px !important
+        }
+
+        .cart-item .item-info .unidade-preco {
+            margin-top: -35px !important
+        }
+
+        .cart-item .item-info .unidade-qtd {
+            margin-top: -35px !important
+        }
+
+        .cart-item .item-info .unidade-total {
+            margin-top: -35px !important
+        }
+    }
+
+    @media only screen and (min-width:1360px) and (max-width:1366px) {
+
+        .classe_unidade,
+        .peso_classe {
+            margin-top: 11px !important
+        }
+    }
+
+    @media only screen and (max-width:480px) {
+        .cart-item {
+            display: inline-block;
+            width: 100%
+        }
+
+        .item-actions {
+            width: 100% !important;
+            margin-top: -10px !important
+        }
+
+        .item-actions .actions-toolbar {
+            width: 100%;
+            display: inline-flex
+        }
+
+        .item-actions .actions-toolbar .action-edit {
+            float: left !important;
+            left: 0 !important;
+            right: auto !important;
+            top: 0 !important
+        }
+
+        .item-actions .actions-toolbar .action-delete {
+            float: right !important;
+            left: auto !important;
+            right: 0 !important;
+            top: 0 !important
+        }
+
+        .cart-item-name {
+            margin-top: 8px !important;
+            margin-bottom: 1.5px;
+            line-height: 17px
+        }
+
+        .cart.table-wrapper .col.msrp:before,
+        .cart.table-wrapper .col.price:before,
+        .cart.table-wrapper .col.qty:before,
+        .cart.table-wrapper .col.subtotal:before {
+            font-weight: 300 !important
+        }
+
+        .cart.table-wrapper .col.msrp .price-excluding-tax .price,
+        .cart.table-wrapper .col.msrp .price-including-tax .price,
+        .cart.table-wrapper .col.price .price-excluding-tax .price,
+        .cart.table-wrapper .col.price .price-including-tax .price,
+        .cart.table-wrapper .col.subtotal .price-excluding-tax .price,
+        .cart.table-wrapper .col.subtotal .price-including-tax .price,
+        .order-details-items .col.price .price-excluding-tax .price,
+        .order-details-items .col.price .price-including-tax .price,
+        .order-details-items .col.subtotal .price-excluding-tax .price,
+        .order-details-items .col.subtotal .price-including-tax .price,
+        .paypal-review .table-paypal-review-items .col.price .price-excluding-tax .price,
+        .paypal-review .table-paypal-review-items .col.price .price-including-tax .price,
+        .paypal-review .table-paypal-review-items .col.subtotal .price-excluding-tax .price,
+        .paypal-review .table-paypal-review-items .col.subtotal .price-including-tax .price {
+            font-weight: 500 !important
+        }
+
+        .item-actions {
+            margin-top: -13px !important
+        }
+
+        .preco-kg div {
+            display: inline-flex !important
+        }
+
+        .preco-kg span:first-child {
+            display: block !important;
+            margin: 0 4px 0 0 !important
+        }
+
+        .preco-kg span:last-child {
+            display: block !important;
+            margin: -1px 0 0 0 !important;
+            font-weight: 500 !important;
+            font-size: 15px !important
+        }
+
+        .preco-kg .col.price:before {
+            display: none !important
+        }
+
+        .col-md-2 .cart-item-img {
+            padding-right: 5px !important
+        }
+
+        .cart .cart-category-group {
+            margin-bottom: -60px !important;
+            margin-top: 40px !important
+        }
+    }
+</style>

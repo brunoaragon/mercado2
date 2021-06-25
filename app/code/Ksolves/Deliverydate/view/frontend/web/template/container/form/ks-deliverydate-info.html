@@ -1,0 +1,51 @@
+ <!-- **
+ * @category   Ksolves
+ * @package    Ksolves_Deliverydate
+ * @author     Ksolves Team
+ * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * -->
+
+<div class="ks-deliverydate-info">
+    <form class="form" id="deliverydate-form" novalidate="novalidate">
+        <fieldset id="co-deliverydate">
+            <!-- ko if: window.checkoutConfig.ksDeliverydateConfig.isEnabledDeliveryTime -->
+            <div class="ks-delivery-date">
+                <div class="title">
+                    <span data-bind="text: window.checkoutConfig.ksDeliverydateConfig.getDeliveryLabel ? window.checkoutConfig.ksDeliverydateConfig.getDeliveryLabel : 'Delivery Date'"></span>
+                </div>
+                <div class="control">
+                    <input type="text" data-bind="ks_deliverydatepicker: true, value: ksDeliveryDate" name="ks-delivery-date" id="ks-delivery-date" readonly="readonly" onpaste="return false;" />
+                    <div id="ks-delivery-date-required"></div>
+                </div>
+            </div>
+            <!-- /ko -->
+
+            <!-- ko if: window.checkoutConfig.ksDeliverydateConfig.isEnabledDeliveryTimeSlot -->
+            <div class="ks-delivery-time">
+                <div class="title">
+                    <span data-bind="text: window.checkoutConfig.ksDeliverydateConfig.getDeliveryTimeSlotLabel ? window.checkoutConfig.ksDeliverydateConfig.getDeliveryTimeSlotLabel : 'Deliverydate TimeSlot'"></span>
+                </div>
+                <div class="control">
+                    <select class="select" name="ks-delivery-time" id="ks-delivery-time"
+                            data-bind="value: ksDeliverydateTimeSlot"
+                    ></select>
+                </div>
+            </div>
+            <!-- /ko -->
+
+            <!-- ko if: window.checkoutConfig.ksDeliverydateConfig.isEnabledDeliveryComment -->
+            <div class="ks-delivery-comment">
+                <div class="title">
+                    <span data-bind="text: window.checkoutConfig.ksDeliverydateConfig.getDeliveryCommentLabel ? window.checkoutConfig.ksDeliverydateConfig.getDeliveryCommentLabel : 'Deliverydate Comment'"></span>
+                </div>
+                <div class="control">
+                    <div class="input-box">
+                        <textarea name="ks-delivery-comment" id="ks-delivery-comment" rows="2"
+                        data-bind="value: ksDeliverydateComment"></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- /ko -->
+        </fieldset>
+    </form>    
+</div>

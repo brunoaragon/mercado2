@@ -293,52 +293,60 @@ $showHome = $helper->getConfigValue('shopkartlitesettings/navigation_settings/en
     </ul>
 </nav>
 
-<div class="mnn-categories-slider owl-carousel owl-theme">
-    <?php
-    $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
-    $categoryCollection = $objectManager->get('\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory');
-    $categories = $categoryCollection->create();
-    $categories->addAttributeToSelect('*');
-    $categories->addAttributeToFilter('entity_id', array('gt' => 2));
-    $categories->addAttributeToFilter('level', 2);
-    $categories->addAttributeToFilter('is_active', 1);
-    $categories->setOrder('name', 'ASC');
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$request = $objectManager->get('Magento\Framework\App\Action\Context')->getRequest();
+if ($request->getFullActionName() == 'cms_index_index') {
 
-    foreach ($categories as $_category) {
-        $collectionFactory = $objectManager->get('\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory')->create();
-        $products = $collectionFactory->addAttributeToSelect('external_image')
-            ->addCategoriesFilter(['in' => $_category->getId()])
-            ->setPageSize(4);
+?>
+    <div class="mnn-categories-slider owl-carousel owl-theme">
+        <?php
+        $objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
+        $categoryCollection = $objectManager->get('\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory');
+        $categories = $categoryCollection->create();
+        $categories->addAttributeToSelect('*');
+        $categories->addAttributeToFilter('entity_id', array('gt' => 2));
+        $categories->addAttributeToFilter('level', 2);
+        $categories->addAttributeToFilter('is_active', 1);
+        $categories->setOrder('name', 'ASC');
 
-        $products->getSelect()->orderRand();
+        foreach ($categories as $_category) {
+            $collectionFactory = $objectManager->get('\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory')->create();
+            $products = $collectionFactory->addAttributeToSelect('external_image')
+                ->addCategoriesFilter(['in' => $_category->getId()])
+                ->setPageSize(4);
 
-        $products = $products->getItems();
+            $products->getSelect()->orderRand();
 
-    ?>
-        <div>
-            <a href="<?= $_category->getUrl() ?>">
-                <div class="slider-category_item">
-                    <?php
-                    foreach ($products as $_item) {
-                    ?>
-                        <div class="slider-category_item-product">
-                            <img src="<?= $_item->getExternalImage() ?>">
-                        </div>
-                    <?php
-                    }
-                    ?>
+            $products = $products->getItems();
 
-                </div>
-                <div class="slider-category_name">
-                    <span><?= $_category->getName() ?></span>
-                </div>
-            </a>
-        </div>
+        ?>
+            <div>
+                <a href="<?= $_category->getUrl() ?>">
+                    <div class="slider-category_item">
+                        <?php
+                        foreach ($products as $_item) {
+                        ?>
+                            <div class="slider-category_item-product">
+                                <img src="<?= $_item->getExternalImage() ?>">
+                            </div>
+                        <?php
+                        }
+                        ?>
 
-    <?php
-    }
-    ?>
-</div>
+                    </div>
+                    <div class="slider-category_name">
+                        <span><?= $_category->getName() ?></span>
+                    </div>
+                </a>
+            </div>
+        <?php
+        }
+        ?>
+    </div>
+<?php
+}
+?>
 
 <style>
     .slider-category_name {
@@ -394,7 +402,7 @@ $showHome = $helper->getConfigValue('shopkartlitesettings/navigation_settings/en
         .mnn-categories-slider {
             display: block !important;
         }
-    }
+    }    
 </style>
 
 <script>

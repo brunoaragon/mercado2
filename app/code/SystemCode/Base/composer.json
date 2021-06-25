@@ -1,0 +1,33 @@
+{
+    "name": "systemcode/base",
+    "description":"Magento 2 base module used for others System Code modules.",
+    "keywords": [
+        "magento 2"
+    ],
+    "type": "magento2-module",
+    "version": "1.0.2",
+    "license": [
+        "proprietary"
+    ],
+    "homepage": "https://www.systemcode.com.br/",
+    "support": {
+        "email": "contato@systemcode.com.br",
+        "issues": "https://github.com/eduardoddias/Magento-SystemCode_Base/issues/"
+    },
+    "authors": [
+        {
+            "name": "Eduardo Diogo Dias",
+            "email": "contato@systemcode.com.br",
+            "homepage": "https://www.systemcode.com.br/",
+            "role": "CTO"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "SystemCode\\Base\\": ""
+        }
+    }
+}

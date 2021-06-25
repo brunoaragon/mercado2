@@ -1,0 +1,210 @@
+<!--
+ * Ksolves
+ *
+ * @category    Ksolves
+ * @package     Ksolves_Deliverydate
+ * @copyright   Copyright (c) Ksolves (https://www.ksolves.com/)
+ * @license     http://opensource.org/licenses/osl-3.0.php
+ * -->
+
+<script type="text/javascript">
+	function findDeliveryDateOption() {
+		var deliveryDate = document.getElementById("ks-delivery-date").value;
+		var i = 0;
+
+		jQuery.ajax({
+			type: "POST",
+			url: '<?php echo $this->getUrl("deliverydate/timeslot/getdelivery"); ?>',
+			data: {
+				today_date: deliveryDate
+			},
+			dataType: "json",
+			showLoader: true,
+			success: function(response) {
+				if (response == "") {
+					jQuery('#ks-delivery-time').html('');
+					jQuery('#ks-delivery-time').append(`<option class="ks-delivery-time" disabled selected value>Selecione o horário de entrega</option>`);
+					jQuery('#ks-delivery-time').append(`<option>Nenhum horário disponível. Selecione outra data</option>`);
+				} else {
+					jQuery('#ks-delivery-time').html('');
+					jQuery('#ks-delivery-time').append(`<option class="ks-delivery-time" disabled selected value>Selecione o horário de entrega</option>`);
+					
+					
+					jQuery.each(response, function(i, value) {
+						if (checkCurrentTime(value) == true) {
+							time_from = value.substr(0, 7);
+							time_to = value.substr(10, 7);
+
+							value_label = timeFormat(time_from)+' às '+timeFormat(time_to);
+
+							i++;						
+							jQuery('#ks-delivery-time').append(`<option value="${value}">${value_label}</option>`);
+						}
+					})					
+				}
+			}
+		});
+
+		if(i == 0){
+			jQuery('#ks-delivery-time').html('');
+			jQuery('#ks-delivery-time').append(`<option class="ks-delivery-time" disabled selected value>Nenhum horário disponível. Selecione outra data</option>`);
+		}
+	}
+
+	function getDeliveryDateOption() {
+		var deliveryDate = document.getElementById("ks-delivery-date").value;
+		var i = 0;
+		jQuery.ajax({
+			type: "GET",
+			url: '<?php echo $this->getUrl("deliverydate/timeslot/getdelivery"); ?>',
+			data: {
+				today_date: deliveryDate
+			},
+			showLoader: true,
+			success: function(feedback) {
+				var dataJSON = JSON.parse(feedback);
+				if (dataJSON == "") {
+					jQuery('#ks-delivery-time').html('');
+					jQuery('#ks-delivery-time').append(`<option class="ks-delivery-time" disabled selected value>Selecione o horário de entrega</option>`);
+					jQuery('#ks-delivery-time').append(`<option>Nenhum horário disponível. Selecione outra data</option>`);
+				} else {
+					jQuery('#ks-delivery-time').html('');
+					jQuery('#ks-delivery-time').append(`<option class="ks-delivery-time" disabled selected value>Selecione o horário de entrega</option>`);
+										
+					jQuery.each(dataJSON, function(i, value) {
+						if (checkCurrentTime(value) == true) {	
+							time_from = value.substr(0, 7);
+							time_to = value.substr(10, 7);
+
+							value_label = timeFormat(time_from)+' às '+timeFormat(time_to);
+
+							i++;						
+							jQuery('#ks-delivery-time').append(`<option value="${value}">${value_label}</option>`);
+						}
+					})					
+				}
+			}
+		});
+
+		if(i == 0){
+			jQuery('#ks-delivery-time').html('');
+			jQuery('#ks-delivery-time').append(`<option class="ks-delivery-time" disabled selected value>Nenhum horário disponível. Selecione outra data</option>`);
+		}
+	}
+
+	function timeFormat(time){
+		if(time.substr(5, 7) == "PM"){
+			h = parseInt(time.substr(0, 2)) + 12;
+			m = time.substr(3, 2);
+
+			return h+':'+m;
+		} else {
+			return time.substr(0, 5);
+		}
+						
+	}
+
+	function blankDeliveryDateOption() {
+		jQuery('#ks-delivery-time').html('');
+		jQuery('#ks-delivery-time').append(`<option class="ks-delivery-time" disabled selected value>Selecione o horário de entrega</option>`);
+	}
+
+	function checkCurrentTime(option) {
+		var agenda = option.substr(10, 5);
+		var ampm = option.substr(15, 2);
+
+		agenda = parseInt(agenda);
+		if (ampm == "PM") {
+			agenda = agenda + 12;
+		} else {
+			agenda = agenda;
+		}
+
+		var currentdate = new Date();
+		hour = currentdate.getHours();
+
+		current = hour;
+
+		if (hour.toString().length == 1) {
+			current = '0' + hour;
+		}
+
+		var agenda_data = jQuery('#ks-delivery-date').val();
+		var agenda_data = agenda_data.substr(0, 2);
+
+		var currentdate = new Date();
+		current_date = currentdate.getDate()
+
+		if ((agenda > current) || (current_date != agenda_data)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	setInterval(function() {
+		jQuery('.primary .continue').click(function(event) {
+			jQuery('#ks-delivery-time').css('border', '1px solid #e1e1e1');
+			jQuery('#ks-delivery-date').css('border', '1px solid #e1e1e1');
+
+			jQuery("#required-shipping").remove();
+
+			if (jQuery('#ks-delivery-date').length > 0 && (jQuery('#ks-delivery-date').val() == "" || jQuery('#ks-delivery-date').val() == null)) {
+				jQuery('#ks-delivery-date').css('border', '1px solid red');
+				event.preventDefault();
+				
+				if(jQuery("#required-shipping").length < 1){				
+					jQuery('<span id="required-shipping" style="color:#e23333; font-size:14px; float:right; margin-right:15px;">Informe data e horário de entrega</span>').appendTo('#shipping-method-buttons-container')
+				}
+			}
+			if (jQuery('#ks-delivery-time').length > 0 && (jQuery('#ks-delivery-time').val() == "" || jQuery('#ks-delivery-time').val() == null)) {
+				jQuery('#ks-delivery-time').css('border', '1px solid red');
+				event.preventDefault();
+
+				if(jQuery("#required-shipping").length < 1){				
+					jQuery('<span id="required-shipping" style="color:#e23333; font-size:14px; float:right; margin-right:15px;">Informe data e horário de entrega</span>').appendTo('#shipping-method-buttons-container')
+				}
+			}			
+		});
+	}, 2000);
+</script>
+
+<script type="text/javascript">
+	require(['jquery'], function(jQuery) {
+		jQuery(document).ready(checkContainer);
+
+		function checkContainer() {
+			if (jQuery('#ks-delivery-date').is(':visible')) {
+				var deliveryDate = document.getElementById("ks-delivery-date").value;
+				if (deliveryDate != '') {
+					getDeliveryDateOption();
+				} else {
+					blankDeliveryDateOption();
+				}
+				document.getElementById('ks-delivery-date').change = function() {
+					findDeliveryDateOption();
+				};
+			} else {
+				setTimeout(checkContainer, 5000);
+			}
+		}
+	});
+</script>
+
+<style>
+	#co-deliverydate {
+		border: none;
+		border-top: 1px solid #ddd;
+		margin-top: 15px;
+		padding-top: 30px;
+		margin-bottom: 10px;
+	}
+
+	.ui-datepicker-trigger {
+		display: none;
+	}
+
+	#ks-delivery-comment {
+		width: calc(100% + 4px);
+	}
+</style>
