@@ -600,11 +600,7 @@ div.shadow {
 	.productlist-card-item {
 		width: calc(25% - 13px) !important;
 	}
-	.product-card.animate,
-	.product-front, 
-	.product-back,
-	.product-card,
-	.make-3D-space {
+	.product-card.animate, .product-front, .product-back, .product-card, .make-3D-space {
 		height: 380px;
 	}
 	.stats-container .product_price {
@@ -627,11 +623,10 @@ div.shadow {
 }
 
 @media only screen and (max-width: 480px) {
-	.view_details{
+	.view_details {
 		border: none;
 	}
-	.product-options-item input, 
-	.product-options-item button {
+	.product-options-item input, .product-options-item button {
 		border: 1px solid #eee;
 	}
 	.stats-container .product_price {
@@ -666,7 +661,6 @@ div.shadow {
 		margin-top: -8px;
 		font-size: 13px;
 	}
-
 	.stats-container {
 		top: 215px;
 		width: calc(100% - 20px);
@@ -675,11 +669,7 @@ div.shadow {
 	.product-card.animate .stats-container {
 		top: 150px;
 	}
-	.product-card.animate,
-	.product-front, 
-	.product-back,
-	.product-card,
-	.make-3D-space {
+	.product-card.animate, .product-front, .product-back, .product-card, .make-3D-space {
 		height: 300px;
 	}
 	.owl-dots {
@@ -703,6 +693,21 @@ div.shadow {
 	}
 }
 
+.mnn-card-loading {
+	background: rgba(255, 255, 255, 0.75);
+	position: absolute;
+	z-index: 9999999;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	vertical-align: middle;
+	color: #48cfad;
+	padding-top: 50%;
+	display: none;
+}
+
 @media only screen and (max-width: 450px) {
 	.stats-container {
 		top: 195px;
@@ -710,11 +715,7 @@ div.shadow {
 	.product-card.animate .stats-container {
 		top: 140px;
 	}
-	.product-card.animate,
-	.product-front, 
-	.product-back,
-	.product-card,
-	.make-3D-space {
+	.product-card.animate, .product-front, .product-back, .product-card, .make-3D-space {
 		height: 290px;
 	}
 	.product-card.animate .view_details {
@@ -736,11 +737,7 @@ div.shadow {
 	.product-card.animate .stats-container {
 		top: 120px;
 	}
-	.product-card.animate,
-	.product-front, 
-	.product-back,
-	.product-card,
-	.make-3D-space {
+	.product-card.animate, .product-front, .product-back, .product-card, .make-3D-space {
 		height: 270px;
 	}
 	.product-card.animate .view_details {
@@ -755,11 +752,7 @@ div.shadow {
 	.product-card.animate .stats-container {
 		top: 100px;
 	}
-	.product-card.animate,
-	.product-front, 
-	.product-back,
-	.product-card,
-	.make-3D-space {
+	.product-card.animate, .product-front, .product-back, .product-card, .make-3D-space {
 		height: 250px;
 	}
 	.product-card.animate .view_details {
