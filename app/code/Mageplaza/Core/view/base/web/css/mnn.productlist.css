@@ -121,7 +121,7 @@ html, body {
 		margin-top: 3px !important;
 	}
 	.minicart-wrapper {
-		margin-top: 7px !important;
+		margin-top: 11px !important;
 	}
 	#subcategory {
 		position: absolute !important;
@@ -962,10 +962,7 @@ div.shadow {
 	.mnn-minicart label a {
 		color: #eee;
 		font-weight: 500;
-	}
-	.page-wrapper .page-header .header.content .minicart-wrapper .action.showcart .counter.qty {
-		background: #333 !important;
-	}
+	}	
 	.page-wrapper .page-header .header.content .minicart-wrapper .action.showcart .counter.qty {
 		top: 8px;
 		left: 18px;
@@ -981,6 +978,10 @@ div.shadow {
 		top: 11px;
 		left: 17px;
 	}
+}
+
+.page-wrapper .page-header .header.content .minicart-wrapper .action.showcart .counter.qty {
+	background: #333 !important;
 }
 
 #formstorecelect .page-title-main>strong:after{
