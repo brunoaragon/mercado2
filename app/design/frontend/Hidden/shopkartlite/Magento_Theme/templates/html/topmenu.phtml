@@ -284,12 +284,6 @@ $showHome = $helper->getConfigValue('shopkartlitesettings/navigation_settings/en
                 <span>Fale Conosco</span>
             </a>
         </li>
-
-        <li class="level0 nav-5 category-item first level-top ui-menu-item" role="presentation">
-            <a class="level-top ui-corner-all" id="ui-id-2" tabindex="-1" role="menuitem">
-                <span>Comprando em Cascavel/PR</span>
-            </a>
-        </li>
     </ul>
 </nav>
 
@@ -361,7 +355,8 @@ if ($request->getFullActionName() == 'cms_index_index') {
     }
 
     .slider-category_item {
-        width: calc(100% - 20px);
+        width: 110px;
+        height: 110px;
         display: inline-block;
         background: #fff;
         margin: 5px;
@@ -370,17 +365,17 @@ if ($request->getFullActionName() == 'cms_index_index') {
     }
 
     .slider-category_item-product {
-        width: calc(50% - 5px);
-        height: calc(50% - 5px);
+        width: 53px;
+        height: 53px;
         display: inline-block;
     }
 
     .slider-category_item-product img {
         filter: brightness(1.06);
         height: auto;
-        max-height: 50px;
+        max-height: 45px;
         width: auto !important;
-        max-width: 50px;
+        max-width: 45px;
         margin: auto;
         white-space: nowrap;
         text-align: center;
@@ -402,7 +397,7 @@ if ($request->getFullActionName() == 'cms_index_index') {
         .mnn-categories-slider {
             display: block !important;
         }
-    }    
+    }
 </style>
 
 <script>
@@ -428,3 +423,167 @@ if ($request->getFullActionName() == 'cms_index_index') {
         })
     })
 </script>
+
+<style>
+    .mnn-menu-mobile {
+        display: none;
+    }
+
+    @media only screen and (max-width : 480px) {
+        .mnn-menu-mobile {
+            display: inline-block;
+            position: fixed;
+            background: rgba(60, 60, 60, 0.9);
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 46px;
+            z-index: 9999999999999;
+        }
+
+        .mnn-menu-mobile .mnn-menu {
+            width: 100%;
+            display: inline-flex;
+            height: 100%;
+        }
+
+        .mnn-menu .mnn-menu_item {
+            width: 20%;
+            text-align: center;
+            height: 100%;
+        }
+
+        .mnn-menu .mnn-menu_item svg {
+            font-size: 21px;
+            margin-top: 3px;
+            width: 100%;
+            padding: 10px 0;
+        }
+
+        .menu_item_check {
+            width: calc(20% - 10px);
+            height: 0px;
+            background: #48cfad;
+            position: absolute;
+            z-index: 9999999999999;
+            display: block;
+            margin: auto;
+            margin-left: 5px;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            opacity: 0;
+            transition: 0.2s;
+        }
+
+        .mnn-menu_item .active {
+            height: 4px;
+            opacity: 1;
+            transition: 0.2s;
+        }
+
+        .category_list {
+            height: calc(100% - 272px) !important;
+            overflow-x: hidden;
+        }
+    }
+</style>
+
+<div class="mnn-menu-mobile">
+    <div class="mnn-menu">
+        <div onclick="selectMenu('home')" class="mnn-menu_item menu-mobile-home">
+            <div class="menu_item_check">
+            </div>
+            <a href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                    <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7l9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <path d="M9 22V12h6v10" />
+                    </g>
+                </svg>
+            </a>
+        </div>
+        <div onclick="selectMenu('cart')" class="mnn-menu_item menu-mobile-cart">
+            <div class="menu_item_check">
+            </div>
+            <a href="/checkout/cart/">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                    <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </g>
+                </svg>
+            </a>
+        </div>
+        <div onclick="showChangeStore()" class="mnn-menu_item menu-mobile-store">
+            <div class="menu_item_check">
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                </g>
+            </svg>
+        </div>
+        <div onclick="selectMenu('wishlist')" class="mnn-menu_item menu-mobile-wishlist">
+            <div class="menu_item_check">
+            </div>
+            <a href="/wishlist">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                    <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 11l3 3L22 4" />
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                    </g>
+                </svg>
+            </a>
+        </div>
+        <div onclick="selectMenu('account')" class="mnn-menu_item menu-mobile-account">
+            <div class="menu_item_check">
+            </div>
+            <a href="/customer/account/">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                    <g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </g>
+                </svg>
+            </a>
+        </div>
+
+        <script>
+            function selectMenu(menu_selected) {
+                jQuery('.menu_item_check').removeClass('active');
+                jQuery('.menu-mobile-' + menu_selected).find('.menu_item_check').addClass('active');
+            }
+
+            <?php
+            $url_active = $_SERVER['REQUEST_URI'];
+
+            if ($url_active != "") {
+            ?>
+                require([
+                    'jquery'
+                ], function($, $t) {
+                    jQuery(document).ready(function() {
+                        url = "<?= $url_active ?>";
+
+                        if (url.toLowerCase().indexOf("customer") >= 0) {
+                            menu = 'account';
+                        } else if (url.toLowerCase().indexOf("wishlist") >= 0) {
+                            menu = 'wishlist';
+                        } else if (url.toLowerCase().indexOf("checkout") >= 0) {
+                            menu = 'cart';
+                        } else {
+                            menu = 'home';
+                        }
+
+                        selectMenu(menu)
+                    })
+                })
+            <?php
+            }
+            ?>
+        </script>
+
+    </div>
+</div>

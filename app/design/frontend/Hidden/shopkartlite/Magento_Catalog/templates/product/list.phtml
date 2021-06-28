@@ -206,9 +206,7 @@ $showBorder = $shopkartliteHelper->getConfigValue('shopkartlitesettings/category
             qtd = parseInt(jQuery('.product-' + product_id).find('.qtd-addtocart').val());
             qtdInCart = parseInt(jQuery('.product-' + product_id).find('.cart-check-qtd').html());
 
-            jQuery('.product-' + product_id).find('.loading').css('display', 'flex');
-            jQuery('.product-' + product_id).find('.add-success').hide();
-            jQuery('.product-' + product_id).find('.add-fail').hide();
+            jQuery('.product-' + product_id).find('.mnn-card-loading').css('display', 'block');
 
             if (qtdInCart > 0) {
                 jQuery.post("<?= $block->getUrl("adicionarcarrinho/index/update"); ?>", {
@@ -216,7 +214,7 @@ $showBorder = $shopkartliteHelper->getConfigValue('shopkartlitesettings/category
                         qtd: qtd
                     },
                     function(data) {
-                        jQuery('.product-' + product_id).find('.loading').hide();
+                        jQuery('.product-' + product_id).find('.mnn-card-loading').css('display', 'none');
                         if (data == '1') {
                             jQuery('.product-' + product_id).find('.cart-check-qtd').html(parseInt(qtd));
                             mnnAlert("Adicionado ao Carrinho", "Quantidade do produto atualizada", "success");
@@ -231,7 +229,7 @@ $showBorder = $shopkartliteHelper->getConfigValue('shopkartlitesettings/category
                         qtd: qtd
                     },
                     function(data) {
-                        jQuery('.product-' + product_id).find('.loading').hide();
+                        jQuery('.product-' + product_id).find('.mnn-card-loading').css('display', 'none');
                         if (data == '1') {
                             jQuery('.product-' + product_id).find('.cart-check-qtd').html(parseInt(qtd));
                             mnnAlert("Adicionado ao Carrinho", "Produto adicionado com sucesso", "success");

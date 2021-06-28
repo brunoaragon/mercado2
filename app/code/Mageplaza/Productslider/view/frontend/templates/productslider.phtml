@@ -654,8 +654,6 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
         }
 
         function mnnAddToCart(product_id) {
-
-
             qtd = parseInt(jQuery('.product-' + product_id).find('.qtd-addtocart').val());
             qtdInCart = parseInt(jQuery('.product-' + product_id).find('.cart-check-qtd').html());
 

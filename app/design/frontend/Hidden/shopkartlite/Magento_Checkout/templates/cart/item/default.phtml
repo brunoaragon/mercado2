@@ -79,7 +79,7 @@ $_product = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface'
                     </div>
                 </div>
             </div>
-            <div class="cart-item-data">
+            <div class="cart-item-data cart-item-data_details <?= $_product->getProdutoPorPeso() ? 'cart-item-data_kg' : '' ?>">
 
                 <div class="cart-item-data_detail preco-kg">
                     <?php

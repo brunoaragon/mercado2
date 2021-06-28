@@ -15,7 +15,7 @@
     }
 
     .minicart-wrapper .fa-shopping-cart {
-        font-size: 26px;
+        font-size: 20px;
         color: #fff;
         position: absolute;
         left: 0;
@@ -46,11 +46,13 @@
 
         .mnn-minicart label {
             position: absolute;
-            left: 20px;
-            top: 12px;            
+            left: 15px;
+            top: 12px;
+            width: calc(100% - 15px);
+            text-align: center;
         }
 
-        .mnn-minicart label a{
+        .mnn-minicart label a {
             color: #eee;
             font-weight: 500;
         }
@@ -60,15 +62,21 @@
         }
 
         .page-wrapper .page-header .header.content .minicart-wrapper .action.showcart .counter.qty {
-            top: 12px;
+            top: 8px;
+            left: 18px;
+        }
+
+        .page-wrapper .page-header .header.content .minicart-wrapper {
+            margin-left: 30px !important;
         }
 
         .minicart-wrapper .fa-shopping-cart {
-            font-size: 26px;
-            color: #eee;
+            font-size: 20px;
+            color: #fff;
             position: absolute;
             right: 25px;
-            top: 8px;
+            top: 11px;
+            left: 17px;
         }
     }
 </style>
@@ -158,3 +166,184 @@ script;
     }
     </script>
 </div>
+
+<?php
+$objectManager =  \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager  = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+$storeID       = $storeManager->getStore()->getStoreId();
+$storeCode     = $storeManager->getStore()->getCode();
+
+$storeManagerDataList = $storeManager->getStores();
+?>
+
+
+<style>
+    .store-change {
+        position: relative;
+        width: 275px;
+        float: right;
+        display: none !important;
+        border: 1px solid #444;
+        margin-left: 30px;
+        padding: 12px 5px;
+        margin-top: -2px;
+        border-radius: 100px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    #formstorecelect {
+        width: 100% !important;
+        height: 100% !important;
+        background: rgba(0, 0, 0, 0.4) !important;
+        z-index: 99999999 !important;
+        display: none;
+        position: fixed !important;
+        right: 0 !important;
+        left: 0 !important;
+        top: 0 !important;
+    }
+
+    .store-select {
+        width: 50% !important;
+        left: 25% !important;
+        height: 400px !important;
+        background: #fff;
+        z-index: 99999999;
+        position: fixed;
+        top: calc(50% - 200px) !important;
+    }
+
+    .store-change .fa {
+        float: left;
+        font-size: 20px;
+        margin-left: 10px;
+    }
+
+    #formstorecelect .store-item {
+        width: calc(100% - 20px);
+        padding: 5px 10px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+    }
+
+    @media only screen and (max-width :480px) {
+        #formstorecelect {
+            width: 100% !important;
+            height: 100% !important;
+            top: 0 !important;
+            left: 0 !important;
+        }
+
+        .store-select {
+            width: 80% !important;
+            left: 10% !important;
+        }
+
+    }
+
+    @media only screen and (min-width :768px) {
+        #formstorecelect {
+            width: 96%;
+            height: 60%;
+            top: 20%;
+            left: 2%;
+        }
+
+        .page-wrapper .page-header .header.content .minicart-wrapper .action.showcart {
+            float: left;
+            left: -3px;
+            top: 1px;
+        }
+
+        .page-wrapper .page-header .header.content .minicart-wrapper .action.showcart .counter.qty {
+            top: 8px;
+            left: 34px;
+        }
+
+        .store-change {
+            display: inline-block !important;
+        }
+    }
+</style>
+
+<div class="store-change" onclick="showChangeStore()">
+    <i class="fa fa-map-marker"></i> <span> <?= $storeManager->getStore()->getName() ?></span>
+</div>
+
+<div id="formstorecelect">
+    <div class="store-select">
+        <div class="slider-outer" style="max-width: 1280px; margin: auto !important;">
+            <div style="margin-bottom: 0;" class="owl-button-top above-padding below-padding block widget block-new-products grid">
+                <div class="page-title-main">
+                    <strong role="heading" aria-level="2">Nossas Lojas</strong>
+                    <buttoin onclick="hideChangeStore()" style="z-index: 99999999; float: right; position: absolute; top: -16px; right: 0px; font-size: 25px; padding: 10px 15px; cursor: pointer;">
+                        <svg style="cursor: pointer" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                            <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 6L6 18" />
+                                <path d="M6 6l12 12" />
+                            </g>
+                        </svg>
+                        </span>
+                </div>
+                <div class="block-content">
+                    <?php
+                    foreach ($storeManagerDataList as $key => $value) :
+                        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                        $storeInfo = $objectManager->create('\Rdtech\Loja\Model\Storelocator')->getCollection()
+                            ->addFieldToFilter('code', $value['code'])
+                            ->getFirstItem();
+                    ?>
+                        <div class="store-item" id="store-<?= $value['code'] ?>" onclick="changeStore(this,'<?= $value['code'] ?>')">
+                            <div class="store-title">
+                                <span><?= $value['name'] ?></span>
+                                <span><?= $storeInfo->getAddress() ?></span>
+                            </div>
+                        </div>
+                    <?php
+                    endforeach
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    require([
+        'jquery',
+        'mage/translate',
+        'mage/calendar'
+    ], function($, $t) {
+        jQuery(document).mouseup(function(e) {
+            var container = jQuery(".store-select");
+
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                hideChangeStore()
+            }
+        });
+    });
+
+    function showChangeStore() {
+        jQuery('.store-widget-slider .product-slider').show();
+        jQuery('.overlay').fadeIn(350);
+        jQuery('#formstorecelect').fadeIn(200);
+    }
+
+    function hideChangeStore() {
+        jQuery('.overlay').fadeOut(350);
+        jQuery('#formstorecelect').fadeOut(200);
+    }
+
+    function changeStore(item, store) {
+        jQuery('.store-card-click').addClass('store-card-disabled');
+        jQuery('.store-card-click').removeClass('store-card-enabled');
+        jQuery(item).find('.store-card-click').removeClass('store-card-disabled');
+        jQuery(item).find('.store-card-click').addClass('store-card-enabled');
+
+        var href = jQuery('.view-' + store).find('a').attr('href');
+        window.location.href = href;
+    }
+</script>

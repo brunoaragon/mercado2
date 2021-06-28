@@ -206,8 +206,6 @@
     }
 
     @media only screen and (max-width:480px) {
-
-
         body .page-title-wrapper {
             text-align: center !important;
             padding: 0 5px !important;
@@ -277,7 +275,7 @@
         margin-bottom: 7px;
     }
 
-    .cart:last-child .cart-product{
+    .cart:last-child .cart-product {
         border-bottom: none;
     }
 
@@ -650,10 +648,10 @@ if ($cashback_enable && $cashback_total > 0) {
     });
 
     function updateCartItem(item_id = 0) {
-        qty = jQuery('.item-'+item_id).find('.input-cart-qty').val();
+        qty = jQuery('.item-' + item_id).find('.input-cart-qty').val();
 
-        console.log('send post; qty = '+qty+'; id = '+item_id)
-        
+        console.log('send post; qty = ' + qty + '; id = ' + item_id)
+
         if (isNaN(qty)) {
             qty = jQuery(qty).val();
         }
@@ -1498,6 +1496,55 @@ if ($idade < 18 && $_maioridade == true) {
         .cart .cart-category-group {
             margin-bottom: -60px !important;
             margin-top: 40px !important
+        }
+    }
+
+    @media only screen and (max-width:991px) {
+
+        .cart-item-data_detail {
+            width: 33.33% !important;
+        }
+
+        .cart-item-data_detail .classe_unidade {
+            padding-top: 15px !important;
+        }
+
+        .cart-item-data_detail .peso_classe {
+            padding-top: 0px !important;
+        }
+
+        .cart-item-data_kg {
+            padding-top: 0px;
+        }
+
+        .cart-item-category {
+            display: none;
+        }
+
+        .cart-item-data_action {
+            width: 50px;
+        }
+
+        .cart-item-data_name {
+            width: calc(100% - 50px);
+        }
+
+        .preco-kg {
+            display: none;
+        }
+    }
+
+    @media only screen and (max-width:768px) {
+        .cart-item-data_details {
+            padding-top: 55px;
+        }
+
+        .cart-item-data_kg {
+            padding-top: 0px;
+        }
+
+        .checkout-cart-index .page-title-wrapper {
+            padding-top: 15px !important;
         }
     }
 </style>

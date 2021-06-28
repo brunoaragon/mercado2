@@ -197,8 +197,8 @@
     @media only screen and (min-width : 1280px) {
         .page-wrapper .page-header .header.content .block-search {
             padding-left: 15px;
-            max-width: calc(100% - 470px);
-            width: 600px;
+            max-width: calc(100% - 550px);
+            width: 500px;
         }
 
         .page-wrapper .page-header .header.content .block-search .field.search .control .input-text {
@@ -300,8 +300,9 @@ $welcomeMessage = $block->getWelcome();
             });
         }
 
-        jQuery('.mnn-categories-slider').insertAfter(".nav-sections");
+        jQuery('.mnn-menu-mobile').insertAfter(".nav-sections");
 
+        jQuery('.mnn-categories-slider').insertAfter(".nav-sections");
         jQuery('.mnn-categories-slider').insertAfter(jQuery('.mp-slider-mnn').first());
 
         jQuery('.mp-slider-mnn').show();
