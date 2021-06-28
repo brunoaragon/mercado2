@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Mageplaza
  *
@@ -100,23 +101,27 @@ class AddBlock implements ObserverInterface
                             ->setSlider($slider)
                             ->toHtml();
 
+                        $loadingBlock = "<div class='slider-loading' style='width: 100%;padding: 20px 0;text-align:center'><i class='fa fa-cog fa-spin fa-3x fa-fw'></i></div>";
+
                         if (strpos($location, 'top') !== false) {
                             if ($type === 'sidebar') {
-                                $output = "<div sort='".$slider->getPriority()."' class='mnn-content-sort-".$slider->getPriority()." mp-banner-sidebar mp-slider-mnn' id=\"mageplaza-bannerslider-block-before-{$type}-{$slider->getId()}\">
+                                $output = "<div sort='" . $slider->getPriority() . "' class='mnn-content-sort-" . $slider->getPriority() . " mp-banner-sidebar mp-slider-mnn' id=\"mageplaza-bannerslider-block-before-{$type}-{$slider->getId()}\">
                                         $content</div>" . $output;
                             } else {
-                                $output = "<div sort='".$slider->getPriority()."' class='mnn-content-sort-".$slider->getPriority()." mp-slider-mnn' id=\"mageplaza-bannerslider-block-before-{$type}-{$slider->getId()}\">
+                                $output = "<div sort='" . $slider->getPriority() . "' class='mnn-content-sort-" . $slider->getPriority() . " mp-slider-mnn' id=\"mageplaza-bannerslider-block-before-{$type}-{$slider->getId()}\">
                                         $content</div>" . $output;
                             }
                         } else {
                             if ($type === 'sidebar') {
-                                $output .= "<div sort='".$slider->getPriority()."' class='mnn-content-sort-".$slider->getPriority()." mp-banner-sidebar mp-slider-mnn' id=\"mageplaza-bannerslider-block-after-{$type}-{$slider->getId()}\">
+                                $output .= "<div sort='" . $slider->getPriority() . "' class='mnn-content-sort-" . $slider->getPriority() . " mp-banner-sidebar mp-slider-mnn' id=\"mageplaza-bannerslider-block-after-{$type}-{$slider->getId()}\">
                                         $content</div>";
                             } else {
-                                $output .= "<div sort='".$slider->getPriority()."' class='mnn-content-sort-".$slider->getPriority()." mp-slider-mnn' id=\"mageplaza-bannerslider-block-after-{$type}-{$slider->getId()}\">
+                                $output .= "<div sort='" . $slider->getPriority() . "' class='mnn-content-sort-" . $slider->getPriority() . " mp-slider-mnn' id=\"mageplaza-bannerslider-block-after-{$type}-{$slider->getId()}\">
                                         $content</div>";
                             }
                         }
+
+                        $output = $loadingBlock . $output;
                     }
                 }
             }

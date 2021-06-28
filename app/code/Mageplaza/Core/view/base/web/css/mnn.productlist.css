@@ -702,6 +702,13 @@ div.shadow {
 	}
 }
 
+.toolbar-products:last-child .pages {
+    display: block !important;
+}
+.toolbar:last-child .toolbar-amount{
+	display: none !important;
+}
+
 .mnn-card-loading {
 	background: rgba(255, 255, 255, 0.75);
 	position: absolute;

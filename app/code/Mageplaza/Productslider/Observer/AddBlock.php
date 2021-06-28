@@ -85,6 +85,8 @@ class AddBlock implements ObserverInterface
             $fullActionName = $this->request->getFullActionName();
 
             $output = $observer->getTransport()->getOutput();
+
+            $loadingBlock = "<div class='slider-loading' style='width: 100%;padding: 20px 0;text-align:center'><i class='fa fa-cog fa-spin fa-3x fa-fw'></i></div>";
            
             foreach ($this->helperData->getActiveSliders() as $slider) {
                 [$pageType, $location] = explode('.', $slider->getLocation());
@@ -102,6 +104,8 @@ class AddBlock implements ObserverInterface
                     }
                 }
             }
+
+            $output = $loadingBlock.$output;
 
             $observer->getTransport()->setOutput($output);
         }
