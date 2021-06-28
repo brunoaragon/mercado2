@@ -691,6 +691,15 @@ div.shadow {
 	.make-3D-space .old-price {
 		font-size: 13px !important;
 	}
+	.mnn-product-list {
+		padding: 10px 0;
+		margin: 5px 0;
+	}
+	.mnn-slide-title {
+		margin-top: 15px;
+		font-size: 20px;
+		font-weight: 400;
+	}
 }
 
 .mnn-card-loading {
