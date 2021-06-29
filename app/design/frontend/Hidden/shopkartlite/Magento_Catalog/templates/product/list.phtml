@@ -269,7 +269,10 @@ $showBorder = $shopkartliteHelper->getConfigValue('shopkartlitesettings/category
 
                             <?php echo $productImage->toHtml(); ?>
 
-                            <div class="image_overlay"></div>
+                            <a class="card-mnn-link-mobile" href="<?= $_product->getProductUrl() ?>">
+                                <div class="image_overlay"></div>
+                            </a>
+
                             <a href="<?= $_product->getProductUrl() ?>" class="view_details">Ver Produto</a>
                             <div class="stats">
                                 <div class="stats-container">

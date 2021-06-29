@@ -1,0 +1,1331 @@
+<?php
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\Checkout\Block\Onepage */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager  = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+$storeCode     = $storeManager->getStore()->getCode();
+
+$storeManagerDataList = $storeManager->getStores();
+
+function getCheckoutColor($attr)
+{
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $model = $objectManager->create('\Rdtech\Mastertheme\Model\Themecustom');
+
+    $collection = $model->getCollection()
+        ->addFieldToSelect('element')
+        ->addFieldToSelect('value')
+        ->addFieldToFilter('element', $attr)
+        ->getFirstItem();
+
+    if ($collection->getValue()) {
+        return $collection->getValue();
+    } else {
+        return null;
+    }
+}
+?>
+
+
+
+
+
+<style>
+    .mnn_shipping {
+        display: inline-block;
+        box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.75%);
+        margin-top: 25px;
+        width: 100%;
+    }
+
+    .opc-wrapper {
+        width: 100%;
+    }
+
+    body,
+    body .page-wrapper {
+        background: <?= getCheckoutColor('checkout_page_background') ?> !important;
+        color: <?= $this->getCheckoutColor('checkout_page_text') ?> !important;
+    }
+
+    #store_menu {
+        background: <?= getCheckoutColor('checkout_page_background') ?> !important;
+        border: none !important
+    }
+
+    .step_progress .opc-progress-bar-item>span {
+        color: <?= $this->getCheckoutColor('checkout_page_text') ?> !important;
+    }
+
+    #store_menu .menu_item,
+    #store_menu .menu_item i,
+    .menu_item_home,
+    .menu_item_home i {
+        color: <?= $this->getCheckoutColor('checkout_page_text') ?> !important;
+    }
+
+    .new-address-popup button {
+        background: #e8e8e8;
+        color: #555;
+        border: none;
+    }
+
+    body .table-checkout-shipping-method tbody td {
+        border-color: #202b33 !important;
+    }
+
+    .mnn_shipping_address {
+        background: #fafafa;
+        color: #555;
+        display: inline-block; 
+        width: 100%;
+        border-bottom: 1px solid #ddd;
+        padding: 15px;
+    }
+
+    .mnn_shipping_method {
+        background: #f8f8f8;
+        color: #555;
+        border-bottom: 1px solid #ddd;
+        padding: 15px;
+        display: inline-block; 
+        width: 100%;
+    }
+
+    .mnn_shipping_schedule {
+        background: #f6f6f6;
+        color: #555;
+        border-bottom: 1px solid #ddd;
+        padding: 15px;
+        display: inline-block; 
+        width: 100%;
+    }
+
+    .mnn_payment {
+        background: #f4f4f4;
+        color: #555;
+        padding: 15px;
+        display: inline-block; 
+        width: 100%;
+    }
+
+    .opc-wrapper .shipping-address-item.selected-item {
+        border-color: transparent;
+    }
+
+    .mnn_shipping_content {
+        display: inline-block !important;
+        width: 100%;
+    }
+
+    .mnn_shipping_title {
+        font-size: 18px;
+        font-weight: 300;
+    }
+
+    .mnn_shipping_title i {
+        margin-right: 10px;
+        width: 35px;
+        text-align: center;
+    }
+
+    .mnn_shipping_content {
+        margin-top: 20px;
+    }
+
+    .mnn_shipping_action {
+        margin-top: 15px;
+    }
+
+    .mnn_shipping_action .mnn-opc-back {
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        padding: 10px 20px;
+        width: 130px;
+        color: #398fd1;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+    .mnn_shipping_action .mnn-opc-back:hover {
+        border: 1px solid #398fd1;
+        transition: 0.3s;
+    }
+
+    .mnn_shipping_action .mnn-opc-next {
+        background: transparent;
+        border: 1px solid #398fd1;
+        border-radius: 4px;
+        padding: 10px 20px;
+        width: 200px;
+        color: #398fd1;
+        font-weight: 500;
+        float: right;
+    }
+
+    .mnn_shipping_address .mnn-opc-next {
+        margin-top: -45px;
+    }
+
+    .step-title {
+        display: none;
+    }
+
+    .mnn_checkout {
+        width: 100%;
+    }
+
+    .mnn_checkout select,
+    .mnn_checkout input {
+        color: #666 !important;
+    }
+
+    .opc-summary-wrapper {
+        width: 100%;
+    }
+
+    #shipping-method-buttons-container {
+        display: none;
+    }
+
+    body .mnn_resume .opc-block-summary {
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+
+    body .mnn_resume .cart-summary,
+    body .mnn_resume .modal-content,
+    body .cart-summary {
+        background: transparent !important;
+        filter: none !important;
+        border: none !important;
+    }
+
+    .opc-block-summary>.title {
+        color: #fff !important;
+    }
+
+    #opc-shipping_method,
+    #shipping {
+        display: inline-block !important;
+        width: 100% !important;
+    }
+
+    .opc-wrapper .shipping-address-item {
+        border-bottom: 1px solid #efefef !important;
+    }
+
+    .opc-wrapper .action-select-shipping-item {
+        padding: 7px 20px;
+        background: #f8f8f8;
+        border: 1px solid #398fd1;
+        border-radius: 4px;
+        color: #398fd1;
+    }
+
+    #payment {
+        display: none !important;
+    }
+
+    .mnn_payment #payment {
+        display: inline-block !important;
+        width: 100%;
+    }
+
+    .payment-method-content .primary button {
+        display: none;
+    }
+
+    #payment .field label {
+        color: #fff !important;
+    }
+
+    .payment-method-title {
+        display: flex;
+    }
+
+    .fa-angle-right {
+        position: absolute;
+        margin-top: -21px;
+        left: -7px;
+        font-size: 20px;
+        color: #398fd1;
+    }    
+
+    .mnn_checkout textarea {
+        color: #666;
+    }
+
+    .opc-wrapper .form-login,
+    .opc-wrapper .form-shipping-address,
+    .opc-wrapper .methods-shipping {
+        background: transparent !important;
+    }
+
+    @media only screen and (max-width: 991px) {
+        .minicart-wrapper {
+            width: auto !important;
+            margin-top: 10px !important;
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        .mnn_shipping_title {
+            font-size: 16px;
+        }
+    }
+
+    @media only screen and (max-width: 480px) {
+        .mnn_shipping_action .mnn-opc-back {
+            padding: 10px 0;
+            width: 90px;
+        }
+
+        .mnn_shipping_action .mnn-opc-next {
+            width: 150px;
+        }
+
+        #co-deliverydate {
+            padding: 0 !important;
+        }
+
+        #co-deliverydate div {
+            width: 100%;
+        }
+    }
+
+    #co-shipping-method-form .col-method {
+        display: none !important;
+    }
+
+    #co-shipping-method-form .col-method:first-child {
+        display: block !important;
+    }
+
+    .table-checkout-shipping-method tbody tr {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .table-checkout-shipping-method thead {
+        display: none !important;
+    }
+
+    .table-checkout-shipping-method tbody tr td {
+        padding: 10px 0 !important;
+    }
+
+    .opc-wrapper .step-content {
+        margin: 10px 0 0 0 !important;
+    }
+
+    .ks-delivery-date,
+    .ks-delivery-time {
+        display: inline-block;
+        width: calc(50% - 2px);
+        margin-bottom: 20px;
+        padding: 0 !important;
+    }
+
+    .ks-delivery-date .control input,
+    .ks-delivery-time .control input,
+    .ks-delivery-date .control textarea,
+    .ks-delivery-time .control textarea,
+    .ks-delivery-date .control select,
+    .ks-delivery-time .control select {
+        width: calc(100% - 5px)
+    }
+
+    .ks-delivery-comment {
+        width: calc(100% - 10px);
+        margin-bottom: 20px;
+    }
+
+    @media only screen and (max-width: 480px) {
+        #co-shipping-method-form {
+            padding: 0 5px !important;
+        }
+
+        .mnn_checkout .col-md-8 {
+            padding: 0 !important;
+        }
+
+        .mnn_checkout .fa-angle-right {
+            display: none !important;
+        }
+
+        .table-checkout-shipping-method thead {
+            display: none !important;
+        }
+
+
+        .table-checkout-shipping-method tbody tr:last-child {
+            border-bottom: none;
+        }
+    }
+
+    .mnn_checkout .table-checkout-shipping-method {
+        width: 100%;
+    }
+
+    .mnn_checkout .table-checkout-shipping-method td {
+        border: none !important;
+        cursor: pointer;
+    }
+
+    .mnn_checkout .table-checkout-shipping-method thead .col-method:first-child {
+        opacity: 0;
+        max-width: 20px;
+        padding: 0;
+    }
+
+    .message-error {
+        display: none !important;
+    }
+
+    .mnn_message {
+        padding-top: 15px;
+    }
+
+    /*
+    .mnn_message .message-error {
+        display: none;
+    }
+
+    .mnn_message .message-error:first-child {
+        display: inline-block !important;
+        width: 100%;
+    }
+    */
+
+    .mnn_shipping_action {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .checkout-icon {
+        display: none !important;
+    }
+
+    body .opc-wrapper .shipping-address-item {
+        border-bottom: 1px solid #dcdcdc !important;
+    }
+
+    body .opc-sidebar,
+    body .page-wrapper .mnn_resume .opc-block-summary {
+        background: #fff !important;
+        filter: none;
+    }
+
+    body .page-wrapper .mnn_resume .opc-block-summary {
+        background: #fff !important;
+        filter: none;
+        border: 1px solid #e3e3e3;
+    }
+</style>
+
+
+
+<div class="mnn_checkout">
+    <div class="step_progress">
+
+    </div>
+    <div class="mnn_checkout_step">
+        <div class="mnn_shipping">
+            <div class="mnn_shipping_address">
+                <div class="mnn_shipping_title">
+                    <i class="fa fa-map-marker"></i><span>Endereço</span>
+                </div>
+                <div class="mnn_shipping_toggle">
+                    <i class="fa fa-angle-right"></i>
+                    <div class="mnn_shipping_content">
+                        <div class="opc-wrapper">
+
+                        </div>
+                    </div>
+                    <div class="mnn_shipping_action">
+                        <button type="button" class="mnn-opc-next" onclick="shippingStep('.mnn_shipping_method .mnn_shipping_toggle');">Continuar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="mnn_shipping_method">
+                <div class="mnn_shipping_title">
+                    <i class="fa fa-truck"></i><span>Entrega/Retirada</span>
+                </div>
+                <div class="mnn_shipping_toggle hidden">
+                    <i class="fa fa-angle-right"></i>
+                    <div class="mnn_shipping_content">
+                        <div class="opc-wrapper">
+
+                        </div>
+                    </div>
+                    <div class="mnn_shipping_action">
+                        <button type="button" class="mnn-opc-back" onclick="shippingStep('.mnn_shipping_address .mnn_shipping_toggle');">Voltar</button>
+                        <button type="button" class="mnn-opc-next" onclick="stepShipping()">Continuar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="mnn_shipping_schedule">
+                <div class="mnn_shipping_title">
+                    <i class="fa fa-calendar"></i><span>Agendamento de Entrega/Retirada</span>
+                </div>
+                <div class="mnn_shipping_toggle hidden">
+                    <i class="fa fa-angle-right"></i>
+                    <div class="mnn_shipping_content">
+
+                    </div>
+                    <div class="mnn_shipping_action">
+                        <button type="button" class="mnn-opc-back" onclick="shippingStep('.mnn_shipping_method .mnn_shipping_toggle');">Voltar</button>
+                        <button type="button" class="mnn-opc-next" onclick="verifyDelivery();">Continuar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mnn_payment">
+            <div class="mnn_shipping_title">
+                <i class="fa fa-money"></i><span>Pagamento</span>
+            </div>
+            <div class="mnn_shipping_toggle hidden">
+                <i class="fa fa-angle-right"></i>
+                <div class="mnn_shipping_content">
+                    <div class="opc-wrapper">
+
+                    </div>
+                </div>
+                <div class="mnn_shipping_action">
+                    <button type="button" class="mnn-opc-back" onclick="jQuery('.opc-progress-bar ._complete span').click();shippingStep('.mnn_shipping_schedule .mnn_shipping_toggle');">Voltar</button>
+                    <button type="button" class="mnn-opc-next" onclick="checkoutVerify()">Finalizar Pedido</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mnn_message col-md-12">
+
+        </div>
+    </div>
+
+    <div class="col-md-4 mnn_resume">
+
+    </div>
+</div>
+
+
+
+
+<script>
+    function checkoutVerify() {
+        shipping = false;
+        jQuery("#co-payment-form .radio").each(function(index) {
+            if (jQuery(this).is(':checked')) {
+                shipping = true;
+            }
+        });
+
+        if (shipping == false) {
+            require([
+                'jquery',
+                'Rdtech_Mastertheme/js/sweetalert2'
+            ], function($, $t) {
+                swal('Pagamento', 'Selecione a forma de pagamento', 'warning');
+            })
+        } else {
+            jQuery('.payment-method-content .primary button').click()
+        }
+
+    }
+
+    function verifyDelivery() {
+        delivery = true;
+
+        if (jQuery('#ks-delivery-date').length > 0 && (jQuery('#ks-delivery-date').val() == "" || jQuery('#ks-delivery-date').val() == null)) {
+            delivery = false;
+        }
+
+        if (jQuery('#ks-delivery-time').length > 0 && (jQuery('#ks-delivery-time').val() == "" || jQuery('#ks-delivery-time').val() == null)) {
+            delivery = false;
+        }
+
+        if (delivery == true) {
+            stepPayment();
+        } else {
+            require([
+                'jquery',
+                'Rdtech_Mastertheme/js/sweetalert2'
+            ], function($, $t) {
+                swal('Agendamento', 'Selecione data/horário para entrega ou retirada', 'warning');
+            })
+        }
+    }
+
+    function stepShipping() {
+        shipping = false;
+        jQuery("#checkout-shipping-method-load .radio").each(function(index) {
+            if (jQuery(this).is(':checked')) {
+                shipping = true;
+            }
+        });
+
+        if (shipping == false) {
+            require([
+                'jquery',
+                'Rdtech_Mastertheme/js/sweetalert2'
+            ], function($, $t) {
+                swal('Entrega/Retirada', 'Selecione a forma de entrega', 'warning');
+            })
+        } else {
+            shippingStep('.mnn_shipping_schedule .mnn_shipping_toggle');
+        }
+    }
+
+    function stepPayment() {
+        jQuery('#shipping-method-buttons-container button').click();
+        shippingStep('.mnn_payment .mnn_shipping_toggle');
+
+        payment = setInterval(function() {
+            if (jQuery('.mnn_payment .mnn_shipping_content #payment').length < 1) {
+                jQuery('#payment').appendTo('.mnn_payment .mnn_shipping_content');
+            }
+        }, 500);
+    }
+
+    function shippingStep(step) {
+        jQuery('.mnn_shipping_toggle').addClass('hidden');
+        jQuery(step).removeClass('hidden');
+    }
+
+    require([
+        'jquery',
+        'mage/translate',
+        'mage/calendar'
+    ], function($, $t) {
+        shippingaddress = setInterval(function() {
+            if (jQuery('.mnn_shipping_address .mnn_shipping_content .opc-wrapper #shipping').length < 1) {
+                jQuery('#shipping').appendTo('.mnn_shipping_address .mnn_shipping_content .opc-wrapper');
+            }
+        }, 500);
+
+        shippingmethod = setInterval(function() {
+            if (jQuery('.mnn_shipping_method .mnn_shipping_content .opc-wrapper #opc-shipping_method').length < 1) {
+                jQuery('#opc-shipping_method').appendTo('.mnn_shipping_method .mnn_shipping_content .opc-wrapper');
+            }
+        }, 500);
+
+        shippingdelivery = setInterval(function() {
+            if (jQuery('.mnn_shipping_schedule .mnn_shipping_content .ks-deliverydate-info').length < 1) {
+                jQuery('.ks-deliverydate-info').appendTo('.mnn_shipping_schedule .mnn_shipping_content');
+            }
+        }, 500);
+
+        resume = setInterval(function() {
+            if (jQuery('.mnn_resume .opc-summary-wrapper').length < 1) {
+                jQuery('.opc-summary-wrapper').appendTo('.mnn_resume');
+            }
+        }, 500);
+
+        step = setInterval(function() {
+            if (jQuery('.step_progress .opc-progress-bar').length < 1) {
+                jQuery('.opc-progress-bar').appendTo('.step_progress');
+            }
+        }, 500);
+
+        message = setInterval(function() {
+            if (jQuery('.mnn_message .message-error').length < 1) {
+                jQuery('.message-error').appendTo('.mnn_message');
+            }
+        }, 200);
+    })
+</script>
+
+
+
+
+
+
+
+
+
+
+<style>
+    .opc-wrapper {
+        /*display: none !important;*/
+    }
+
+
+    .loading-checkout-m2n {
+        background: #fff;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 99999999;
+        opacity: 0.85;
+    }
+
+    #co-shipping-method-form,
+    .cep-invalidate,
+    .checkout-methods-items {
+        display: none
+    }
+
+    .cep-invalidate {
+        padding: 15px 0
+    }
+
+    .cep-invalidate span:first-child {
+        font-weight: 500;
+        color: #e03c3c
+    }
+
+    .opc-progress-bar {
+        margin-top: 25px
+    }
+
+    #formstorecelect {
+        width: 70%;
+        height: 50%;
+        position: fixed;
+        top: 25%;
+        left: 15%;
+        background: #fff;
+        z-index: 9999;
+        -webkit-box-shadow: 0 0 30px 0 rgba(0, 0, 0, .3);
+        -moz-box-shadow: 0 0 30px 0 rgba(0, 0, 0, .3);
+        box-shadow: 0 0 30px 0 rgba(0, 0, 0, .3);
+        display: none
+    }
+
+    .store-select .owl-buttons {
+        z-index: 99999999
+    }
+
+    .store-select .store-item .store-img {
+        filter: grayscale(.5);
+        opacity: .5;
+        transition: .4s
+    }
+
+    .store-select .store-item:hover .store-img {
+        filter: grayscale(.3);
+        opacity: .7;
+        transition: .4s
+    }
+
+    .store-select .store-icon .store-card-click {
+        background: #fff;
+        border-radius: 100px;
+        line-height: 167px;
+        width: 140px;
+        height: 140px;
+        margin: auto;
+        text-align: center;
+        opacity: .65
+    }
+
+    .store-select .store-icon .store-card-disabled {
+        opacity: .65
+    }
+
+    .store-select .store-icon .store-card-enabled {
+        opacity: .2
+    }
+
+    .store-select .store-icon .store-card {
+        background: #aaa;
+        border-radius: 100px;
+        line-height: 167px;
+        width: 140px;
+        height: 140px;
+        margin: auto;
+        text-align: center
+    }
+
+    .store-select .store-icon .store-card i {
+        color: #555;
+        position: absolute;
+        margin: auto;
+        display: block;
+        top: 25%;
+        left: 42%;
+        opacity: .5
+    }
+
+    .store-select .store-title {
+        text-align: center;
+        margin-top: 5px
+    }
+
+    .store-select .store-item {
+        padding-bottom: 8px;
+        cursor: pointer
+    }
+
+    #switcher-language {
+        display: none
+    }
+
+    .store-select .owl-carousel .owl-wrapper {
+        width: max-content !important;
+        left: auto !important;
+        display: block !important;
+        margin: auto !important;
+        text-align: center !important;
+        align-content: center !important
+    }
+
+    .store-select .block-content {
+        margin-top: 100px
+    }
+
+    @media only screen and (max-width :468px) {
+        #formstorecelect {
+            width: 96%;
+            height: 60%;
+            top: 20%;
+            left: 2%
+        }
+
+        .store-select .store-icon .store-card,
+        .store-select .store-icon .store-card-click {
+            width: 120px;
+            height: 120px
+        }
+
+        .store-select .store-icon .store-card i {
+            top: 22%;
+            left: 41%
+        }
+
+        .store-select .block-content {
+            margin-top: 50px
+        }
+
+        .owl-button-top .owl-theme .owl-controls.clickable {
+            top: -88px
+        }
+    }
+
+    @media only screen and (max-width :468px) {
+        #formstorecelect {
+            width: 96%;
+            height: 60%;
+            top: 20%;
+            left: 2%
+        }
+    }
+
+    .billing-address-same-as-shipping-block {
+        display: none
+    }
+
+    #rm_pagseguro_ccflags {
+        margin-top: 15px
+    }
+
+    #label_method_flatrate_flatrate {
+        display: none
+    }
+
+    #label_method_freeshipping_freeshipping {
+        font-weight: 600
+    }
+
+    .opc-wrapper .shipping-address-item {
+        width: 100%;
+        line-height: 20px;
+        padding: 7px 33px;
+        margin: 0;
+        border-bottom: 1px solid #eee
+    }
+
+    .opc-wrapper .action-select-shipping-item {
+        margin-top: -70px
+    }
+
+    .opc-wrapper .shipping-address-item:before {
+        display: none
+    }
+
+    .new-address-popup {
+        margin-top: 15px
+    }
+
+    .minicart-items .product>.product-image-container,
+    .minicart-items-wrapper .product-item img {
+        display: none;
+    }
+
+    .minicart-items .product-item {
+        padding: 0;
+    }
+
+    .minicart-items .product-item-details .details-qty {
+        margin-top: -10px !important;
+    }
+
+    #co-shipping-method-form,
+    .cep-invalidat {
+        display: block !important;
+    }
+
+    #category_menu {
+        display: none !important;
+    }
+
+    body .page-wrapper #maincontent {
+        margin-left: auto !important;
+    }
+
+    body #store_menu {
+        width: 100% !important;
+        margin-left: 0px !important;
+    }
+
+    @media only screen and (max-width :990px) {
+        .opc-estimated-wrapper {
+            margin-top: 20px !important;
+        }
+    }
+
+    .modal-content {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .opc-estimated-wrapper {
+        background: #f8f8f8;
+        border-bottom: 1px solid #f8f8f8;
+        border-top: 1px solid #f8f8f8;
+        color: #555;
+    }
+
+    .checkout-index-index .modal-popup .fieldset .field legend {
+        display: none !important;
+    }
+
+    .checkout-index-index .modal-popup .fieldset .field label {
+        padding: 0
+    }
+</style>
+
+<div class="cep-invalidate">
+    <span>Esta unidade (<?= $storeManager->getStore()->getName() ?>) não atende no endereço (CEP) informado.</span>
+</div>
+
+<div id="checkout" data-bind="scope:'checkout'" class="checkout-container">
+    <div id="checkout-loader" data-role="checkout-loader" class="loading-mask" data-mage-init='{"checkoutLoader": {}}'>
+        <div class="loader">
+            <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')) ?>" alt="<?= $block->escapeHtmlAttr(__('Loading...')) ?>">
+        </div>
+    </div>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("position: absolute;", "#checkout-loader img") ?>
+    <!-- ko template: getTemplate() -->
+    <!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "#checkout": {
+                "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+            }
+        }
+    </script>
+    <?php $serializedCheckoutConfig = /* @noEscape */ $block->getSerializedCheckoutConfig();
+    $scriptString = <<<script
+        window.checkoutConfig = {$serializedCheckoutConfig};
+        // Create aliases for customer.js model from customer module
+        window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
+        window.customerData = window.checkoutConfig.customerData;
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+    <?php $scriptString = <<<script
+        require([
+            'mage/url',
+            'Magento_Ui/js/block-loader'
+        ], function(url, blockLoader) {
+            blockLoader("{$block->escapeJs($block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')))}");
+            return url.setBaseUrl('{$block->escapeJs($block->escapeUrl($block->getBaseUrl()))}');
+        })
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+</div>
+
+<input type="hidden" id="cep-loaded">
+
+<?php
+$helper = $this->helper('Hidden\ShopkartLite\Helper\Data');
+$address = $helper->getConfigValue('bizkicksettings/footer_contant/address');
+
+$adr_url = str_replace(', ', '+', $address);
+$adr_url = str_replace(' ,', '+', $adr_url);
+$adr_url = str_replace(' ', '+', $adr_url);
+$adr_url = str_replace(',', '+', $adr_url);
+
+$url = 'https://www.google.com/maps/search/?api=1&query=' . $adr_url;
+
+$store_address = '<a target="_blank" href="' . $url . '">' . $address . '</a>';
+?>
+
+<script>
+    require([
+        'jquery',
+        'mage/mage'
+    ], function($) {
+        jQuery(document).ready(function() {
+            onLoad();
+            validateCep();
+
+            jQuery('.shipping-address-items').click(function() {
+                cepHideCheckout();
+                onLoad();
+            });
+
+            jQuery('#co-shipping-method-form').click(function() {
+                validaPagamento();
+            });
+
+            jQuery('input[name ="postcode"]').keyup(function() {
+                buscaCep();
+            });
+        });
+    });
+
+    function cepHideCheckout() {
+        require(['jquery'], function() {
+            jQuery('.checkout-shipping-method').hide();
+            jQuery('#co-shipping-method-form').hide();
+            jQuery('.cep-invalidate').show();
+
+            jQuery('input[name ="postcode"]').css('border-color', 'red');
+
+            //jQuery('body').loader('hide');
+        });
+    }
+
+    function cepShowCheckout() {
+        require(['jquery'], function() {
+            jQuery('.checkout-shipping-method').show();
+            jQuery('#co-shipping-method-form').show();
+            jQuery('.cep-invalidate').hide();
+
+            jQuery('input[name ="postcode"]').css('border-color', '#e1e1e1');
+
+            //jQuery('body').loader('hide');
+        });
+    }
+
+
+    /*
+
+        setInterval(function() {
+            if (jQuery('.loading-mask').is(':visible') || jQuery('.loading-mask').css('display') != 'none') {
+                validateCep();
+                //jQuery('body').loader('hide');
+            }
+
+            if (jQuery('#co-shipping-method-form').is(':visible') || jQuery('#co-shipping-method-form').css('display') != 'none') {
+                onLoad();
+                validateCep();
+            }
+
+            jQuery('.shipping-address-items').click(function() {
+                cepHideCheckout();
+                onLoad();
+            });
+        }, 500);
+
+        require(['jquery'], function() {
+            jQuery(document).ready(function() {
+                onLoad();
+                //jQuery('body').loader('hide');
+            });
+
+            setTimeout(function() {
+                onLoad();
+                validateCep();
+                //jQuery('body').loader('hide');
+            }, 1000);
+
+            setInterval(function() {
+                onLoad();
+            }, 500);
+
+            setInterval(function() {
+                if (jQuery('.loading-mask').is(':visible') || jQuery('.loading-mask').css('display') != 'none') {
+                    validateCep();
+                    //jQuery('body').loader('hide');
+                }
+
+                if (jQuery('#co-shipping-method-form').is(':visible') || jQuery('#co-shipping-method-form').css('display') != 'none') {
+                    onLoad();
+                    validateCep();
+                }
+            }, 500);
+        });
+
+    */
+
+    function onLoad() {
+        require(['jquery'], function() {
+            jQuery('.table-checkout-shipping-method').find('.radio').first().attr('checked');
+
+            jQuery('input[name ="street[1]"]').parent().parent().find('label').html('Número');
+            jQuery('input[name ="street[3]"]').parent().parent().find('label').html('Complemento');
+
+            jQuery('#label_method_freeshipping_freeshipping').html('<?= $store_address ?>');
+
+            if (jQuery('.shipping-address-items .selected-item').length && jQuery('#co-shipping-method-form').css('display') != 'block') {
+                validateCep();
+            }
+        });
+    }
+
+    function getCep() {
+        if (jQuery('.shipping-address-items .selected-item').length > 0) {
+            lines = jQuery('.shipping-address-items .selected-item').html();
+
+            var lines = lines.split("\n");
+
+            postcode = null;
+            for (var i = 0, len = lines.length; i < len; i++) {
+                var str = (jQuery.trim(lines[i]));
+                var n = str.indexOf("postcode");
+
+                pos = n + 12;
+                var res = str.substr(pos, 9);
+
+                var objER = /^[0-9]{5}-[0-9]{3}$/;
+
+                res = jQuery.trim(res)
+                if (res.length > 0) {
+                    if (objER.test(res)) {
+                        postcode = res;
+                    }
+                }
+            }
+        } else {
+            postcode = jQuery('input[name ="postcode"]').val();
+        }
+
+        cep = postcode.replace("-", "");
+
+        return cep;
+    }
+
+    setInterval(function() {
+        require(['jquery'], function() {
+            store = '<?= $storeCode ?>';
+
+            cep = getCep();
+
+            if (cep.length >= 8) {
+                jQuery('#cep-loaded').val(cep);
+                jQuery.post("<?= $block->getUrl("store/index/store"); ?>", {
+                        cep: cep,
+                        store: store
+                    },
+                    function(data) {
+                        if (data == '1') {
+                            cepShowCheckout()
+                        } else {
+                            cepHideCheckout();
+                        }
+                    }
+                )
+            }
+        });
+
+        jQuery('input[name ="street[1]"]').parent().parent().find('label').html('Número');
+        jQuery('input[name ="street[3]"]').parent().parent().find('label').html('Complemento');
+    }, 1000);
+
+    function validateCep() {
+        require(['jquery'], function() {
+            store = '<?= $storeCode ?>';
+
+            cep = getCep();
+
+            if (cep.length >= 8) {
+                if (jQuery('#cep-loaded').val() != cep) {
+                    jQuery('#cep-loaded').val(cep);
+                    jQuery.post("<?= $block->getUrl("store/index/store"); ?>", {
+                            cep: cep,
+                            store: store
+                        },
+                        function(data) {
+                            console.log('->' + cep);
+                            if (data == '1') {
+                                cepShowCheckout()
+                            } else {
+                                cepHideCheckout();
+                            }
+                        }
+                    )
+                }
+            }
+        });
+    }
+
+    <?php
+    $_tokenCep = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('mnnmain/mnngeneral/tokencep');
+    ?>
+
+    function buscaCep() {
+        cep = getCep();
+
+        cep_verify = cep.replace("-", "");
+
+        if ((cep_verify.length >= 8) && cep != jQuery('#cep-loaded').val()) {
+            jQuery('#cep-loaded').val(cep);
+
+            cep1 = cep.substr(0, 5);
+            cep2 = cep.substr(5, 3);
+            cepfinal = cep1 + '-' + cep2;
+
+            require(['jquery'], function() {
+
+                jQuery.post("https://mercadonanuvem.com/cep.php", {
+                        codigopostal: cepfinal,
+                        token: "<?= $_tokenCep ?>"
+                    },
+                    function(response) {
+                        data = jQuery.parseJSON(response);
+                        var data = JSON.parse(response);
+
+                        data.forEach(function(cep, index) {
+                            bairro = cep.bairro;
+                            logradouro = cep.logradouro;
+                            cidade = cep.cidade;
+                            uf = cep.uf;
+                        });
+
+                        jQuery('input[name ="street[0]"]').val(logradouro);
+                        jQuery('input[name ="street[2]"]').val(bairro);
+                        jQuery('input[name ="city"]').val(cidade);
+                        jQuery('#shipping-new-address-form select').last().val(defineEstado(uf));
+
+                        jQuery('input[name ="street[0]"]').last().change()
+                        jQuery('input[name ="street[2]"]').last().change()
+                        jQuery('input[name ="city"]').last().change()
+                        jQuery('#shipping-new-address-form select').last().change()
+                    }
+                )
+
+                validateCep()
+            });
+        }
+    }
+
+    function validaPagamento() {
+        selected = null;
+        jQuery('.col-method input').each(function(index) {
+            if (jQuery(this).attr('checked')) {
+                selected = jQuery(this).val();
+            }
+        });
+
+        if (selected == 'flatrate_flatrate') {
+            jQuery('.payment-method').first().hide();
+        } else {
+            jQuery('.payment-method').first().show();
+        }
+    }
+
+    function defineEstado(uf) {
+        switch (uf.toUpperCase()) {
+            case "AC":
+                data = "485";
+                break;
+            case "AL":
+                data = "486";
+                break;
+            case "AP":
+                data = "487";
+                break;
+            case "AM":
+                data = "488";
+                break;
+            case "BA":
+                data = "489";
+                break;
+            case "CE":
+                data = "490";
+                break;
+            case "ES":
+                data = "491";
+                break;
+            case "GO":
+                data = "492";
+                break;
+            case "MA":
+                data = "493";
+                break;
+            case "MG":
+                data = "496";
+                break;
+            case "MS":
+                data = "495";
+                break;
+            case "MT":
+                data = "494";
+                break;
+            case "PA":
+                data = "497";
+                break;
+            case "PB":
+                data = "498";
+                break;
+            case "PR":
+                data = "499";
+                break;
+            case "PE":
+                data = "500";
+                break;
+            case "PI":
+                data = "501";
+                break;
+            case "RJ":
+                data = "502";
+                break;
+            case "RN":
+                data = "503";
+                break;
+            case "RS":
+                data = "504";
+                break;
+            case "RO":
+                data = "505";
+                break;
+            case "RR":
+                data = "506";
+                break;
+            case "SC":
+                data = "507";
+                break;
+            case "SP":
+                data = "508";
+                break;
+            case "SE":
+                data = "509";
+                break;
+            case "TO":
+                data = "510";
+                break;
+            case "DF":
+                data = "511";
+                break;
+        }
+
+        return data;
+    }
+</script>

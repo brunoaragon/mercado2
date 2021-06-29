@@ -28,6 +28,10 @@
 	font-size: 15px;
 }
 
+.hidden {
+	display: none;
+}
+
 html, body {
 	font-family: 'Roboto', sans-serif !important;
 	overflow-x: hidden !important;
@@ -962,7 +966,7 @@ div.shadow {
 	.mnn-minicart label a {
 		color: #eee;
 		font-weight: 500;
-	}	
+	}
 	.page-wrapper .page-header .header.content .minicart-wrapper .action.showcart .counter.qty {
 		top: 8px;
 		left: 18px;
@@ -984,7 +988,7 @@ div.shadow {
 	background: #333 !important;
 }
 
-#formstorecelect .page-title-main>strong:after{
+#formstorecelect .page-title-main>strong:after {
 	display: none;
 }
 
@@ -1072,5 +1076,51 @@ div.shadow {
 @media only screen and (min-width :991px) {
 	.store-change {
 		display: inline-block !important;
+	}
+}
+
+@media only screen and (max-width: 480px) {
+	.stats-container p {
+		display: none !important;
+	}
+	.product-more-info, .product-options {
+		opacity: 1 !important;
+	}
+	.product-more-info {
+		margin-bottom: 13px !important;
+		margin-top: 0px !important;
+		font-size: 12px !important;
+	}
+	.product-card.animate, .product-front, .product-back, .product-card, .make-3D-space {
+		height: 330px;
+	}
+	.stats-container .product_name {
+		font-size: 13px;
+		-webkit-line-clamp: 2;
+		padding-right: 2px;
+		max-height: 32px;
+		margin-bottom: 3px;
+		line-height: 15px;
+		margin-top: -14px;
+	}
+	.stats-container .product_price {
+		font-size: 15px;
+		margin-top: -16px;
+	}
+	.product-more-info {
+		margin-bottom: 15px !important;
+		margin-top: 0px !important;
+		font-size: 11.5px !important;
+		opacity: 0.6 !important;
+	}
+	.stats-container {
+		top: 215px !important;
+	}
+	.image_overlay {
+		background: #000 !important;
+		opacity: 0.05 !important;
+	}
+	.make-3D-space .view_details{
+		display: none !important;
 	}
 }

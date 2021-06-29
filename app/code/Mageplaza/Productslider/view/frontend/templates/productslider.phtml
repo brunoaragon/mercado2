@@ -41,8 +41,9 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
 
         <div style="display: inline-flex; width: 100%">
             <?php
-            if (boolval($banner)) {
-                echo "<style>.banner-productslider{width:20%;padding:35px 8px 10px 0}#mp-list-items-" . $blockId . "{width:80%}</style>";
+
+            if (strlen($banner) > 0) {
+                echo "<style>.banner-productslider{width:20% !important;padding:35px 8px 10px 0 !important}#mp-list-items-" . $blockId . "{width:80% !important}</style>";
             ?>
                 <div class="banner-productslider">
                     <img src="<?= $banner ?>">
@@ -77,7 +78,10 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
 
                                 <?php echo $productImage->toHtml(); ?>
 
-                                <div class="image_overlay"></div>
+                                <a class="card-mnn-link-mobile" href="<?= $_product->getProductUrl() ?>">
+                                    <div class="image_overlay"></div>
+                                </a>
+
                                 <a href="<?= $_product->getProductUrl() ?>" class="view_details">Ver Produto</a>
                                 <div class="stats">
                                     <div class="stats-container">
@@ -222,31 +226,7 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="product-back">
-                                <div class="shadow"></div>
-                                <div class="carousel">
-                                    <ul>
-                                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt-large.png" alt="" /></li>
-                                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt-large2.png" alt="" /></li>
-                                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt-large3.png" alt="" /></li>
-                                    </ul>
-                                    <div class="arrows-perspective">
-                                        <div class="carouselPrev">
-                                            <div class="y"></div>
-                                            <div class="x"></div>
-                                        </div>
-                                        <div class="carouselNext">
-                                            <div class="y"></div>
-                                            <div class="x"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flip-back">
-                                    <div class="cy"></div>
-                                    <div class="cx"></div>
-                                </div>
-                            </div>
+                            </div>                            
                         </div>
                     </div>
                 <?php
@@ -282,11 +262,11 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
                                 nav: false
                             },
                             1280: {
-                                items: <?= boolval($banner) ? '4' : '5' ?>,
+                                items: <?= strlen($banner) > 0 ? '4' : '5' ?>,
                                 nav: false
                             },
                             1466: {
-                                items: <?= boolval($banner) ? '4' : '5' ?>,
+                                items: <?= strlen($banner) > 0 ? '4' : '5' ?>,
                                 nav: false,
                                 loop: true
                             }
@@ -354,7 +334,10 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
 
                                     <?php echo $productImage->toHtml(); ?>
 
-                                    <div class="image_overlay"></div>
+                                    <a class="card-mnn-link-mobile" href="<?= $_product->getProductUrl() ?>">
+                                        <div class="image_overlay"></div>
+                                    </a>
+
                                     <a href="<?= $_product->getProductUrl() ?>" class="view_details">Ver Produto</a>
                                     <div class="stats">
                                         <div class="stats-container">
@@ -499,31 +482,7 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="product-back">
-                                    <div class="shadow"></div>
-                                    <div class="carousel">
-                                        <ul>
-                                            <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt-large.png" alt="" /></li>
-                                            <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt-large2.png" alt="" /></li>
-                                            <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/t-shirt-large3.png" alt="" /></li>
-                                        </ul>
-                                        <div class="arrows-perspective">
-                                            <div class="carouselPrev">
-                                                <div class="y"></div>
-                                                <div class="x"></div>
-                                            </div>
-                                            <div class="carouselNext">
-                                                <div class="y"></div>
-                                                <div class="x"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flip-back">
-                                        <div class="cy"></div>
-                                        <div class="cx"></div>
-                                    </div>
-                                </div>
+                                </div>                               
                             </div>
                         </div>
                     </div>
@@ -545,10 +504,8 @@ if ($block->getHelperData()->isEnabled() && $items && $items->getSize()) :
                 // Lift card and show stats on Mouseover
                 jQuery('.product-card').hover(function() {
                     jQuery(this).addClass('animate');
-                    jQuery('div.carouselNext, div.carouselPrev').addClass('visible');
                 }, function() {
                     jQuery(this).removeClass('animate');
-                    jQuery('div.carouselNext, div.carouselPrev').removeClass('visible');
                 });
 
 

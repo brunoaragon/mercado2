@@ -1,0 +1,202 @@
+<?php
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+<?php /** @var $block \Magento\Checkout\Block\Cart\Shipping */ ?>
+<?php /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */ ?>
+
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager  = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+$storeCode     = $storeManager->getStore()->getCode();
+
+$storeManagerDataList = $storeManager->getStores();
+?>
+
+<div class="cep-invalidate">
+    <span class="cep-msg"><?= $storeManager->getStore()->getName() ?> não atende no <b>CEP</b> informado ou <b>CEP</b> não informado.</span>
+
+    <?php
+    if (count($storeManagerDataList) > 1) {
+    ?>
+        <span class="cep-change" onclick="showChangeStore()">Alterar local de compra</span>
+    <?php
+    }
+    ?>
+
+    <div class="cep-loading" style="text-align: center; margin-top: 15px; color: #555;">
+        <i class="fa fa-spinner fa-pulse fa-2x"></i>
+    </div>
+</div>
+
+<div id="block-shipping" class="block shipping" data-mage-init='{"collapsible":{"openedState": "active", "saveState": true}}'>
+    <div class="title" data-role="title">
+        <strong id="block-shipping-heading" role="heading" aria-level="2">
+            <?= $block->getQuote()->isVirtual() ? $block->escapeHtml(__('Estimate Tax')) : $block->escapeHtml(__('Estimate Shipping and Tax')) ?>
+        </strong>
+    </div>
+    <div id="block-summary" data-bind="scope:'block-summary'" class="content" data-role="content" aria-labelledby="block-shipping-heading">
+        <!-- ko template: getTemplate() -->
+        <!-- /ko -->
+        <script type="text/x-magento-init">
+            {
+                "#block-summary": {
+                    "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+                }
+            }
+        </script>
+        <?php $serializedCheckoutConfig = /* @noEscape */ $block->getSerializedCheckoutConfig();
+
+        $scriptString = <<<script
+
+            window.checkoutConfig = {$serializedCheckoutConfig};
+            window.customerData = window.checkoutConfig.customerData;
+            window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
+            require([
+                'mage/url',
+                'Magento_Ui/js/block-loader'
+            ], function(url, blockLoader) {
+                blockLoader(
+                    "{$block->escapeJs($block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')))}"
+                );
+                return url.setBaseUrl('{$block->escapeJs($block->escapeUrl($block->getBaseUrl()))}');
+            })
+script;
+        ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+    </div>
+</div>
+
+<script>
+    require(['jquery'], function() {
+        jQuery(document).ready(function() {
+            validateCep()
+            jQuery('input[name ="postcode"]').keyup(function() {
+                validateCep()
+            });
+        });
+
+        setTimeout(function() {
+            validateCep()
+            jQuery('input[name ="postcode"]').keyup(function() {
+                validateCep()
+            });
+        }, 2000);
+
+        setInterval(function() {
+            validateCep();
+        }, 2000);
+
+        setInterval(function() {
+            if (jQuery('#block-summary div').length > 0) {
+                jQuery('.cep-loading').hide();
+                jQuery('.cep-msg').show();
+                jQuery('.cep-change').show();
+            }
+        }, 100);
+
+        validateCep()
+        jQuery('input[name ="postcode"]').keyup(function() {
+            validateCep()
+        });
+
+        function validateCep() {
+            jQuery('.item-options').first().find('label').html(jQuery('.item-title').first());
+            jQuery('.item-options').last().find('label').html(jQuery('.item-options').last().find('label .price').html())
+
+            if (jQuery('input[name ="postcode"]').length > 0) {
+                postcode = jQuery('input[name ="postcode"]').val();
+
+                cep = postcode.replace("-", "");
+                store = '<?= $storeCode ?>';
+
+                if (cep.length >= 8) {
+                    jQuery.post("<?= $block->getUrl("store/index/store"); ?>", {
+                            cep: cep,
+                            store: store
+                        },
+                        function(data) {
+                            if (data == '1') {
+                                cepShowCheckout()
+                            } else {
+                                cepHideCheckout()
+                            }
+                        }
+                    )
+                } else {
+                    cepHideCheckout()
+                }
+            } else {
+                cepHideCheckout()
+            }
+        }
+
+        function cepHideCheckout() {
+            jQuery('.checkout-methods-items').hide()
+            jQuery('#co-shipping-method-form').hide()
+            jQuery('.cep-invalidate').show()
+        }
+
+        function cepShowCheckout() {
+            jQuery('.checkout-methods-items').show()
+            jQuery('#co-shipping-method-form').show()
+            jQuery('.cep-invalidate').hide();
+
+            jQuery('.checkout .checkout').html('Concluir Pedido');
+        }
+    });
+</script>
+
+<style>
+    #co-shipping-method-form,
+    .cep-invalidate,
+    .checkout-methods-items {
+        display: none
+    }
+
+    .cep-invalidate {
+        padding: 15px 0
+    }
+
+    .cep-invalidate .cep-msg {
+        font-weight: 400 !important;
+        color: #e03c3c !important;
+        display: none
+    }
+
+    .cep-change {
+        display: none
+    }
+
+    .cep-invalidate .cep-change {
+        font-weight: 600;
+        color: #1b8dde !important;
+        display: inline-block;
+        cursor: pointer;
+        margin-top: 10px
+    }
+
+    #block-summary {
+        display: block !important
+    }
+
+    #block-summary div {
+        display: none
+    }
+
+    #block-summary div:last-child {
+        display: block !important
+    }
+
+    .cart-summary .block>.title {
+        display: none !important
+    }
+
+    .cart-summary .block .item-options{
+        margin: 0 !important;        
+    }
+</style>
