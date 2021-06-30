@@ -143,7 +143,7 @@ html, body {
 }
 
 .mnn-product-list {
-	width: 100% !important;
+	width: 100%;
 	display: inline-block !important;
 	padding: 20px 0 !important;
 	margin: 15px 0 !important;
@@ -1120,7 +1120,64 @@ div.shadow {
 		background: #000 !important;
 		opacity: 0.05 !important;
 	}
-	.make-3D-space .view_details{
+	.make-3D-space .view_details {
 		display: none !important;
+	}
+	.mp-slider-mnn .mnn-product-list {
+		width: 100% !important;
+	}
+}
+
+@media only screen and (max-width: 460px) {
+	.stats-container {
+		top: 200px !important;
+	}
+	.product-card.animate, .product-front, .product-back, .product-card, .make-3D-space {
+		height: 315px;
+	}
+}
+
+@media only screen and (max-width: 440px) {
+	.stats-container {
+		top: 185px !important;
+	}
+	.product-card.animate, .product-front, .product-back, .product-card, .make-3D-space {
+		height: 300px;
+	}
+}
+
+@media only screen and (max-width: 420px) {
+	.stats-container {
+		top: 170px !important;
+	}
+	.product-card.animate, .product-front, .product-back, .product-card, .make-3D-space {
+		height: 280px;
+	}
+}
+
+@media only screen and (max-width: 400px) {
+	.stats-container {
+		top: 160px !important;
+	}
+	.product-card.animate, .product-front, .product-back, .product-card, .make-3D-space {
+		height: 270px;
+	}
+}
+
+@media only screen and (max-width: 380px) {
+	.stats-container {
+		top: 155px !important;
+	}
+	.product-card.animate, .product-front, .product-back, .product-card, .make-3D-space {
+		height: 265px;
+	}
+}
+
+@media only screen and (max-width: 360px) {
+	.stats-container {
+		top: 150px !important;
+	}
+	.product-card.animate, .product-front, .product-back, .product-card, .make-3D-space {
+		height: 260px;
 	}
 }

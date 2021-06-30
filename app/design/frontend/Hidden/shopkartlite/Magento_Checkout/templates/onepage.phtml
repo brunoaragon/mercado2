@@ -35,10 +35,6 @@ function getCheckoutColor($attr)
 }
 ?>
 
-
-
-
-
 <style>
     .mnn_shipping {
         display: inline-block;
@@ -83,39 +79,53 @@ function getCheckoutColor($attr)
         border-color: #202b33 !important;
     }
 
-    .mnn_shipping_address {
-        background: #fafafa;
-        color: #555;
-        display: inline-block; 
+    .step_progress {
         width: 100%;
-        border-bottom: 1px solid #ddd;
+        text-align: center;
+    }
+
+    .mnn_checkout_step {
+        width: 70%;
+    }
+
+    .mnn_resume {
+        width: 30%;
+    }
+
+    .mnn_shipping_address {
+        background: #48cfad;
+        color: #444;
+        display: inline-block;
+        width: 100%;
         padding: 15px;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
     }
 
     .mnn_shipping_method {
-        background: #f8f8f8;
-        color: #555;
-        border-bottom: 1px solid #ddd;
+        background: #45c7a7;
+        color: #444;
         padding: 15px;
-        display: inline-block; 
+        display: inline-block;
         width: 100%;
     }
 
     .mnn_shipping_schedule {
-        background: #f6f6f6;
-        color: #555;
-        border-bottom: 1px solid #ddd;
+        background: #43bd9f;
+        color: #444;
         padding: 15px;
-        display: inline-block; 
+        display: inline-block;
         width: 100%;
     }
 
     .mnn_payment {
-        background: #f4f4f4;
-        color: #555;
+        background: #3eb598;
+        color: #393939;
         padding: 15px;
-        display: inline-block; 
+        display: inline-block;
         width: 100%;
+        border-bottom-left-radius: 7px;
+        border-bottom-right-radius: 7px;
     }
 
     .opc-wrapper .shipping-address-item.selected-item {
@@ -152,23 +162,23 @@ function getCheckoutColor($attr)
         border-radius: 4px;
         padding: 10px 20px;
         width: 130px;
-        color: #398fd1;
+        color: #333;
         font-weight: 500;
         transition: 0.3s;
     }
 
     .mnn_shipping_action .mnn-opc-back:hover {
-        border: 1px solid #398fd1;
+        border: 1px solid #333;
         transition: 0.3s;
     }
 
     .mnn_shipping_action .mnn-opc-next {
         background: transparent;
-        border: 1px solid #398fd1;
+        border: 1px solid #333;
         border-radius: 4px;
         padding: 10px 20px;
         width: 200px;
-        color: #398fd1;
+        color: #333;
         font-weight: 500;
         float: right;
     }
@@ -260,7 +270,7 @@ function getCheckoutColor($attr)
         left: -7px;
         font-size: 20px;
         color: #398fd1;
-    }    
+    }
 
     .mnn_checkout textarea {
         color: #666;
@@ -824,8 +834,18 @@ function getCheckoutColor($attr)
         }
     }
 
+    .page-wrapper {
+        background: #222;
+    }
+
+    .page-footer,
     .billing-address-same-as-shipping-block {
         display: none
+    }
+
+    .opc-progress-bar-item._active>span,
+    .opc-progress-bar-item>span {
+        color: #fff;
     }
 
     #rm_pagseguro_ccflags {
