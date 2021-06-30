@@ -305,15 +305,6 @@ if ($request->getFullActionName() == 'cms_index_index') {
         $categories->setOrder('name', 'ASC');
 
         foreach ($categories as $_category) {
-            $collectionFactory = $objectManager->get('\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory')->create();
-            $products = $collectionFactory->addAttributeToSelect('external_image')
-                ->addCategoriesFilter(['in' => $_category->getId()])
-                ->setPageSize(4);
-
-            $products->getSelect()->orderRand();
-
-            $products = $products->getItems();
-
         ?>
             <div>
                 <a href="<?= $_category->getUrl() ?>">
