@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,58 +11,337 @@
 ?>
 <?php $_product = $block->getProduct(); ?>
 <?php $buttonTitle = __('Add to Cart'); ?>
-<?php if ($_product->isSaleable()): ?>
-<div class="box-tocart">
-    <div class="fieldset">
-        <?php if ($block->shouldRenderQuantity()): ?>
-        <div class="field qty">
-            <label class="label" for="qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></label>
-            <div class="control">
-                
-                <input type="number"
-                       name="qty"
-                       id="qty"
-                       maxlength="12"
-                       value="<?php /* @escapeNotVerified */ echo $block->getProductDefaultQty() * 1 ?>"
-                       title="<?php /* @escapeNotVerified */ echo __('Qty') ?>" class="qty-default input-text qty"
-                       data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
-                       />
-                <span class="qty-main">
-                    <span class="qty-btn qty-inc"><i class="fa fa-plus" aria-hidden="true"></i></span>
-                    <span class="qty-btn qty-dec"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                </span>
-                <script type="text/javascript">
-                    require(['jquery'], function(){
-                        jQuery(document).ready(function(){
-                            jQuery('.qty-inc').click(function () {
-                                jQuery('.qty-default').val(Number(jQuery('.qty-default').val())+1);
-                            });
 
-                            jQuery('.qty-dec').click(function () {
-                                    var value = Number(jQuery('.qty-default').val())-1;
-                                    if(value > 0){
-                                        jQuery('.qty-default').val(value);
+<?php if ($_product->isSaleable()) : ?>
+    <div class="box-tocart <?= intval($_product->getProdutoPorPeso()) == 1 ? 'box-tocart-weight' : '' ?>">
+        <div class="fieldset">
+            <?php if ($block->shouldRenderQuantity()) : ?>
+                <div class="field qty">
+                    <label class="label" for="qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></label>
+                    <div class="control">
+
+                        <input type="number" name="qty" id="qty" maxlength="12" value="<?php /* @escapeNotVerified */ echo $block->getProductDefaultQty() * 1 ?>" title="<?php /* @escapeNotVerified */ echo __('Qty') ?>" class="qty-default input-text qty" data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>" />
+
+                        <?php
+                        if ($_product->getProdutoPorPeso()) {
+                        ?>
+                            <span class="qty-main">
+                                <span class="qty-btn qty-dec" onclick="pesoMinus()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                        <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14" />
+                                        </g>
+                                    </svg>
+                                </span>
+                                <span class="qty-btn qty-inc" onclick="pesoPlus()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                        <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 5v14" />
+                                            <path d="M5 12h14" />
+                                        </g>
+                                    </svg>
+                                </span>
+                            </span>
+
+                            <style>
+                                .qty .control {
+                                    display: inline-flex;
+                                    width: 100%;
+                                    padding: 0;
+                                }
+
+                                .por_peso {
+                                    display: inline-flex;
+                                    width: calc(100% - 90px);
+                                    padding: 0;
+                                    margin-top: -4px;
+                                }
+
+                                .peso_qtd {
+                                    width: 50%;
+                                    padding-top: 2px;
+                                }
+
+                                .peso_price {
+                                    width: 50%;
+                                }
+
+                                .qty-btn svg {
+                                    font-size: 15px;
+                                    margin-top: 3px;
+                                }
+
+                                .por_peso span {
+                                    font-weight: 400;
+                                }
+
+                                .rs,
+                                .por_peso span span {
+                                    font-size: 26px;
+                                }
+
+                                .por_peso span:first-child {
+                                    margin-bottom: -5px;
+                                    display: inline-block;
+                                }
+
+                                #qty {
+                                    display: none;
+                                }
+
+                                .qty-main {
+                                    height: 26px !important;
+                                    width: 90px !important;
+                                }
+
+                                .qty-inc {
+                                    border: 1px solid #ddd;
+                                    display: inline-block;
+                                    padding: 5px 10px;
+                                    border-radius: 3px;
+                                    cursor: pointer;
+                                }
+
+                                .qty-dec {
+                                    border: 1px solid #ddd;
+                                    display: inline-block;
+                                    padding: 5px 10px;
+                                    border-radius: 3px;
+                                    margin-right: 5px;
+                                    cursor: pointer;
+                                }
+
+                                .label_peso {
+                                    font-weight: 300 !important;
+                                    font-size: 22px !important;
+                                    margin-bottom: 6px !important;
+                                }
+
+                                .product-info-main .product-add-form .box-tocart .field.qty {
+                                    margin-bottom: -8px;
+                                }
+
+                                .por_peso {
+                                    margin-top: 0;
+                                    margin-bottom: 5px;
+                                }
+
+                                .product-info-main .product-add-form .box-tocart .field.qty {
+                                    margin-bottom: -28px;
+                                }
+
+                                @media only screen and (max-width:555px) {
+                                    .product-info-main .product-add-form .box-tocart .field.qty {
+                                        margin-bottom: 0px;
                                     }
+                                }
 
+                                @media only screen and (max-width:768px) {
+                                    .product-info-main .product-add-form .box-tocart .field.qty {
+                                        margin-bottom: 0px;
+                                    }
+                                }
+                            </style>
+
+                            <div class="por_peso">
+                                <div class="peso_qtd">
+                                    <span><span class="label_peso"><?= number_format($_product->getProdutoPesoUnidade(), 2, ',', '.') ?></span><?= $_product->getProdutoUnidadeMedida() ?></span><br>
+                                </div>
+                                <div class="peso_price">
+                                    <?php
+                                    if ($_product->getSpecialPrice()) {
+                                    ?>
+                                        <span><span class="rs">R$</span><span class="label_preco"><?= number_format($_product->getSpecialPrice(), 2, ',', '.') ?></span></span>
+
+                                        <input type="hidden" id="peso" value="<?= number_format($_product->getProdutoPesoUnidade(), 4) ?>">
+                                        <input type="hidden" id="preco" value="<?= $_product->getSpecialPrice() ?>">
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <span><span class="rs">R$</span><span class="label_preco"><?= number_format($_product->getPrice(), 2, ',', '.') ?></span></span>
+
+                                        <input type="hidden" id="peso" value="<?= number_format($_product->getProdutoPesoUnidade(), 4) ?>">
+                                        <input type="hidden" id="preco" value="<?= $_product->getPrice() ?>">
+                                    <?php
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+
+                            <script>
+                                require(['jquery'], function() {
+                                    jQuery(document).ready(function() {
+                                        /*
+                                        setTimeout(function() {
+                                            jQuery('.product-info-price .price-box .price').html('R$<?= number_format($_product->getPriceQuilo(), 2, ',', '.') ?>' + '/kg')
+                                        }, 1000);
+                                        */
+                                    });
+                                });
+
+                                function pesoPlus() {
+                                    qtd = parseInt(jQuery('#qty').val()) + 1;
+
+                                    peso = parseFloat(jQuery('#peso').val()) * qtd;
+                                    preco = parseFloat(jQuery('#preco').val()) * qtd;
+
+                                    jQuery('.label_peso').html((peso.toFixed(2).replace('.', ',')));
+                                    jQuery('.label_preco').html((preco.toFixed(2).replace('.', ',')));
+                                }
+
+                                function pesoMinus() {
+                                    qtd = parseInt(jQuery('#qty').val()) - 1;
+
+                                    peso = parseFloat(jQuery('#peso').val()) * qtd;
+                                    preco = parseFloat(jQuery('#preco').val()) * qtd;
+
+                                    jQuery('.label_peso').html((peso.toFixed(2).replace('.', ',')));
+                                    jQuery('.label_preco').html((preco.toFixed(2).replace('.', ',')));
+                                }
+                            </script>
+                        <?php
+                        } else {
+                        ?>
+                            <style>
+                                @media only screen and (max-width:480px) {
+                                    .box-tocart .actions {
+                                        width: 67% !important;
+                                    }
+                                }
+
+                                @media only screen and (max-width:425px) {
+                                    .box-tocart .actions button {
+                                        height: 51px !important;
+                                        line-height: 19px !important;
+                                        padding-top: 6px !important;
+                                    }
+                                }
+
+                                .qty-main {
+                                    height: 26px !important;
+                                    width: 80px !important;
+                                    float: left;
+                                    margin-top: 4px;
+                                }
+
+                                .qty-inc {
+                                    border: 1px solid #ddd;
+                                    display: inline-block;
+                                    padding: 3px 7px;
+                                    border-radius: 3px;
+                                    cursor: pointer;
+                                }
+
+                                .qty-dec {
+                                    border: 1px solid #ddd;
+                                    display: inline-block;
+                                    padding: 3px 7px;
+                                    border-radius: 3px;
+                                    margin-right: 5px;
+                                    cursor: pointer;
+                                }
+
+                                .qty-btn svg {
+                                    font-size: 15px;
+                                    margin-top: 3px;
+                                }
+                            </style>
+
+                            <span class="qty-main">
+                                <span class="qty-btn qty-dec">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                        <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14" />
+                                        </g>
+                                    </svg>
+                                </span>
+                                <span class="qty-btn qty-inc">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                                        <g fill="none" stroke="#626262" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 5v14" />
+                                            <path d="M5 12h14" />
+                                        </g>
+                                    </svg>
+                                </span>
+                            </span>
+                        <?php
+                        }
+                        ?>
+
+                        <script type="text/javascript">
+                            require(['jquery'], function() {
+                                jQuery(document).ready(function() {
+                                    jQuery('.qty-inc').click(function() {
+                                        jQuery('.qty-default').val(Number(jQuery('.qty-default').val()) + 1);
+                                    });
+
+                                    jQuery('.qty-dec').click(function() {
+                                        var value = Number(jQuery('.qty-default').val()) - 1;
+                                        if (value > 0) {
+                                            jQuery('.qty-default').val(value);
+                                        }
+
+                                    });
+                                });
                             });
-                        });
-                    });
-                </script>
+                        </script>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <div class="actions">
+                <button onclick="continueBuy()" type="submit" title="<?php /* @escapeNotVerified */ echo $buttonTitle ?>" class="action primary tocart" id="product-addtocart-button">
+                    <span><?php /* @escapeNotVerified */ echo $buttonTitle ?></span>
+                </button>
+                <?php echo $block->getChildHtml('', true) ?>
             </div>
         </div>
-        <?php endif; ?>
-        <div class="actions">
-            <button type="submit"
-                    title="<?php /* @escapeNotVerified */ echo $buttonTitle ?>"
-                    class="action primary tocart"
-                    id="product-addtocart-button">
-                <span><?php /* @escapeNotVerified */ echo $buttonTitle ?></span>
-            </button>
-            <?php echo $block->getChildHtml('', true) ?>
-        </div>
     </div>
-</div>
 <?php endif; ?>
+
+<script>
+    function continueBuy() {
+        if (history.length > 1) {
+            setTimeout(function() {
+                jQuery('.continue_buy').show();
+            }, 1000);
+        }
+    }
+
+    function backContinueBuy() {
+        history.back();
+    }
+</script>
+
+<style>
+    .continue_buy {
+        display: none;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    @media only screen and (max-width :768px) {
+        .continue_buy {
+            margin-bottom: 40px;
+            width: 100%;
+            height: 40px;
+            border: 1px solid #3c3c3c;
+            text-align: center;
+            padding-top: 9px;
+            font-weight: 500;
+            font-size: 15px;
+            color: rgb(60 60 60);
+            border-radius: 7px;
+            cursor: pointer;
+            opacity: 1;
+            pointer-events: initial;
+        }
+    }
+</style>
+
+<div class="continue_buy" onclick="backContinueBuy()">
+    <span>Continuar Comprando</span>
+</div>
+
 <script type="text/x-magento-init">
     {
         "#product_addtocart_form": {

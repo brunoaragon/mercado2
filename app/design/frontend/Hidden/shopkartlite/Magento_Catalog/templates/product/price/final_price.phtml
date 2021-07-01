@@ -1,0 +1,218 @@
+<?php
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php
+/** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $block */
+
+/** ex: \Magento\Catalog\Pricing\Price\RegularPrice */
+/** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
+$priceModel = $block->getPriceType('regular_price');
+
+/** ex: \Magento\Catalog\Pricing\Price\FinalPrice */
+/** @var \Magento\Framework\Pricing\Price\PriceInterface $finalPriceModel */
+$finalPriceModel = $block->getPriceType('final_price');
+$idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
+$schema = ($block->getZone() == 'item_view') ? true : false;
+?>
+
+<style>
+    .m2n-price-detail-kg,
+    .m2n-price-detail {
+        padding: 25px 0 10px 0;
+    }
+
+    .m2n-price-detail-kg .preco_original {
+        font-size: 15px;
+        font-weight: 400;
+        text-decoration: line-through;
+        opacity: 0.8;
+    }
+
+    .m2n-price-detail-kg .preco_novo {
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    .m2n-price-detail .preco_novo {
+        font-size: 26px;
+        font-weight: 500;
+    }
+</style>
+
+<?php
+$product_id = str_replace('old-price-', '', $block->getPriceId($idSuffix));
+$product_id = intval(str_replace('-final_price', '', $product_id));
+
+if (is_numeric($product_id)) {
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    $_product = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface')->getById($product_id);
+} else {
+    $_product = array();
+}
+if ($schema) {
+    if ($_product->getProdutoPorPeso()) {
+        if ($_product->getSpecialPrice()) {
+?>
+            <div class="m2n-price-detail-kg">
+                <div class="preco_original">
+                    <span>R$<?= number_format($_product->getPriceQuilo(), 2, ',', '.') ?>/kg</span>
+                </div>
+                <div class="preco_novo">
+                    <span>R$<?= number_format($_product->getSpecialPriceQuilo(), 2, ',', '.') ?>/kg</span>
+                </div>
+            </div>
+        <?php
+        } else {
+        ?>
+            <div class="m2n-price-detail-kg">
+                <div class="preco_novo">
+                    <span>R$<?= number_format($_product->getPriceQuilo(), 2, ',', '.') ?>/kg</span>
+                </div>
+            </div>
+        <?php
+        }
+    } else {
+        if ($_product->getSpecialPrice()) {
+        ?>
+            <div class="m2n-price-detail">
+                <div class="preco_original">
+                    <span>R$<?= number_format($_product->getPrice(), 2, ',', '.') ?></span>
+                </div>
+                <div class="preco_novo">
+                    <span>R$<?= number_format($_product->getSpecialPrice(), 2, ',', '.') ?></span>
+                </div>
+            </div>
+        <?php
+        } else {
+        ?>
+            <div class="m2n-price-detail">
+                <div class="preco_novo">
+                    <span>R$<?= number_format($_product->getPrice(), 2, ',', '.') ?></span>
+                </div>
+            </div>
+    <?php
+        }
+    }
+} else {
+    ?>
+    <?php if ($block->hasSpecialPrice()) : ?>
+
+        <?php
+        if ($_product && $_product->getProdutoPorPeso()) {
+        ?>
+            <div class="price-box price-final_price" data-role="priceBox" data-product-id="<?= $block->getPriceId($idSuffix) ?>" data-price-box="product-id-<?= $block->getPriceId($idSuffix) ?>">
+                <span class="old-price">
+                    <span class="price-container price-final_price tax weee">
+                        <span class="price-label">Preço Normal</span>
+                        <span id="old-price-<?= $block->getPriceId($idSuffix) ?>" data-price-amount="<?= number_format($_product->getPriceQuilo(), 2, ',', '.') ?>" data-price-type="oldPrice" class="price-wrapper "><span class="price">R$<?= number_format($_product->getPriceQuilo(), 2, ',', '.') ?></span></span>
+                    </span> </span>
+                <span class="special-price">
+                    <span class="price-container price-final_price tax weee">
+                        <span class="price-label">Preço Especial</span>
+                        <span id="product-price-<?= $block->getPriceId($idSuffix) ?>" data-price-amount="<?= number_format($_product->getSpecialPriceQuilo(), 2, ',', '.') ?>" data-price-type="finalPrice" class="price-wrapper "><span class="price">R$<?= number_format($_product->getSpecialPriceQuilo(), 2, ',', '.') ?>/kg</span></span>
+                    </span>
+                </span>
+            </div>
+        <?php
+        } else {
+        ?>
+            <span class="old-price">
+                <?= /* @noEscape */ $block->renderAmount($priceModel->getAmount(), [
+                    'display_label'     => __('Regular Price'),
+                    'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
+                    'price_type'        => 'oldPrice',
+                    'include_container' => true,
+                    'skip_adjustments'  => true
+                ]); ?>
+            </span>
+            <span class="special-price">
+
+                <div style="margin-top: 9px !important;margin-bottom: -9px;" class="price-box price-final_price" data-role="priceBox" data-product-id="535246" data-price-box="product-id-535246">
+                    <style>
+                        .m2n-price-detail-kg,
+                        .m2n-price-detail {
+                            padding: 25px 0 10px 0;
+                        }
+
+                        .m2n-price-detail-kg .preco_original {
+                            font-size: 15px;
+                            font-weight: 400;
+                            text-decoration: line-through;
+                            opacity: 0.8;
+                        }
+
+                        .m2n-price-detail-kg .preco_novo {
+                            font-size: 20px;
+                            font-weight: 500;
+                        }
+
+                        .m2n-price-detail .preco_novo {
+                            font-size: 26px;
+                            font-weight: 500;
+                        }
+                    </style>
+
+                    <div class="price-box price-final_price" data-role="priceBox" data-product-id="535246" data-price-box="product-id-535246">
+                        <span class="price-container price-final_price tax weee">
+                            <span id="product-price-535246" data-price-amount="111,00" data-price-type="finalPrice" class="price-wrapper "><span class="price">R$<?= number_format($_product->getSpecialPrice(),2,'.',',') ?></span></span>
+                        </span>
+                    </div>
+                </div>
+
+            </span>
+        <?php
+        }
+        ?>
+
+    <?php else : ?>
+
+        <?php
+        $product_id = str_replace('old-price-', '', $block->getPriceId($idSuffix));
+        $product_id = intval(str_replace('-final_price', '', $product_id));
+
+        if (is_numeric($product_id)) {
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $_product = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface')->getById($product_id);
+        } else {
+            $_product = array();
+        }
+
+        if ($_product && $_product->getProdutoPorPeso()) {
+        ?>
+            <div class="price-box price-final_price" data-role="priceBox" data-product-id="<?= $block->getPriceId($idSuffix) ?>" data-price-box="product-id-<?= $block->getPriceId($idSuffix) ?>">
+                <span class="price-container price-final_price tax weee">
+                    <span id="product-price-<?= $block->getPriceId($idSuffix) ?>" data-price-amount="<?= number_format($_product->getPriceQuilo(), 2, ',', '.') ?>" data-price-type="finalPrice" class="price-wrapper "><span class="price">R$<?= number_format($_product->getPriceQuilo(), 2, ',', '.') ?>/kg</span></span>
+                </span>
+            </div>
+        <?php
+        } else {
+        ?>
+            <div class="price-box price-final_price" data-role="priceBox" data-product-id="<?= $block->getPriceId($idSuffix) ?>" data-price-box="product-id-<?= $block->getPriceId($idSuffix) ?>">
+                <span class="price-container price-final_price tax weee">
+                    <span id="product-price-<?= $block->getPriceId($idSuffix) ?>" data-price-amount="<?= number_format($_product->getPrice(), 2, ',', '.') ?>" data-price-type="finalPrice" class="price-wrapper "><span class="price">R$<?= number_format($_product->getPrice(), 2, ',', '.') ?></span></span>
+                </span>
+            </div>
+        <?php
+        }
+        ?>
+
+    <?php endif; ?>
+
+    <?php if ($block->showMinimalPrice()) : ?>
+        <?php if ($block->getUseLinkForAsLowAs()) : ?>
+            <a href="<?= $block->escapeUrl($block->getSaleableItem()->getProductUrl()) ?>" class="minimal-price-link">
+                <?= /* @noEscape */ $block->renderAmountMinimal() ?>
+            </a>
+        <?php else : ?>
+            <span class="minimal-price-link">
+                <?= /* @noEscape */ $block->renderAmountMinimal() ?>
+            </span>
+        <?php endif ?>
+    <?php endif; ?>
+
+<?php } ?>

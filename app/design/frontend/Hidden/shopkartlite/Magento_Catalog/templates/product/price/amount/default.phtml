@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php /** @var $block \Magento\Framework\Pricing\Render\Amount */ ?>
+
+<span class="price-container <?= $block->escapeHtmlAttr($block->getAdjustmentCssClasses()) ?>" <?= $block->getSchema() ? ' itemprop="offers" itemscope itemtype="http://schema.org/Offer"' : '' ?>>
+    <?php if ($block->getDisplayLabel()) : ?>
+        <span class="price-label"><?= $block->escapeHtml($block->getDisplayLabel()) ?></span>
+    <?php endif; ?>
+
+    <?php    
+    $product_id = str_replace('old-price-','',$block->getPriceId());
+    $product_id = intval(str_replace('-final_price','',$product_id));
+    
+    if (is_numeric($product_id)) {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $_product = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface')->getById($product_id);
+    } else {
+        $_product = array();
+    }
+        
+    if ($_product->getProdutoPorPeso()) {          
+        if ($_product->getSpecialPrice()) {
+            if($block->getPriceType() == "oldPrice"){
+                $priceshow = $_product->getPriceQuilo();
+            } else {
+                $priceshow = $_product->getSpecialPriceQuilo();
+            }            
+        } else {
+            $priceshow = $_product->getPriceQuilo();
+        }
+    } else {
+        $priceshow = $block->getDisplayValue();
+    }    
+
+    
+
+    if ($_product->getProdutoPorPeso()) {
+    ?>    
+    <span <?php if ($block->getPriceId()) : ?> id="<?= $block->escapeHtmlAttr($block->getPriceId()) ?>" <?php endif; ?> <?= ($block->getPriceDisplayLabel()) ? 'data-label="' . $block->escapeHtmlAttr($block->getPriceDisplayLabel() . $block->getPriceDisplayInclExclTaxes()) . '"' : '' ?> data-price-amount="<?= $block->escapeHtmlAttr($block->getDisplayValue()) ?>" data-price-type="<?= $block->escapeHtmlAttr($block->getPriceType()) ?>" class="price-wrapper <?= $block->escapeHtmlAttr($block->getPriceWrapperCss()) ?>"><?= $block->escapeHtml($block->formatCurrency($priceshow, (bool)$block->getIncludeContainer()), ['span']) ?><span>/kg</span></span>
+    <?php
+    } else {
+    ?>    
+    <span <?php if ($block->getPriceId()) : ?> id="<?= $block->escapeHtmlAttr($block->getPriceId()) ?>" <?php endif; ?> <?= ($block->getPriceDisplayLabel()) ? 'data-label="' . $block->escapeHtmlAttr($block->getPriceDisplayLabel() . $block->getPriceDisplayInclExclTaxes()) . '"' : '' ?> data-price-amount="<?= $block->escapeHtmlAttr($block->getDisplayValue()) ?>" data-price-type="<?= $block->escapeHtmlAttr($block->getPriceType()) ?>" class="price-wrapper <?= $block->escapeHtmlAttr($block->getPriceWrapperCss()) ?>"><?= $block->escapeHtml($block->formatCurrency($priceshow, (bool)$block->getIncludeContainer()), ['span']) ?></span>
+    <?php
+    }
+    ?>
+
+
+    <?php if ($block->hasAdjustmentsHtml()) : ?>
+        <?= $block->getAdjustmentsHtml() ?>
+    <?php endif; ?>
+
+
+    <?php if ($block->getSchema()) : ?>
+        <meta itemprop="price" content="<?= $block->escapeHtmlAttr($block->getDisplayValue()) ?>" />
+        <meta itemprop="priceCurrency" content="<?= $block->escapeHtmlAttr($block->getDisplayCurrencyCode()) ?>" />
+    <?php endif; ?>
+</span>
